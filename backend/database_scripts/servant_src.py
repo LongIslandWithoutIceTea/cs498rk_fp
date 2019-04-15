@@ -240,4 +240,4 @@ servant_list = [
     {"name": "Murasaki Shikibu", "star": 5, "_id": 237},
     {"name": "Kingprotea", "star": 5, "_id": 238},
     {"name": "Kama", "star": 5, "_id": 239}
-    ]
+]
