@@ -1,12 +1,7 @@
-servant_list = [{
-"name": "Mashu Kyrielight",
-"star": 3,
-"_id": 1
-}, {
-"name": "Artoria Pendragon",
-"star": 5,
-"_id": 2
-}, {
+servant_list = [
+    {"name": "Mashu Kyrielight", "star": 3, "_id": 1},
+    {"name": "Artoria Pendragon","star": 5,"_id": 2},
+    {
 "name": "Artoria Pendragon (Alter)",
 "star": 4,
 "_id": 3
