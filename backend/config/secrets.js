@@ -1,4 +1,4 @@
 module.exports = {
     token : "token",
-    mongo_connection : "mongo"
+    mongo_connection : "mongodb+srv://chuangk2:<password>@caldeadb-buuxb.mongodb.net/test?retryWrites=true"
 };
