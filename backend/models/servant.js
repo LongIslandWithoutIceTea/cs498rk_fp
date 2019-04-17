@@ -23,7 +23,10 @@ var ServantSchema = new mongoose.Schema({
     Death Rate: String,
     Alignments: String,
     Gender: String,
-    Saint Graphs:Array
+    Saint Graphs: Array,
+    Icons: Array,
+    Sprites: Array
+
 },{ collection : 'servants' });
 
 // Export the Mongoose model
