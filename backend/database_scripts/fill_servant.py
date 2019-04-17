@@ -1,5 +1,6 @@
 import pymongo
 from servant_src import servant_list
+from servants import servant_list_test
 import pandas as pd
 from bs4 import BeautifulSoup
 import requests
@@ -102,13 +103,13 @@ def getSvtData(i):
 # print(servant_list[i])
 def main():
     collection = connect();
-    for i in range(0, 239):
-        print(i)
-        getSvtData(i)
+    # for i in range(0, 239):
+    #     print(i)
+    #     getSvtData(i)
     # print(servant_list)
     # with open("servants", "w") as f:
     #     print(servant_list, file=f)
-    collection.insert_many(servant_list)
+    collection.insert_many(servant_list_test)
 
 if __name__ == "__main__":
      main()
