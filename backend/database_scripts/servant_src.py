@@ -139,7 +139,7 @@ servant_list = [
 	{"name": "Elizabeth Báthory (Brave)","star": 4,"_id": 138},
 	{"name": "Cleopatra","star": 5,"_id": 139},
 	{"name": "Vlad III (EXTRA)","star": 4,"_id": 140},
-	{"name": "Jeanne d'Arc (Alter) (Santa Lily)","star": 4,"_id": 141},
+	{"name": "Jeanne d\'Arc (Alter) (Santa Lily)","star": 4,"_id": 141},
 	{"name": "Ishtar","star": 5,"_id": 142},
 	{"name": "Enkidu","star": 5,"_id": 143},
 	{"name": "Quetzalcoatl","star": 5,"_id": 144},
