@@ -22,7 +22,8 @@ var ServantSchema = new mongoose.Schema({
     NP Charge DEF: String,
     Death Rate: String,
     Alignments: String,
-    Gender: String
+    Gender: String,
+    Saint Graphs:Array
 },{ collection : 'servants' });
 
 // Export the Mongoose model
