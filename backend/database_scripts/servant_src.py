@@ -237,5 +237,6 @@ servant_list = [
 	{"name": "Miyu Edelfelt","star": 4,"_id": 236},
 	{"name": "Murasaki Shikibu","star": 5,"_id": 237},
 	{"name": "Kingprotea","star": 5,"_id": 238},
-	{"name": "Kama","star": 5,"_id": 239}
+	{"name": "Kama","star": 5,"_id": 239},
+    {"name": "Beast III/L", "star": 5, "_id": 240}
 ]

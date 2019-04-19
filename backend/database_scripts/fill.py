@@ -135,12 +135,12 @@ def getSvtData(i):
 # print(servant_list_test[i])
 def main():
     collection = connect();
-    for i in range(0, 239):
-        print(i)
-        getSvtData(i)
+    # for i in range(0, 239):
+    #     print(i)
+    #     getSvtData(i)
     #print(servant_list_test)
-    with open("servants", "w") as f:
-        print(servant_list_test, file=f)
+    # with open("servants", "w") as f:
+    #     print(servant_list_test, file=f)
     # getSvtData(0)
     collection.insert_many(servant_list_test)
 
