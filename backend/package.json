@@ -1,10 +1,11 @@
 {
-  "name": "backend",
+  "name": "mp3_starter_19",
   "version": "1.0.0",
-  "description": "RKFP",
+  "description": "MP3 Starter for CS498RK Spring 2019",
   "authors": [
-    "Fubuki <Fubuki@illinois.edu>",
-   ],
+    "James Lee <jwlee11@illinois.edu>",
+    "Sujay Khandekar <khandek2@illinois.edu>"
+  ],
   "scripts": {
     "start": "nodemon --exec node server.js"
   },
@@ -19,9 +20,9 @@
     "url": "https://github.com/uiuc-web-programming/mp3_starter_17.git"
   },
   "dependencies": {
-    "body-parser": "^1.17.2",
-    "express": "^4.15.3",
-    "mongoose": "^5.4.18",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.5.2",
     "nodemon": "^1.11.0"
   }
 }
