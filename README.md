@@ -24,3 +24,6 @@ CS498RK final project in Spring 2019
 - rabbit : work on discussion thread & forum
 - icetea : database & backend
 - chicken & fish : everything else 
+
+## front end libs
+- [Sementic UI React](https://react.semantic-ui.com/)
