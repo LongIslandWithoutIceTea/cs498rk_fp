@@ -7,8 +7,8 @@ import requests
 
 def connect():
     client = pymongo.MongoClient("mongodb+srv://chuangk2:Tea890122@caldeadb-buuxb.mongodb.net/test?retryWrites=true")
-    db = client["chaldeadb"]
-    collection_servants_info = db["servants_info"]
+    db = client["test"]
+    collection_servants_info = db["servants"]
     return collection_servants_info
 
 def getSvtData(i):
@@ -147,8 +147,10 @@ def getSvtData(i):
         sprites.append({img_caption : img_src})
     servant_list[i]["sprites"] = sprites
 
-    #active skills
+    # active_skills
+    active_skills = []
 
+    # passive_skills
 
     # print(servant_list[i])
 
@@ -159,9 +161,9 @@ def main():
     for i in range(0, 240):
         print(i)
         getSvtData(i)
-    #print(servant_list)
-    with open("servants", "w") as f:
-        print(servant_list, file=f)
+    # print(servant_list)
+    # with open("servants", "w") as f:
+    #     print(servant_list, file=f)
     collection_servants_info.insert_many(servant_list)
 
 if __name__ == "__main__":
