@@ -1,0 +1,35 @@
+$font-family-default: "Trebuchet MS", Helvetica, sans-serif;
+
+.title {
+    padding: 0.7em !important;
+}
+
+.subtitle {
+    padding: 0.2em 0.5em !important;
+}
+
+.index {
+    margin: 10%;
+}
+
+.des {
+    font-family: $font-family-default;
+}
+
+.header {
+    font-family: $font-family-default;
+    font-size: 1.25em;
+}
+
+.modalImg {
+    height: 40em;
+    width: 28em;
+}
+
+.tag {
+    margin: 0.25em 0;
+}
+
+.ic {
+    margin: auto;
+}
