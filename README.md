@@ -25,5 +25,5 @@ CS498RK final project in Spring 2019
 - icetea : database & backend
 - chicken & fish : everything else 
 
-## front end libs
+## Front-end libs
 - [Sementic UI React](https://react.semantic-ui.com/)
