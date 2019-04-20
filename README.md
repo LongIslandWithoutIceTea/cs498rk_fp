@@ -1,7 +1,7 @@
 # USS Illini MkII
 CS498RK final project in Spring 2019
 
-## Wargaming API related
+## Wargaming API related functionalities
 ### Warship info
 - Basic info for every warship, just as in USS-illini
 - Leader Board
@@ -13,7 +13,7 @@ CS498RK final project in Spring 2019
 - players in the Clan
 - Clan Battle records
 
-## Database related
+## Database related functionalities
 ### User Page
 - allow user to edit user info, manage posts, etc...
 ### Forum 
