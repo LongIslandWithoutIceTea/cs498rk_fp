@@ -8,8 +8,7 @@ import {
     Segment,
     Image,
 } from 'semantic-ui-react'
-import logo from '../assets/Chaldea_white.png'
-import background from '../assets/LostbeltPoster.jpg'
+import logo from '../assets/wows-icon.png'
 import './index.scss'
 
 class IndexPage extends Component {
@@ -22,19 +21,18 @@ class IndexPage extends Component {
             <div>
                 <Segment inverted textAlign='center' vertical>
                     <Header className="title" as='h1' inverted>
-                        <Image avatar src={logo} size='big' verticalAlign='middle'/>
-                        <span>Chaldea Wikia</span>
+                        <Image avatar src={logo} size='large' verticalAlign='middle'/>
+                        <span>USS illini mkII</span>
                     </Header>
                     <Container className="index" text>
                         <Header as='h2' inverted>
-                            A wiki site for Fate/Grand Order
+                            A wiki site for World of Warships
                         </Header>
                         <Divider/>
                     </Container>
-                    <Button primary>Start</Button>
+                    <Button primary>Start<Icon name='right arrow' /></Button>
                 </Segment>
 
-                <Image src={background} fluid verticalAlign='middle'/>
             </div>
         );
     }
