@@ -16,6 +16,11 @@ CS498RK final project in Spring 2019
 ## Database related
 ### User Page
 - allow user to edit user info, manage posts, etc...
-### Forum (if we have time to do so)
-- just like reddit
+### Forum 
+- work just like reddit
 - note that we do need to implement the discussion thread under the warship info section
+
+## Work distribution 
+- rabbit : work on discussion thread & forum
+- icetea : database & backend
+- chicken & fish : everything else 
