@@ -1,33 +1,33 @@
-// Load required packages
 var mongoose = require('mongoose');
 
-// Define our user schema
-var ServantSchema = new mongoose.Schema({
-    _id: Number,
-    name: String,
-    star: Number,
-    Japanese Name: String,
-    AKA: String,
-    Cost: String,
-    ATK: String,
-    HP: String,
-    Grail ATK: String,
-    Grail HP: String,
-    Voice Actor: String,
-    Illustrator: String,
-    Attribute: String,
-    Growth Curve: String,
-    Star Absorption: String,
-    NP Charge ATK: String,
-    NP Charge DEF: String,
-    Death Rate: String,
-    Alignments: String,
-    Gender: String,
-    Saint Graphs: Array,
-    Icons: Array,
-    Sprites: Array
+var ServantInfoSchema = new mongoose.Schema({
+  _id: Number,
+  name: String,
+  stars: Number,
+  class: String,
+  japanese_name: String,
+  aka: String,
+  cost: String,
+  atk: String,
+  hp: String,
+  grail_atk: String,
+  grail_hp: String,
+  voice_actor: String,
+  illustrator: String,
+  attribute: String,
+  growth_curve: String,
+  star_absorption: String,
+  star_generation: String,
+  np_charge_atk: String,
+  np_charge_def: String,
+  death_rate: String,
+  alignments: String,
+  gender: String,
+  traits: String,
+  qab: String,
+  saint_graphs: Array,
+  icons: Array,
+  sprites: Array,
+},{ collection: 'servants'});
 
-},{ collection : 'servants' });
-
-// Export the Mongoose model
-module.exports = mongoose.model('Servant', ServantSchema);
+module.exports = mongoose.model('Servant', ServantInfoSchema);
