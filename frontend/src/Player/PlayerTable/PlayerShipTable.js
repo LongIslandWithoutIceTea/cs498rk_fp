@@ -15,13 +15,14 @@ const nationOptions=[
   {key: 'france', value: 'france', text: 'France'},
   {key: 'germany', value: 'germany', text: 'Germany'},
   {key: 'poland', value: 'poland', text: 'Poland'},
-  {key: 'pan_asia', value: 'pa', text: 'Pan Asia'},
+  {key: 'pan_asia', value: 'pan_asia', text: 'Pan Asia'},
+  {key: 'italy', value: 'italy', text: 'Italy'},
   {key: 'commonwealth', value: 'commonwealth', text: 'Common Wealth'},
-  {key: 'pan_america', value: 'pm', text: 'Pan America'}
+  {key: 'pan_america', value: 'pan_america', text: 'Pan America'}
 ];
 const typeOptions=[
   {key: 'all', value: 'all', text: ''},
-  {key: 'Destoryer', value: 'Destoryer', text: 'Destoryer'},
+  {key: 'Destroyer', value: 'Destroyer', text: 'Destroyer'},
   {key: 'Cruiser', value: 'Cruiser', text: 'Cruiser'},
   {key: 'Battleship', value: 'Battleship', text: 'Battleship'},
   {key: 'AirCarrier', value: 'AirCarrier', text: 'Carrier'}
@@ -261,17 +262,33 @@ export default class PlayerShipTable extends Component {
   }
 
   handleSort(clickedColumn){
+    var selectedData = [];
+    this.state.data.forEach((row)=>{
+      if(this.selected(row,this.state.selectedName,this.state.selectedNation,this.state.selectedType,this.state.selectedTier)){
+        selectedData.push(row);
+      }
+    })
     if (this.state.column !== clickedColumn) {
       this.setState({
         column: clickedColumn,
-        data: _.sortBy(this.state.data, [clickedColumn]),
+        selectedData: _.sortBy(selectedData, [clickedColumn]),
         direction: 'ascending',
+        page: 0,
       })
     }else{
-      this.setState({
-        data: this.state.data.reverse(),
-        direction: this.state.direction === 'ascending' ? 'descending' : 'ascending',
-      })
+      if(this.state.direction === 'ascending'){
+        this.setState({
+          selectedData: _.sortBy(selectedData, [clickedColumn]).reverse(),
+          direction: 'descending',
+          page: 0,
+        })
+      }else{
+        this.setState({
+          selectedData: _.sortBy(selectedData, [clickedColumn]),
+          direction: 'ascending',
+          page: 0,
+        })
+      }
     }
   }
 
@@ -286,22 +303,22 @@ export default class PlayerShipTable extends Component {
   }
 
   selected(row,selectedName,selectedNation,selectedType,selectedTier){
-    if(selectedName && selectedName !== "all"){
+    if(selectedName && selectedName !== "all" && selectedName !== ""){
       if(row.name !== selectedName){
         return false;
       }
     }else{
-      if(selectedName && selectedNation !== "all"){
+      if(selectedName && selectedNation !== "all" && selectedName !== ""){
         if(row.nation !== selectedNation){
           return false;
         }
       }
-      if(selectedName && selectedType !== "all"){
+      if(selectedName && selectedType !== "all" && selectedName !== ""){
         if(row.type !== selectedType){
           return false;
         }
       }
-      if(selectedName && selectedTier !== "all"){
+      if(selectedName && selectedTier !== "all" && selectedName !== ""){
         if(row.tier !== parseInt(selectedTier)){
           return false;
         }
@@ -424,7 +441,7 @@ export default class PlayerShipTable extends Component {
                     <Menu.Item as='a' icon onClick={this.nextPage}>
                       <Icon name='angle right' />
                     </Menu.Item>
-                    <Menu.Item as='a' icon onClick={()=>this.setState({page:this.state.selectedData.length/perpage-1})}>
+                    <Menu.Item as='a' icon onClick={()=>this.setState({page:Math.ceil(this.state.selectedData.length/perpage-1)})}>
                       <Icon name='angle double right' />
                     </Menu.Item>
                   </Menu>
