@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal } from 'semantic-ui-react';
+import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Container } from 'semantic-ui-react';
 import _ from 'lodash';
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
@@ -426,12 +426,12 @@ export default class PlayerShipTable extends Component {
 
   render() {
     return (
-      <Segment>
+      <div>
         <Dimmer active={!this.state.doneLoading}>
           <Loader>Loading</Loader>
         </Dimmer>
 
-        <Table sortable celled structured striped collapsing unstackable className="PlayerShipTable">
+        <Table sortable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
               <Table.Row>
                 <Table.HeaderCell colSpan='2'>Ship</Table.HeaderCell>
@@ -494,7 +494,7 @@ export default class PlayerShipTable extends Component {
           </Modal.Content>
         </Modal>
 
-      </Segment>
+      </div>
     );
   }
 }
