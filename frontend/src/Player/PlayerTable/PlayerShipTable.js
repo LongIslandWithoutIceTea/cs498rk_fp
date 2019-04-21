@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown } from 'semantic-ui-react';
+import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
+import PlayerWeaponTable from './PlayerWeaponTable.js';
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 const perpage = 10;
@@ -66,25 +67,27 @@ class PlayerShipTableBody extends Component {
           rows.push(
               (
               <Table.Row key={row.ship_id}>
-                <Table.Cell>{row.name}</Table.Cell>
-                <Table.Cell><img src={row.image} alt="404" height="35" ></img></Table.Cell>
-                <Table.Cell>{row.nation}</Table.Cell>
-                <Table.Cell>{row.type}</Table.Cell>
-                <Table.Cell>{row.tier}</Table.Cell>
-                <Table.Cell>{row.wins}</Table.Cell>
-                <Table.Cell>{row.battles}</Table.Cell>
-                <Table.Cell>{row.win_rate}</Table.Cell>
-                <Table.Cell>{row.survival_rate}</Table.Cell>
+                <Table.Cell selectable><a>{row.name}</a></Table.Cell>
+                <Table.Cell ><img src={row.image} alt="404" height="35" ></img></Table.Cell>
+                <Table.Cell >{row.nation}</Table.Cell>
+                <Table.Cell >{row.type}</Table.Cell>
+                <Table.Cell >{row.tier}</Table.Cell>
+                <Table.Cell >{row.wins}</Table.Cell>
+                <Table.Cell >{row.battles}</Table.Cell>
+                <Table.Cell >{row.win_rate}</Table.Cell>
+                <Table.Cell >{row.survival_rate}</Table.Cell>
 
-                <Table.Cell>{row.max_xp}</Table.Cell>
-                <Table.Cell>{row.max_frags_battle}</Table.Cell>
-                <Table.Cell>{row.max_damage_dealt}</Table.Cell>
-                <Table.Cell>{row.max_planes_killed}</Table.Cell>
+                <Table.Cell >{row.max_xp}</Table.Cell>
+                <Table.Cell >{row.max_frags_battle}</Table.Cell>
+                <Table.Cell >{row.max_damage_dealt}</Table.Cell>
+                <Table.Cell >{row.max_planes_killed}</Table.Cell>
 
-                <Table.Cell>{row.ave_xp}</Table.Cell>
-                <Table.Cell>{row.ave_frags}</Table.Cell>
-                <Table.Cell>{row.ave_damage_dealt}</Table.Cell>
-                <Table.Cell>{row.ave_planes_killed}</Table.Cell>
+                <Table.Cell >{row.ave_xp}</Table.Cell>
+                <Table.Cell >{row.ave_frags}</Table.Cell>
+                <Table.Cell >{row.ave_damage_dealt}</Table.Cell>
+                <Table.Cell >{row.ave_planes_killed}</Table.Cell>
+
+                <Table.Cell collapsing selectable onClick={()=>this.props.handleselectedShipID(row.ship_id)}><Icon name="ellipsis horizontal"/></Table.Cell>
               </Table.Row>
             )
           )
@@ -117,8 +120,10 @@ export default class PlayerShipTable extends Component {
       selectedNation: "all",
       selectedType: "all",
       selectedTier: "all",
+      selectedShipData: null,
       ship_ids: [],
       shipnames: [{key: 'all', value: 'all', text: ''}],
+      showModal: false,
     }
     this.handleSort = this.handleSort.bind(this);
     this.build = this.build.bind(this);
@@ -127,6 +132,7 @@ export default class PlayerShipTable extends Component {
     this.prevPage = this.prevPage.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
     this.selected = this.selected.bind(this);
+    this.handleselectedShipID = this.handleselectedShipID.bind(this);
   }
   componentDidMount() {
     var data = [];
@@ -302,6 +308,37 @@ export default class PlayerShipTable extends Component {
      this.setState({selectedData:selectedData, page: 0});
   }
 
+  handleselectedShipID(selectedShipID){
+    var selectedShipData = {};
+    if(this.state.selectedData){
+      this.state.selectedData.forEach((row)=>{
+        if(row.ship_id === selectedShipID){
+            selectedShipData.ship_id = row.ship_id;
+            selectedShipData.main_battery_max_frags_battle = row.main_battery_max_frags_battle;
+            selectedShipData.main_battery_frags = row.main_battery_frags;
+            selectedShipData.main_battery_hit_rate = row.main_battery_hit_rate;
+
+            selectedShipData.torpedoes_max_frags_battle = row.torpedoes_max_frags_battle;
+            selectedShipData.torpedoes_frags = row.torpedoes_frags;
+            selectedShipData.torpedoes_hit_rate = row.torpedoes_hit_rate;
+
+            selectedShipData.second_battery_max_frags_battle = row.second_battery_max_frags_battle;
+            selectedShipData.second_battery_frags = row.second_battery_frags;
+            selectedShipData.second_battery_hit_rate = row.second_battery_hit_rate;
+
+            selectedShipData.aircraft_max_frags_battle = row.aircraft_max_frags_battle;
+            selectedShipData.aircraft_frags = row.aircraft_frags;
+
+            selectedShipData.ramming_max_frags_battle = row.ramming_max_frags_battle;
+            selectedShipData.ramming_frags = row.ramming_frags;
+
+            this.setState({showModal:true, selectedShipData:selectedShipData});
+            return;
+        }
+      })
+    }
+  }
+
   selected(row,selectedName,selectedNation,selectedType,selectedTier){
     if(selectedName && selectedName !== "all" && selectedName !== ""){
       if(row.name !== selectedName){
@@ -394,7 +431,7 @@ export default class PlayerShipTable extends Component {
           <Loader>Loading</Loader>
         </Dimmer>
 
-        <Table sortable celled structured selectable striped collapsing unstackable className="PlayerShipTable">
+        <Table sortable celled structured striped collapsing unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
               <Table.Row>
                 <Table.HeaderCell colSpan='2'>Ship</Table.HeaderCell>
@@ -407,6 +444,7 @@ export default class PlayerShipTable extends Component {
                 <Table.HeaderCell sorted={this.state.column === 'survival_rate' ? this.state.direction : null} onClick={() => this.handleSort('survival_rate')} rowSpan='2'>Survival Rate</Table.HeaderCell>
                 <Table.HeaderCell colSpan='4'>Max</Table.HeaderCell>
                 <Table.HeaderCell colSpan='4'>Average</Table.HeaderCell>
+                <Table.HeaderCell rowSpan='2'></Table.HeaderCell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell colSpan='2'><Dropdown clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value,"all","all","all")}}/></Table.Cell>
@@ -425,11 +463,11 @@ export default class PlayerShipTable extends Component {
               </Table.Row>
             </Table.Header>
 
-            <PlayerShipTableBody data={this.state.selectedData} page={this.state.page}/>
+            <PlayerShipTableBody data={this.state.selectedData} page={this.state.page} handleselectedShipID={this.handleselectedShipID}/>
 
             <Table.Footer className="PlayerShipTableFooter">
               <Table.Row>
-                <Table.HeaderCell colSpan='17'>
+                <Table.HeaderCell colSpan='18'>
                   <Menu floated='right' pagination>
                     <Menu.Item as='a' icon onClick={()=>this.setState({page:0})}>
                       <Icon name='angle double left' />
@@ -449,6 +487,13 @@ export default class PlayerShipTable extends Component {
               </Table.Row>
             </Table.Footer>
         </Table>
+
+        <Modal open={this.state.showModal} size="large" onClose={()=>this.setState({showModal:false})} closeIcon>
+          <Modal.Content>
+            <PlayerWeaponTable selectedShipData={this.state.selectedShipData}/>
+          </Modal.Content>
+        </Modal>
+
       </Segment>
     );
   }
