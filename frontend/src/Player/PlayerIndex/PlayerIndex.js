@@ -3,6 +3,7 @@ import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, He
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import PlayerShipTable from '../PlayerTable/PlayerShipTable.js'
+import PlayerRankTable from '../PlayerTable/PlayerRankTable.js'
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 const achievementsDict = {
@@ -42,8 +43,11 @@ export default class PlayerIndex extends Component {
       clandata: {"1000043952":{"members_count":46,"name":"Hiryu Ride Face","creator_name":"Aikun96","clan_id":1000043952,"created_at":1484747968,"updated_at":1555210651,"leader_name":"ChipsChan","members_ids":[1003333910,1004477726,1007175219,1008316697,1008625506,1009061145,1009661450,1010209482,1010323946,1010724543,1011528019,1013304000,1013334385,1013587959,1013999547,1015329727,1015357346,1015493067,1015610394,1018349928,1018526149,1021128077,1021760124,1021825753,1022169623,1023567781,1023915822,1023925788,1024488643,1024492045,1025308785,1025493071,1025871171,1026265082,1026478590,1026558717,1027538149,1027962043,1028085712,1029202697,1029258263,1029652630,1030351561,1030590838,1031351287,1033795111],"creator_id":1016393566,"tag":"KUMA","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":1013587959,"description":"If u know Kancolle, Warships Girls R, Azur Lane, Ars Nova(Blue Steel), High School Fleet than u can join us.\nPs: Girls und Panzer is a good anime! Watch it!"}},
       achievements:{"battle":{"FOOLSDAY_TROOPER":9,"COLLECTION_HAPPY_BIRTHDAY2018_COMPLETED":1,"ONE_SOLDIER_IN_THE_FIELD":5,"CAMPAIGN_VIVELAFRANCE_COMPLETED_EXCELLENT":1,"CLAN_SEASON_1_LEAGUE_3":3,"SEA_LEGEND":1,"CLAN_SEASON_1_LEAGUE_1":2,"CLAN_SEASON_1_LEAGUE_4":3,"COLLECTION_BRITISHARC_COMPLETED":1,"SCIENCE_OF_WINNING_TACTICIAN":1,"FOOLSDAY_ONE_STEP":1,"DOUBLE_KILL":122,"COLLECTION_DUNKIRK_COMPLETED":1,"BD2016_MANNERS":1,"MAIN_CALIBER":960,"COLLECTION_HSF2018_COMPLETED":1,"COLLECTION_AMERICANARC_COMPLETED":1,"BD2016_RUN_FOREST":1,"NY17_AIMING":1,"EV1APR19_ALLROUNDER":1,"CAMPAIGN_NEWYEAR2019PEF_COMPLETED":1,"FOOLSDAY_POEKHALI":1,"RASPUTIN":1,"COLLECTION_HAPPYNEWYEAR2019_COMPLETED":1,"LIQUIDATOR":34,"CLAN_SEASON_1_LEAGUE_2":3,"WITHERING":174,"BD2016_FIRESHOW":1,"FIREPROOF":116,"BD2_CONTAINERS":57,"BD2_FR":6,"CAMPAIGN_NEWYEAR2019STEELQUEST_COMPLETED_EXCELLENT":1,"EV1APR19_ATTDEF2":1,"AVACOMMON":1,"SUPPORT":976,"CAMPAIGN_VIVELAFRANCE_COMPLETED":1,"MERCENARY":1,"MESSENGER":1,"PVE_HON_PR_SAVE_1":1,"SCIENCE_OF_WINNING_ARSONIST":1,"BD2016_PARTY_CHECK_IN":1,"NY17_DRESS_THE_TREE":1,"WORKAHOLIC_L":1,"HEADBUTT":10,"BD2_CAMPAIGNS":1,"BD2_CREW":159,"ATBA_CALIBER":383,"MERCENARY_L":1,"EV1APR19_EPICENTER1":6,"AIRKING":24,"BD2_ARP":2,"NO_PRICE_FOR_HEROISM":1,"FILLALBUM_BRIT_CVARC_COMPLETED":1,"NEVER_ENOUGH_MONEY":1,"BD2016_FESTIV_SOUP":1,"ARSONIST":160,"WARRIOR":230,"WORKAHOLIC":1,"PVE_HON_PR_DONE_ALL_1":1,"DETONATED":81,"CHIEF_ENGINEER":1,"PVE_HON_FRAG_CLASS":11,"EV1APR19_DOMINATION2":3,"NO_DAY_WITHOUT_ADVENTURE_L":1,"EV1APR19_DOMINATION1":1,"CAMPAIGN_NEWYEAR2019STEELQUEST_COMPLETED":1,"NEWYEAR_LEADERBOARD":1,"SCIENCE_OF_WINNING_LUCKY":1,"CAMPAIGN_SB_COMPLETED":1,"BD2_RANKS":21,"COLLECTION_OVECHKIN_COMPLETED":1,"COLLECTION_HAPPYNEWYEAR2018_COMPLETED":1,"INSTANT_KILL":1594,"UNSINKABLE":8,"ENGINEER":1,"CAMPAIGN_HALSEY_COMPLETED":1,"CAMPAIGN_NEWYEAR2018BASIC_COMPLETED":1,"NY17_SAFECRACKER":1,"JUNIOR_PLANNER":1,"BD2_CAMO":15,"COLLECTION_VIVELAFRANCE_COMPLETED":1,"BD2016_RISE_OF_THE_MACHINES":1,"BD2016_SNATCH":1,"NO_DAY_WITHOUT_ADVENTURE":1,"CAMPAIGN_NEWYEAR2018ELITE_COMPLETED":1,"PVE_HERO_WIN_SUR":2,"COLLECTION_YAMAMOTO_COMPLETED":1,"DREADNOUGHT":509,"CLEAR_SKY":37,"HALLOWEEN_2017":1,"HALLOWEEN_2016":1,"HALLOWEEN_2018":1,"CAMPAIGN_BISMARCK_COMPLETED":1,"PVE_HON_PR_SAVE_2":1,"PVE_HERO_DAM_ENEM":11,"FOOLSDAY_SHIELDS":1,"FIGHTER":1,"NY17_500_LEAGUES":1,"MILLIONAIR":1,"CAMPAIGN_YAMAMOTO_COMPLETED":1,"EV1APR19_TORPEDO1":3,"BD2016_KING_OF_PARTY":1,"EV1APR19_TORPEDO3":4,"PVE_HON_PR_DONE_1":1,"EV1APR19_TORPEDO5":2,"MESSENGER_L":1,"BATTLE_HERO":1,"BD2016_WRONG_SOW":1,"PVE_HON_WIN_ALL_DONE":15,"CAMPAIGN1_COMPLETED":1,"BD2_GE":4,"BD2_GB":14,"BD2_CREDITS":44,"SCIENCE_OF_WINNING_HARD_EDGED":1,"VETERAN":1,"RETRIBUTION":335,"CAMPAIGN_NY17B_COMPLETED":1,"TWITCH_WG":1,"BD2016_PARTY_ANIMAL":1,"SCIENCE_OF_WINNING_TO_THE_BOTTOM":1,"GREATEEIGHT":18,"COLLECTION_BISMARCK_COMPLETED":1,"NY17_BREAK_THE_BANK":1,"ALL_THREE_HALLOWEEN_COMPLETE":1,"CAPITAL":1,"SCIENCE_OF_WINNING_BOMBARDIER":1,"PVE_DUNKERQUE_OPERATION_DYNAMO":1,"FIRST_BLOOD":1031,"COLLECTION_WOWSBIRTHDAY_COMPLETED":1,"AIRDEFENSEEXPERT":9,"NY17_WIN_AT_LEAST_ONE":1,"CAMPAIGN_NY17B_COMPLETED_EXCELLENT":1,"AMAUTEUR":1,"ATB_HEPHAESTUS":1},"progress":{"FIGHTER":0,"MILLIONAIR":0,"MERCENARY":0,"PVE_HON_PR_DONE_1":0,"PVE_HON_PR_SAVE_1":0,"ENGINEER":0,"BATTLE_HERO":0,"WORKAHOLIC_L":0,"PVE_HON_PR_SAVE_2":0,"JUNIOR_PLANNER":0,"MESSENGER_L":0,"VETERAN":0,"MERCENARY_L":0,"EV1APR19_ALLROUNDER":0,"NO_DAY_WITHOUT_ADVENTURE":0,"NEVER_ENOUGH_MONEY":0,"NO_PRICE_FOR_HEROISM":0,"ALL_THREE_HALLOWEEN_COMPLETE":0,"CAPITAL":0,"SCIENCE_OF_WINNING_BOMBARDIER":0,"WORKAHOLIC":0,"PVE_HON_PR_DONE_ALL_1":0,"SEA_LEGEND":0,"CHIEF_ENGINEER":0,"NO_DAY_WITHOUT_ADVENTURE_L":0,"MESSENGER":0,"AMAUTEUR":0}},
       clansummary: "",
+      rankdata:{"11":{"rank_info":{"max_rank":5,"start_rank":18,"stars":0,"rank":5,"stage":4},"rank_div3":null,"rank_solo":{"max_frags_battle":3,"draws":1,"max_xp":3810,"wins":38,"planes_killed":3,"losses":38,"torpedoes":{"max_frags_battle":1,"frags":8,"hits":51,"shots":1426},"battles":77,"max_damage_dealt":201841,"damage_dealt":6604119,"max_planes_killed":2,"aircraft":{"max_frags_battle":0,"frags":0},"ramming":{"max_frags_battle":0,"frags":0},"main_battery":{"max_frags_battle":2,"frags":23,"hits":11134,"shots":31244},"second_battery":{"max_frags_battle":1,"frags":1,"hits":5,"shots":98},"survived_wins":34,"frags":45,"xp":122760,"survived_battles":49},"rank_div2":null},"10":{"rank_info":{"max_rank":6,"start_rank":23,"stars":0,"rank":6,"stage":2},"rank_div3":null,"rank_solo":{"max_frags_battle":4,"draws":0,"max_xp":4190,"wins":64,"planes_killed":216,"losses":57,"torpedoes":{"max_frags_battle":2,"frags":13,"hits":97,"shots":1168},"battles":121,"max_damage_dealt":219300,"damage_dealt":10793827,"max_planes_killed":52,"aircraft":{"max_frags_battle":2,"frags":2},"ramming":{"max_frags_battle":1,"frags":7},"main_battery":{"max_frags_battle":4,"frags":94,"hits":5933,"shots":16176},"second_battery":{"max_frags_battle":1,"frags":1,"hits":763,"shots":4151},"survived_wins":46,"frags":122,"xp":189900,"survived_battles":59},"rank_div2":null},"1":{"rank_info":{"max_rank":0,"start_rank":0,"stars":0,"rank":0,"stage":0},"rank_div3":null,"rank_solo":null,"rank_div2":null},"102":{"rank_info":{"max_rank":10,"start_rank":10,"stars":0,"rank":10,"stage":1},"rank_div3":null,"rank_solo":null,"rank_div2":null},"3":{"rank_info":{"max_rank":1,"start_rank":22,"stars":1,"rank":1,"stage":4},"rank_div3":null,"rank_solo":{"max_frags_battle":4,"draws":0,"max_xp":3564,"wins":95,"planes_killed":379,"losses":71,"torpedoes":{"max_frags_battle":2,"frags":51,"hits":346,"shots":4872},"battles":166,"max_damage_dealt":164993,"damage_dealt":7268326,"max_planes_killed":49,"aircraft":{"max_frags_battle":2,"frags":14},"ramming":{"max_frags_battle":0,"frags":0},"main_battery":{"max_frags_battle":2,"frags":56,"hits":3319,"shots":15994},"second_battery":{"max_frags_battle":0,"frags":0,"hits":137,"shots":705},"survived_wins":83,"frags":137,"xp":227532,"survived_battles":111},"rank_div2":null},"2":{"rank_info":{"max_rank":7,"start_rank":18,"stars":1,"rank":7,"stage":4},"rank_div3":null,"rank_solo":{"max_frags_battle":4,"draws":0,"max_xp":3456,"wins":34,"planes_killed":234,"losses":20,"torpedoes":{"max_frags_battle":3,"frags":12,"hits":58,"shots":904},"battles":54,"max_damage_dealt":97509,"damage_dealt":1990521,"max_planes_killed":32,"aircraft":{"max_frags_battle":2,"frags":4},"ramming":{"max_frags_battle":0,"frags":0},"main_battery":{"max_frags_battle":2,"frags":24,"hits":1166,"shots":4937},"second_battery":{"max_frags_battle":0,"frags":0,"hits":10,"shots":147},"survived_wins":33,"frags":43,"xp":68749,"survived_battles":44},"rank_div2":null},"5":{"rank_info":{"max_rank":9,"start_rank":23,"stars":1,"rank":9,"stage":4},"rank_div3":null,"rank_solo":{"max_frags_battle":3,"draws":0,"max_xp":3308,"wins":28,"planes_killed":52,"losses":13,"torpedoes":{"max_frags_battle":2,"frags":7,"hits":44,"shots":642},"battles":41,"max_damage_dealt":116460,"damage_dealt":2038916,"max_planes_killed":23,"aircraft":{"max_frags_battle":1,"frags":1},"ramming":{"max_frags_battle":0,"frags":0},"main_battery":{"max_frags_battle":2,"frags":24,"hits":2005,"shots":5944},"second_battery":{"max_frags_battle":0,"frags":0,"hits":78,"shots":358},"survived_wins":22,"frags":37,"xp":53887,"survived_battles":25},"rank_div2":null},"4":{"rank_info":{"max_rank":8,"start_rank":22,"stars":1,"rank":9,"stage":4},"rank_div3":null,"rank_solo":{"max_frags_battle":4,"draws":0,"max_xp":2858,"wins":36,"planes_killed":40,"losses":28,"torpedoes":{"max_frags_battle":2,"frags":18,"hits":69,"shots":1038},"battles":64,"max_damage_dealt":104715,"damage_dealt":2180962,"max_planes_killed":8,"aircraft":{"max_frags_battle":0,"frags":0},"ramming":{"max_frags_battle":1,"frags":1},"main_battery":{"max_frags_battle":3,"frags":30,"hits":1920,"shots":6944},"second_battery":{"max_frags_battle":0,"frags":0,"hits":13,"shots":52},"survived_wins":28,"frags":65,"xp":82650,"survived_battles":36},"rank_div2":null},"7":{"rank_info":{"max_rank":13,"start_rank":23,"stars":1,"rank":13,"stage":4},"rank_div3":null,"rank_solo":{"max_frags_battle":3,"draws":0,"max_xp":1796,"wins":8,"planes_killed":7,"losses":7,"torpedoes":{"max_frags_battle":1,"frags":3,"hits":12,"shots":225},"battles":15,"max_damage_dealt":77177,"damage_dealt":595520,"max_planes_killed":4,"aircraft":{"max_frags_battle":0,"frags":0},"ramming":{"max_frags_battle":0,"frags":0},"main_battery":{"max_frags_battle":2,"frags":10,"hits":1275,"shots":3712},"second_battery":{"max_frags_battle":0,"frags":0,"hits":9,"shots":68},"survived_wins":6,"frags":13,"xp":15226,"survived_battles":9},"rank_div2":null},"6":{"rank_info":{"max_rank":10,"start_rank":23,"stars":0,"rank":10,"stage":4},"rank_div3":null,"rank_solo":{"max_frags_battle":4,"draws":0,"max_xp":3236,"wins":16,"planes_killed":0,"losses":7,"torpedoes":{"max_frags_battle":2,"frags":9,"hits":49,"shots":700},"battles":23,"max_damage_dealt":137637,"damage_dealt":1068390,"max_planes_killed":0,"aircraft":{"max_frags_battle":0,"frags":0},"ramming":{"max_frags_battle":0,"frags":0},"main_battery":{"max_frags_battle":2,"frags":14,"hits":1712,"shots":3954},"second_battery":{"max_frags_battle":0,"frags":0,"hits":0,"shots":0},"survived_wins":14,"frags":31,"xp":44907,"survived_battles":14},"rank_div2":null},"9":{"rank_info":{"max_rank":5,"start_rank":23,"stars":0,"rank":5,"stage":4},"rank_div3":null,"rank_solo":{"max_frags_battle":3,"draws":0,"max_xp":3459,"wins":54,"planes_killed":221,"losses":35,"torpedoes":{"max_frags_battle":1,"frags":3,"hits":32,"shots":567},"battles":89,"max_damage_dealt":190042,"damage_dealt":6949088,"max_planes_killed":41,"aircraft":{"max_frags_battle":2,"frags":7},"ramming":{"max_frags_battle":1,"frags":3},"main_battery":{"max_frags_battle":3,"frags":56,"hits":4083,"shots":11598},"second_battery":{"max_frags_battle":1,"frags":3,"hits":759,"shots":4874},"survived_wins":39,"frags":81,"xp":133269,"survived_battles":45},"rank_div2":null},"8":{"rank_info":{"max_rank":8,"start_rank":23,"stars":2,"rank":9,"stage":2},"rank_div3":null,"rank_solo":{"max_frags_battle":3,"draws":0,"max_xp":3032,"wins":38,"planes_killed":241,"losses":31,"torpedoes":{"max_frags_battle":2,"frags":10,"hits":51,"shots":956},"battles":69,"max_damage_dealt":127244,"damage_dealt":3251330,"max_planes_killed":46,"aircraft":{"max_frags_battle":1,"frags":3},"ramming":{"max_frags_battle":0,"frags":0},"main_battery":{"max_frags_battle":2,"frags":35,"hits":7068,"shots":19502},"second_battery":{"max_frags_battle":1,"frags":1,"hits":16,"shots":122},"survived_wins":29,"frags":61,"xp":91871,"survived_battles":29},"rank_div2":null},"103":{"rank_info":{"max_rank":9,"start_rank":10,"stars":1,"rank":9,"stage":2},"rank_div3":null,"rank_solo":{"max_frags_battle":1,"draws":0,"max_xp":1082,"wins":1,"planes_killed":0,"losses":0,"torpedoes":{"max_frags_battle":0,"frags":0,"hits":0,"shots":4},"battles":1,"max_damage_dealt":23458,"damage_dealt":23458,"max_planes_killed":0,"aircraft":{"max_frags_battle":0,"frags":0},"ramming":{"max_frags_battle":0,"frags":0},"main_battery":{"max_frags_battle":1,"frags":1,"hits":24,"shots":78},"second_battery":{"max_frags_battle":0,"frags":0,"hits":0,"shots":0},"survived_wins":1,"frags":1,"xp":1082,"survived_battles":1},"rank_div2":null},"101":{"rank_info":{"max_rank":7,"start_rank":10,"stars":1,"rank":7,"stage":2},"rank_div3":null,"rank_solo":{"max_frags_battle":2,"draws":0,"max_xp":1965,"wins":3,"planes_killed":1,"losses":2,"torpedoes":{"max_frags_battle":0,"frags":0,"hits":0,"shots":0},"battles":5,"max_damage_dealt":123476,"damage_dealt":400646,"max_planes_killed":1,"aircraft":{"max_frags_battle":0,"frags":0},"ramming":{"max_frags_battle":1,"frags":1},"main_battery":{"max_frags_battle":2,"frags":5,"hits":214,"shots":582},"second_battery":{"max_frags_battle":1,"frags":1,"hits":88,"shots":322},"survived_wins":3,"frags":7,"xp":6368,"survived_battles":3},"rank_div2":null},"104":{"rank_info":{"max_rank":0,"start_rank":0,"stars":0,"rank":0,"stage":0},"rank_div3":null,"rank_solo":null,"rank_div2":null}},
     }
-    this.build = this.build.bind(this);
+    this.buildAchievements = this.buildAchievements.bind(this);
+    this.buildRankSummary = this.buildRankSummary.bind(this);
+    this.buildMiniRankSummary = this.buildMiniRankSummary.bind(this);
   }
   componentDidMount() {
     axios.get("https://api.worldofwarships.com/wows/account/info/?application_id=" + application_id + "&account_id=" + this.props.account_id)
@@ -69,9 +73,14 @@ export default class PlayerIndex extends Component {
         this.setState({achievements:response.data.data[this.props.account_id]})
     })
     .catch((error) => console.log(error));
+    axios.get("https://api.worldofwarships.com/wows/seasons/accountinfo/?application_id=" + application_id + "&account_id=" + this.props.account_id)
+    .then((response)=>{
+        this.setState({rankdata:response.data.data[this.props.account_id].seasons})
+    })
+    .catch((error) => console.log(error));
   }
 
-  build() {
+  buildAchievements() {
     var arr = [];
     var achievements = this.state.achievements.battle;
     for (const [name, number] of Object.entries(this.state.achievements.battle)) {
@@ -84,6 +93,54 @@ export default class PlayerIndex extends Component {
               <Card.Content description={number} />
             </Card.Content>
           </Card>
+        )
+      }
+    }
+    return arr;
+  }
+
+  buildRankSummary() {
+    var arr = [];
+    for (const [season, data] of Object.entries(this.state.rankdata)) {
+      if(this.state.rankdata[season].rank_solo && parseInt(season) < 100){
+        arr.push(
+          <List.Item
+          style={{
+            margin:'2.5em',
+          }}
+          >
+            <List.Content>
+              <List.Header>{"Season" + season + ": "}</List.Header>
+              <Statistic>
+                <Statistic.Value>{this.state.rankdata[season].rank_info.rank}</Statistic.Value>
+                <Statistic.Label>Rank: </Statistic.Label>
+              </Statistic>
+            </List.Content>
+          </List.Item>
+        )
+      }
+    }
+    return arr;
+  }
+
+  buildMiniRankSummary() {
+    var arr = [];
+    for (const [season, data] of Object.entries(this.state.rankdata)) {
+      if(this.state.rankdata[season].rank_solo && parseInt(season) >= 100){
+        arr.push(
+          <List.Item
+          style={{
+            margin:'2.5em',
+          }}
+          >
+            <List.Content>
+              <List.Header>{"Season" + (parseInt(season)-100).toString() + ": "}</List.Header>
+              <Statistic>
+                <Statistic.Value>{this.state.rankdata[season].rank_info.rank}</Statistic.Value>
+                <Statistic.Label>Rank: </Statistic.Label>
+              </Statistic>
+            </List.Content>
+          </List.Item>
         )
       }
     }
@@ -192,9 +249,13 @@ export default class PlayerIndex extends Component {
           </Header>
         </Divider>
 
-        <Container textAlign='center'>
+        <Container textAlign='center'
+        style={{
+            marginTop: '5em',
+          }}
+        >
           <Card.Group itemsPerRow={9} centered>
-            {this.build()}
+            {this.buildAchievements()}
           </Card.Group>
         </Container>
 
@@ -205,12 +266,53 @@ export default class PlayerIndex extends Component {
           }}
         >
           <Header as='h4'>
+            <Icon name='quidditch' />
+            Rank Summary
+          </Header>
+        </Divider>
+        <List horizontal>
+          {this.buildRankSummary()}
+        </List>
+        <Divider horizontal
+        style={{
+            marginTop: '2em',
+          }}
+          >
+          <Header as='h4'>
+            Mini Rank
+          </Header>
+        </Divider>
+        <List horizontal>
+          {this.buildMiniRankSummary()}
+        </List>
+
+        <Divider horizontal
+        style={{
+            marginTop: '5em',
+          }}
+        >
+          <Header as='h4'>
             <Icon name='bar chart' />
-            Detail Performance
+            Detail Random Performance
           </Header>
         </Divider>
         <Container fluid textAlign='center'>
           <PlayerShipTable account_id = {this.props.account_id}/>
+        </Container>
+
+
+        <Divider horizontal
+        style={{
+            marginTop: '5em',
+          }}
+        >
+          <Header as='h4'>
+            <Icon name='bar chart' />
+            Detail Rank Performance
+          </Header>
+        </Divider>
+        <Container fluid textAlign='center'>
+          <PlayerRankTable account_id = {this.props.account_id}/>
         </Container>
       </Segment>
     );
