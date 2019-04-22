@@ -109,7 +109,6 @@ class PlayerShipTableBody extends Component {
           rows.push(
               (
               <Table.Row key={row.ship_id.toString()+'/'+row.season} id={"PlayerRankTable"+row.ship_id.toString()+'/'+row.season} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
-                <Table.Cell >{seasonName}</Table.Cell>
                 <Table.Cell selectable><a>{row.name}</a></Table.Cell>
                 <Table.Cell ><img src={row.image} alt="404" height="35"/></Table.Cell>
                 <Table.Cell ><img src={nationDict[row.nation].image} alt="404" height="25"/></Table.Cell>
@@ -169,6 +168,8 @@ export default class PlayerRankTable extends Component {
       ship_ids: [],
       shipnames: [{key: 'all', value: 'all', text: ''}],
       showModal: false,
+      seasonOptions:[{key: '0', value: 'all', text: ''}],
+      selectedSeason: null,
     }
     this.handleSort = this.handleSort.bind(this);
     this.build = this.build.bind(this);
@@ -184,6 +185,7 @@ export default class PlayerRankTable extends Component {
     var statdata = {};
     var ship_ids = [];
     var shipnames = [];
+    var seasonOptions = [];
     var seasons = new Set();
     this.setState({data:null,doneLoading:false});
     axios.get("https://api.worldofwarships.com/wows/seasons/shipstats/?application_id=" + application_id + "&account_id=" + this.props.account_id)
@@ -236,6 +238,13 @@ export default class PlayerRankTable extends Component {
         })
     })
     .then(()=>{
+      for (let season of seasons){
+        if (season >= 100){
+          seasonOptions.push({key: season, value: season, text: "Season: Mini " + (parseInt(season)-100).toString()});
+        }else{
+          seasonOptions.push({key: season, value: season, text: "Season: " + season});
+        }
+      }
       var slice = 24;
       for(var i = 0; i < ship_ids.length/slice; i++){
         var ship_id_strings = "";
@@ -299,8 +308,8 @@ export default class PlayerRankTable extends Component {
 
                     survived_wins: statdata[ship_id.toString()+","+season.toString()].survived_wins,
                   });
-                  this.setState({data:data,shipnames:shipnames});
-                  this.handleFilter(null,"all","all","all");
+                  this.setState({data:data,shipnames:shipnames,seasonOptions:seasonOptions});
+                  this.handleFilter(null,null,"all","all","all");
                 }
               }
             }
@@ -343,13 +352,14 @@ export default class PlayerRankTable extends Component {
     }
   }
 
-  handleFilter(selectedName,selectedNation,selectedType,selectedTier){
+  handleFilter(selectedSeason, selectedName,selectedNation,selectedType,selectedTier){
      var selectedData = [];
      this.state.data.forEach((row)=>{
-       if(this.selected(row,selectedName,selectedNation,selectedType,selectedTier)){
+       if(this.selected(row,selectedSeason,selectedName,selectedNation,selectedType,selectedTier)){
          selectedData.push(row);
        }
      })
+
      this.setState({selectedData:selectedData, page: 0});
   }
 
@@ -393,7 +403,7 @@ export default class PlayerRankTable extends Component {
     }
   }
 
-  selected(row,selectedName,selectedNation,selectedType,selectedTier){
+  selected(row,selectedSeason, selectedName,selectedNation,selectedType,selectedTier){
     if(selectedName && selectedName !== "all" && selectedName !== ""){
       if(row.name !== selectedName){
         return false;
@@ -413,6 +423,11 @@ export default class PlayerRankTable extends Component {
         if(row.tier !== parseInt(selectedTier)){
           return false;
         }
+      }
+    }
+    if(selectedSeason && selectedSeason !== "all" && selectedSeason !== ""){
+      if(row.season !== selectedSeason){
+        return false;
       }
     }
     return true
@@ -484,10 +499,10 @@ export default class PlayerRankTable extends Component {
         <Dimmer active={!this.state.doneLoading}>
           <Loader>Loading</Loader>
         </Dimmer>
+        <Dropdown fluid clearable placeholder='Select Season' selection options={this.state.seasonOptions.sort((a,b)=>a.key-b.key)} value={this.state.selectedSeason} onChange={(e,{value}) => {this.setState({selectedSeason: value, selectedName:null,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value, null,"all","all","all")}}/>
         <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
               <Table.Row>
-                <Table.HeaderCell rowSpan='2'>Season</Table.HeaderCell>
                 <Table.HeaderCell colSpan='2'>Ship</Table.HeaderCell>
                 <Table.HeaderCell colSpan='2' sorted={this.state.column === 'nation' ? this.state.direction : null} onClick={() => this.handleSort('nation')}>Nation</Table.HeaderCell>
                 <Table.HeaderCell colSpan='2' sorted={this.state.column === 'type' ? this.state.direction : null} onClick={() => this.handleSort('type')}>Type</Table.HeaderCell>
@@ -501,10 +516,10 @@ export default class PlayerRankTable extends Component {
                 <Table.HeaderCell rowSpan='2'></Table.HeaderCell>
               </Table.Row>
               <Table.Row>
-                <Table.Cell colSpan='2' width="5"><Dropdown fluid clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value,"all","all","all")}}/></Table.Cell>
-                <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter("all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
-                <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
-                <Table.Cell width="5"><Dropdown fluid placeholder='Select Tier ' selection options={tierOptions} value={this.state.selectedTier} onChange={(e,{value}) => {this.setState({selectedTier:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,this.state.selectedType,value)}}/></Table.Cell>
+                <Table.Cell colSpan='2' width="5"><Dropdown fluid clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(this.state.selectedSeason, value,"all","all","all")}}/></Table.Cell>
+                <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter(this.state.selectedSeason,"all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
+                <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter(this.state.selectedSeason,"all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
+                <Table.Cell width="5"><Dropdown fluid placeholder='Select Tier ' selection options={tierOptions} value={this.state.selectedTier} onChange={(e,{value}) => {this.setState({selectedTier:value,selectedName:"all"}); this.handleFilter(this.state.selectedSeason,"all",this.state.selectedNation,this.state.selectedType,value)}}/></Table.Cell>
                 <Table.HeaderCell sorted={this.state.column === 'max_xp' ? this.state.direction : null} onClick={() => this.handleSort('max_xp')}>XP</Table.HeaderCell>
                 <Table.HeaderCell sorted={this.state.column === 'max_frags_battle' ? this.state.direction : null} onClick={() => this.handleSort('max_frags_battle')}>Kills</Table.HeaderCell>
                 <Table.HeaderCell sorted={this.state.column === 'max_damage_dealt' ? this.state.direction : null} onClick={() => this.handleSort('max_damage_dealt')}>Damage</Table.HeaderCell>

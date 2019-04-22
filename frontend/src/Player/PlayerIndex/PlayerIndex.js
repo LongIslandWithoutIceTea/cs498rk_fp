@@ -512,12 +512,30 @@ export default class PlayerIndex extends Component {
           display:window.innerWidth>=1080?'block':'none',
         }}
         >
-          <Header size='small' style={{margin:'0'}}>Ship Stats By Type</Header>
-          <PlayerShipTypeTable data={this.state.playShipTableData}/>
-          <Header size='small' style={{margin:'0'}}>Ship Stats By Nation</Header>
-          <PlayerShipTierTable data={this.state.playShipTableData}/>
-          <Header size='small' style={{margin:'0'}}>Ship Stats By Tier</Header>
-          <PlayerShipNationTable data={this.state.playShipTableData}/>
+        <Tab menu={{ secondary: true, pointing: true }} panes={
+          [
+            { menuItem: 'Type', render: () =>
+            <Tab.Pane attached={false}>
+              <Container fluid textAlign='center'>
+                <Header size='small' style={{margin:'0'}}>Ship Stats By Type</Header>
+                <PlayerShipTypeTable data={this.state.playShipTableData}/>
+              </Container>
+            </Tab.Pane> },
+            { menuItem: 'Tier', render: () =>
+            <Tab.Pane attached={false}>
+              <Container fluid textAlign='center'>
+                <Header size='small' style={{margin:'0'}}>Ship Stats By Tier</Header>
+                <PlayerShipTierTable data={this.state.playShipTableData}/>
+              </Container>
+            </Tab.Pane> },
+            { menuItem: 'Nation', render: () =>
+            <Tab.Pane attached={false}>
+              <Container fluid textAlign='center'>
+                <Header size='small' style={{margin:'0'}}>Ship Stats By Nation</Header>
+                <PlayerShipNationTable data={this.state.playShipTableData}/>
+              </Container>
+            </Tab.Pane> },
+          ]} />
         </Container>
 
         <Divider horizontal
