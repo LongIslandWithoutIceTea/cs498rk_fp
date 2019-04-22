@@ -140,7 +140,7 @@ export default class PlayerIndex extends Component {
           </Header>
         </Divider>
         <Container fluid textAlign='center'>
-          <PlayerShipTable account_id = {this.state.data.account_id}/>
+          <PlayerShipTable account_id = {this.props.account_id}/>
         </Container>
       </Segment>
     );
