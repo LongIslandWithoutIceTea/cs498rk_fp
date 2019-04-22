@@ -463,7 +463,7 @@ export default class PlayerShipTable extends Component {
           <Loader>Loading</Loader>
         </Dimmer>
 
-        <Table sortable celled structured striped unstackable className="PlayerShipTable">
+        <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
               <Table.Row>
                 <Table.HeaderCell colSpan='2'>Ship</Table.HeaderCell>
