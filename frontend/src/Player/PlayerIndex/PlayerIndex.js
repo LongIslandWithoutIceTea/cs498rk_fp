@@ -66,7 +66,7 @@ export default class PlayerIndex extends Component {
     }
     this.buildAchievements = this.buildAchievements.bind(this);
     this.buildRankSummary = this.buildRankSummary.bind(this);
-    this.buildMiniRankSummary = this.buildMiniRankSummary.bind(this);
+    this.buildSprintRankSummary = this.buildSprintRankSummary.bind(this);
   }
   componentDidMount() {
     axios.get("https://api.worldofwarships.com/wows/account/info/?application_id=" + application_id + "&account_id=" + this.props.account_id)
@@ -283,7 +283,7 @@ export default class PlayerIndex extends Component {
     return arr;
   }
 
-  buildMiniRankSummary() {
+  buildSprintRankSummary() {
     var arr = [];
     for (const [season, data] of Object.entries(this.state.rankdata)) {
       if(this.state.rankdata[season].rank_solo && parseInt(season) >= 100){
@@ -294,7 +294,7 @@ export default class PlayerIndex extends Component {
           }}
           >
             <List.Content>
-              <List.Header>{"Mini " + (parseInt(season)-100).toString() + ": "}</List.Header>
+              <List.Header>{"Sprint " + (parseInt(season)-100).toString() + ": "}</List.Header>
               <Statistic color={this.state.rankdata[season].rank_info.rank<=1?'red':this.state.rankdata[season].rank_info.rank<=3?'green':this.state.rankdata[season].rank_info.rank<=5?'blue':'grey'}>
                 <Statistic.Value>{this.state.rankdata[season].rank_info.rank}</Statistic.Value>
                 <Statistic.Label>Rank: </Statistic.Label>
@@ -479,7 +479,7 @@ export default class PlayerIndex extends Component {
           alignItems: 'flex-start',
         }}
         >
-          {this.buildMiniRankSummary()}
+          {this.buildSprintRankSummary()}
         </div>
 
         <Divider horizontal

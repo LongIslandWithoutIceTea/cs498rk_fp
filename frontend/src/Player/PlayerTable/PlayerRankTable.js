@@ -104,7 +104,7 @@ class PlayerShipTableBody extends Component {
           if (parseInt(row.season) < 100){
             seasonName = row.season;
           }else{
-            seasonName = "Mini " + (parseInt(row.season)-100).toString()
+            seasonName = "Sprint " + (parseInt(row.season)-100).toString()
           }
           rows.push(
               (
@@ -240,7 +240,7 @@ export default class PlayerRankTable extends Component {
     .then(()=>{
       for (let season of seasons){
         if (season >= 100){
-          seasonOptions.push({key: season, value: season, text: "Season: Mini " + (parseInt(season)-100).toString()});
+          seasonOptions.push({key: season, value: season, text: "Season: Sprint " + (parseInt(season)-100).toString()});
         }else{
           seasonOptions.push({key: season, value: season, text: "Season: " + season});
         }
