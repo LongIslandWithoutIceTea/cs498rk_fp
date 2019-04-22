@@ -61,22 +61,22 @@ export default class PlayerIndex extends Component {
             marginTop: '7em',
           }}
         >
-        <Statistic>
-          <Statistic.Value>{this.state.data.statistics.pvp.battles.toLocaleString()}</Statistic.Value>
-          <Statistic.Label>Battles</Statistic.Label>
-        </Statistic>
-        <Statistic>
-          <Statistic.Value>{this.state.data.statistics.pvp.max_xp.toLocaleString()}</Statistic.Value>
-          <Statistic.Label>Max XP</Statistic.Label>
-        </Statistic>
-        <Statistic>
-          <Statistic.Value>{this.state.data.statistics.pvp.max_damage_dealt.toLocaleString()}</Statistic.Value>
-          <Statistic.Label>Max Damage</Statistic.Label>
-        </Statistic>
-        <Statistic>
-          <Statistic.Value>{this.state.data.statistics.pvp.max_frags_battle.toLocaleString()}</Statistic.Value>
-          <Statistic.Label>Max Kills</Statistic.Label>
-        </Statistic>
+          <Statistic>
+            <Statistic.Value>{this.state.data.statistics.pvp.battles.toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Battles</Statistic.Label>
+          </Statistic>
+          <Statistic>
+            <Statistic.Value>{this.state.data.statistics.pvp.max_xp.toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Max XP</Statistic.Label>
+          </Statistic>
+          <Statistic>
+            <Statistic.Value>{this.state.data.statistics.pvp.max_damage_dealt.toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Max Damage</Statistic.Label>
+          </Statistic>
+          <Statistic>
+            <Statistic.Value>{this.state.data.statistics.pvp.max_frags_battle.toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Max Kills</Statistic.Label>
+          </Statistic>
         </Statistic.Group>
 
         <Divider horizontal
@@ -90,38 +90,33 @@ export default class PlayerIndex extends Component {
           </Header>
         </Divider>
 
-        <List divided size={'massive'}
-        style={{
+        <div
+          style={{
             marginTop: '4em',
-            marginLeft: '20em',
-            marginRight: '20em',
+            marginLeft: 'auto',
           }}
         >
-          <List.Item style={{margin:'1em'}}>
-            <List.Content floated='left'><List.Header>Average XP</List.Header></List.Content>
-            <List.Content floated='right'>{division(this.state.data.statistics.pvp.xp,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses)}</List.Content>
-          </List.Item>
-          <List.Item style={{margin:'1em'}}>
-            <List.Content floated='left'><List.Header>Average Damage</List.Header></List.Content>
-            <List.Content floated='right'>{division(this.state.data.statistics.pvp.damage_dealt,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses)}</List.Content>
-          </List.Item>
-          <List.Item style={{margin:'1em'}}>
-            <List.Content floated='left'><List.Header>Average Kills</List.Header></List.Content>
-            <List.Content floated='right'>{division(this.state.data.statistics.pvp.frags,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses)}</List.Content>
-          </List.Item>
-          <List.Item style={{margin:'1em'}}>
-            <List.Content floated='left'><List.Header>Survival Rate</List.Header></List.Content>
-            <List.Content floated='right'>{division(this.state.data.statistics.pvp.survived_battles,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses)}</List.Content>
-          </List.Item>
-          <List.Item style={{margin:'1em'}}>
-            <List.Content floated='left'><List.Header>Main Battery Hit Rate</List.Header></List.Content>
-            <List.Content floated='right'>{division(this.state.data.statistics.pvp.main_battery.hits,this.state.data.statistics.pvp.main_battery.shots)}</List.Content>
-          </List.Item>
-          <List.Item style={{margin:'1em'}}>
-            <List.Content floated='left'><List.Header>Torpedo Hit Rate</List.Header></List.Content>
-            <List.Content floated='right'>{division(this.state.data.statistics.pvp.torpedoes.hits,this.state.data.statistics.pvp.torpedoes.shots)}</List.Content>
-          </List.Item>
-        </List>
+          <Statistic horizontal size="small" style={{marginLeft: '5em'}}>
+            <Statistic.Value>{division(this.state.data.statistics.pvp.xp,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses).toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Average XP</Statistic.Label>
+          </Statistic>
+          <Statistic horizontal size="small" style={{marginLeft: '5em'}}>
+            <Statistic.Value>{division(this.state.data.statistics.pvp.damage_dealt,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses).toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Average Damage</Statistic.Label>
+          </Statistic>
+          <Statistic horizontal size="small" style={{marginLeft: '5em'}}>
+            <Statistic.Value>{division(this.state.data.statistics.pvp.frags,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses).toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Average Kills</Statistic.Label>
+          </Statistic>
+          <Statistic horizontal size="small" style={{marginLeft: '5em'}}>
+            <Statistic.Value>{division(this.state.data.statistics.pvp.survived_battles,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses).toLocaleString()}</Statistic.Value>
+            <Statistic.Label>Survival Rate</Statistic.Label>
+          </Statistic>
+          <Statistic horizontal size="small" style={{marginLeft: '5em'}}>
+            <Statistic.Value>{division(this.state.data.statistics.pvp.main_battery.hits,this.state.data.statistics.pvp.main_battery.shots) * 100 + "%"}</Statistic.Value>
+            <Statistic.Label>Main Battery Hit Rate</Statistic.Label>
+          </Statistic>
+        </div>
 
         <Divider horizontal
         style={{
