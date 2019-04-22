@@ -484,7 +484,6 @@ export default class PlayerRankTable extends Component {
         <Dimmer active={!this.state.doneLoading}>
           <Loader>Loading</Loader>
         </Dimmer>
-
         <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
               <Table.Row>

@@ -154,7 +154,6 @@ export default class PlayerShipTable extends Component {
       shipData: null,
       selectedData:null,
       direction: null,
-      doneLoading:false,
       page: 0,
       selectedName: "all",
       selectedNation: "all",
@@ -164,6 +163,7 @@ export default class PlayerShipTable extends Component {
       ship_ids: [],
       shipnames: [{key: 'all', value: 'all', text: ''}],
       showModal: false,
+      doneLoading: false,
     }
     this.handleSort = this.handleSort.bind(this);
     this.build = this.build.bind(this);
@@ -174,141 +174,13 @@ export default class PlayerShipTable extends Component {
     this.selected = this.selected.bind(this);
     this.handleselectedShipID = this.handleselectedShipID.bind(this);
   }
-  componentDidMount() {
-    var data = [];
-    var statdata = {};
-    var ship_ids = [];
-    var shipnames = [];
-    this.setState({data:null,doneLoading:false});
-    axios.get("https://api.worldofwarships.com/wows/ships/stats/?application_id=" + application_id + "&account_id=" + this.props.account_id)
-    .then((response)=>{
-        var res = response.data.data[this.props.account_id];
-        res.forEach((ship) => {
-          ship_ids.push(ship.ship_id);
-          statdata[ship.ship_id]={
-              ship_id: ship.ship_id,
-              wins: ship.pvp.wins,
-              battles: (ship.pvp.wins+ship.pvp.losses+ship.pvp.draws),
-              win_rate: division(ship.pvp.wins,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-              survival_rate: division(ship.pvp.survived_battles,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-
-              max_xp: ship.pvp.max_xp,
-              max_frags_battle: ship.pvp.max_frags_battle,
-              max_damage_dealt: ship.pvp.max_damage_dealt,
-              max_planes_killed: ship.pvp.max_planes_killed,
-
-              ave_xp: divisionWhole(ship.pvp.xp,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-              ave_frags: division(ship.pvp.frags,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-              ave_damage_dealt: divisionWhole(ship.pvp.damage_dealt,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-              ave_planes_killed: division(ship.pvp.planes_killed,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-
-              main_battery_max_frags_battle: ship.pvp.main_battery.max_frags_battle,
-              main_battery_frags: division(ship.pvp.main_battery.frags,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-              main_battery_hit_rate: division(ship.pvp.main_battery.hits,ship.pvp.main_battery.shots),
-
-              torpedoes_max_frags_battle: ship.pvp.torpedoes.max_frags_battle,
-              torpedoes_frags: division(ship.pvp.torpedoes.frags,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-              torpedoes_hit_rate: division(ship.pvp.torpedoes.hits,ship.pvp.torpedoes.shots),
-
-              second_battery_max_frags_battle: ship.pvp.second_battery.max_frags_battle,
-              second_battery_frags: division(ship.pvp.second_battery.frags,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-              second_battery_hit_rate: division(ship.pvp.second_battery.hits,ship.pvp.second_battery.shots),
-
-              aircraft_max_frags_battle: ship.pvp.aircraft.max_frags_battle,
-              aircraft_frags: division(ship.pvp.aircraft.frags,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-
-              ramming_max_frags_battle: ship.pvp.ramming.max_frags_battle,
-              ramming_frags: division(ship.pvp.ramming.frags,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-
-
-              team_capture_points: ship.pvp.team_capture_points,
-              dropped_capture_points: ship.pvp.dropped_capture_points,
-              ships_spotted: ship.pvp.ships_spotted,
-              max_damage_scouting: ship.pvp.max_damage_scouting,
-              survived_wins: ship.pvp.survived_wins,
-          }
-        })
-    })
-    .then(()=>{
-      var slice = 24;
-      for(var i = 0; i < ship_ids.length/slice; i++){
-        var ship_id_strings = "";
-        if (i * slice + slice < ship_ids.length){
-          var limit = i * slice + slice;
-        }else{
-          var limit = ship_ids.length;
-          this.setState({doneLoading:true});
-        }
-        for(var j = i * slice; j < limit; j++){
-          ship_id_strings += ship_ids[j] + ",";
-        }
-        axios.get("https://api.worldofwarships.com/wows/encyclopedia/ships/?application_id=" + application_id + "&ship_id=" + ship_id_strings.substring(0,ship_id_strings.length-1))
-        .then((shipresponse)=>{
-          for (const [ship_id, shipres] of Object.entries(shipresponse.data.data)) {
-            if(shipres && statdata[ship_id.toString()]){
-              shipnames.push({key: shipres.name, value: shipres.name, text: shipres.name});
-              data.push({
-                ship_id: shipres.ship_id,
-                name: shipres.name,
-                image: shipres.images.small,
-                nation: shipres.nation,
-                tier: shipres.tier,
-                type: shipres.type,
-
-                wins: statdata[ship_id.toString()].wins,
-                battles: statdata[ship_id.toString()].battles,
-                win_rate:statdata[ship_id.toString()].win_rate,
-                survival_rate: statdata[ship_id.toString()].survival_rate,
-
-                max_xp: statdata[ship_id.toString()].max_xp,
-                max_frags_battle: statdata[ship_id.toString()].max_frags_battle,
-                max_damage_dealt: statdata[ship_id.toString()].max_damage_dealt,
-                max_planes_killed: statdata[ship_id.toString()].max_planes_killed,
-
-                ave_xp: statdata[ship_id.toString()].ave_xp,
-                ave_frags: statdata[ship_id.toString()].ave_frags,
-                ave_damage_dealt: statdata[ship_id.toString()].ave_damage_dealt,
-                ave_planes_killed: statdata[ship_id.toString()].ave_planes_killed,
-
-                main_battery_max_frags_battle: statdata[ship_id.toString()].main_battery_max_frags_battle,
-                main_battery_frags: statdata[ship_id.toString()].main_battery_frags,
-                main_battery_hit_rate: statdata[ship_id.toString()].main_battery_hit_rate,
-
-                torpedoes_max_frags_battle: statdata[ship_id.toString()].torpedoes_max_frags_battl,
-                torpedoes_frags: statdata[ship_id.toString()].torpedoes_frags,
-                torpedoes_hit_rate: statdata[ship_id.toString()].torpedoes_hit_rate,
-
-                second_battery_max_frags_battle: statdata[ship_id.toString()].second_battery_max_frags_battle,
-                second_battery_frags: statdata[ship_id.toString()].second_battery_frags,
-                second_battery_hit_rate: statdata[ship_id.toString()].second_battery_hit_rate,
-
-                aircraft_max_frags_battle: statdata[ship_id.toString()].aircraft_max_frags_battle,
-                aircraft_frags: statdata[ship_id.toString()].aircraft_frags,
-
-                ramming_max_frags_battle: statdata[ship_id.toString()].ramming_max_frags_battle,
-                ramming_frags: statdata[ship_id.toString()].ramming_frags,
-
-
-                team_capture_points: statdata[ship_id.toString()].team_capture_points,
-                dropped_capture_points: statdata[ship_id.toString()].dropped_capture_points,
-                ships_spotted: statdata[ship_id.toString()].ships_spotted,
-                max_damage_scouting: statdata[ship_id.toString()].max_damage_scouting,
-                survived_wins: statdata[ship_id.toString()].survived_wins,
-              });
-              this.setState({data:data,shipnames:shipnames});
-              this.handleFilter(null,"all","all","all");
-            }
-          }
-        })
-        .catch((error) => console.log(error));
-      }
-    })
-    .catch((error) => console.log(error));
+  componentWillReceiveProps() {
+    this.setState({data:this.props.data,shipnames:this.props.shipnames,doneLoading:true});
+    this.handleFilter(null,"all","all","all");
   }
-
   handleSort(clickedColumn){
     var selectedData = [];
-    this.state.data.forEach((row)=>{
+    this.props.data.forEach((row)=>{
       if(this.selected(row,this.state.selectedName,this.state.selectedNation,this.state.selectedType,this.state.selectedTier)){
         selectedData.push(row);
       }
@@ -338,13 +210,15 @@ export default class PlayerShipTable extends Component {
   }
 
   handleFilter(selectedName,selectedNation,selectedType,selectedTier){
-     var selectedData = [];
-     this.state.data.forEach((row)=>{
-       if(this.selected(row,selectedName,selectedNation,selectedType,selectedTier)){
-         selectedData.push(row);
-       }
-     })
-     this.setState({selectedData:selectedData, page: 0});
+    if(this.props.data){
+      var selectedData = [];
+      this.props.data.forEach((row)=>{
+        if(this.selected(row,selectedName,selectedNation,selectedType,selectedTier)){
+          selectedData.push(row);
+        }
+      })
+      this.setState({selectedData:selectedData, page: 0});
+    }
   }
 
   handleselectedShipID(selectedShipID){
