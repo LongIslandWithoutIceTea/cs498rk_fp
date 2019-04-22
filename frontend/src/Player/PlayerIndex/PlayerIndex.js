@@ -55,7 +55,7 @@ export default class PlayerIndex extends Component {
     this.state = {
       achievementsVisible: window.innerWidth>400?true:false,
       playerTableVisible: window.innerWidth>=1920?true:false,
-      playShipTableData: null,
+      playerShipTableData: null,
       shipdetails: null,
       shipnames: null,
       data: {"last_battle_time":1555816434,"account_id":1019218342,"leveling_tier":15,"created_at":1457320991,"leveling_points":12806,"updated_at":1555877501,"private":null,"hidden_profile":false,"logout_at":1555877490,"karma":null,"statistics":{"distance":496492,"battles":12716,"pvp":{"max_xp":6511,"damage_to_buildings":619131,"main_battery":{"max_frags_battle":8,"frags":9655,"hits":763954,"max_frags_ship_id":3765384944,"shots":2056909},"max_ships_spotted_ship_id":3751786288,"max_damage_scouting":334282,"art_agro":4000000001,"max_xp_ship_id":3760109008,"ships_spotted":14066,"second_battery":{"max_frags_battle":3,"frags":364,"hits":98556,"max_frags_ship_id":3751753712,"shots":488873},"max_frags_ship_id":4184815568,"xp":20988609,"survived_battles":5087,"dropped_capture_points":0,"max_damage_dealt_to_buildings":213600,"torpedo_agro":848533559,"draws":4,"control_captured_points":99320,"battles_since_510":9057,"max_total_agro_ship_id":4276041424,"planes_killed":48366,"battles":11055,"max_ships_spotted":12,"max_suppressions_ship_id":4276041424,"survived_wins":4322,"frags":14915,"damage_scouting":257570466,"max_total_agro":4793200,"max_frags_battle":8,"capture_points":0,"ramming":{"max_frags_battle":1,"frags":117,"max_frags_ship_id":3760109008},"suppressions_count":3,"max_suppressions_count":1,"torpedoes":{"max_frags_battle":4,"frags":1359,"hits":6254,"max_frags_ship_id":4282267344,"shots":82849},"max_planes_killed_ship_id":4288591856,"aircraft":{"max_frags_battle":7,"frags":1551,"max_frags_ship_id":3763320816},"team_capture_points":1112945,"control_dropped_points":64546,"max_damage_dealt":342198,"max_damage_dealt_to_buildings_ship_id":4282333168,"max_damage_dealt_ship_id":4276041424,"wins":6872,"losses":4179,"damage_dealt":892778787,"max_planes_killed":83,"max_scouting_damage_ship_id":4279219920,"team_dropped_capture_points":542979,"battles_since_512":8542}},"nickname":"Quincy_0v0","stats_updated_at":1555877501},
@@ -97,12 +97,12 @@ export default class PlayerIndex extends Component {
         this.setState({rankdata:response.data.data[this.props.account_id].seasons})
     })
     .catch((error) => console.log(error));
-    var playShipTableData = [];
+    var playerShipTableData = [];
     var statdata = {};
     var ship_ids = [];
     var shipnames = [];
     var shipdetails = [];
-    this.setState({playShipTableData:null});
+    this.setState({playerShipTableData:null});
     axios.get("https://api.worldofwarships.com/wows/ships/stats/?application_id=" + application_id + "&account_id=" + this.props.account_id)
     .then((response)=>{
         var res = response.data.data[this.props.account_id];
@@ -177,7 +177,7 @@ export default class PlayerIndex extends Component {
                 tier: shipres.tier,
                 type: shipres.type,
               });
-              playShipTableData.push({
+              playerShipTableData.push({
                 ship_id: shipres.ship_id,
                 name: shipres.name,
                 image: shipres.images.small,
@@ -225,7 +225,7 @@ export default class PlayerIndex extends Component {
                 max_damage_scouting: statdata[ship_id.toString()].max_damage_scouting,
                 survived_wins: statdata[ship_id.toString()].survived_wins,
               });
-              this.setState({playShipTableData :playShipTableData ,shipnames:shipnames,shipdetails:shipdetails});
+              this.setState({playerShipTableData :playerShipTableData ,shipnames:shipnames,shipdetails:shipdetails});
 
             }
           }
@@ -501,9 +501,9 @@ export default class PlayerIndex extends Component {
           marginTop: '2.5em',
         }}
         >
-          <PlayerShipTypeGraph data={this.state.playShipTableData}/>
-          <PlayerShipNationGraph data={this.state.playShipTableData}/>
-          <PlayerShipTierGraph data={this.state.playShipTableData}/>
+          <PlayerShipTypeGraph data={this.state.playerShipTableData}/>
+          <PlayerShipNationGraph data={this.state.playerShipTableData}/>
+          <PlayerShipTierGraph data={this.state.playerShipTableData}/>
         </Container>
 
         <Container
@@ -518,21 +518,21 @@ export default class PlayerIndex extends Component {
             <Tab.Pane attached={false}>
               <Container fluid textAlign='center'>
                 <Header size='small' style={{margin:'0'}}>Ship Stats By Type</Header>
-                <PlayerShipTypeTable data={this.state.playShipTableData}/>
+                <PlayerShipTypeTable data={this.state.playerShipTableData}/>
               </Container>
             </Tab.Pane> },
             { menuItem: 'Tier', render: () =>
             <Tab.Pane attached={false}>
               <Container fluid textAlign='center'>
                 <Header size='small' style={{margin:'0'}}>Ship Stats By Tier</Header>
-                <PlayerShipTierTable data={this.state.playShipTableData}/>
+                <PlayerShipTierTable data={this.state.playerShipTableData}/>
               </Container>
             </Tab.Pane> },
             { menuItem: 'Nation', render: () =>
             <Tab.Pane attached={false}>
               <Container fluid textAlign='center'>
                 <Header size='small' style={{margin:'0'}}>Ship Stats By Nation</Header>
-                <PlayerShipNationTable data={this.state.playShipTableData}/>
+                <PlayerShipNationTable data={this.state.playerShipTableData}/>
               </Container>
             </Tab.Pane> },
           ]} />
@@ -559,7 +559,7 @@ export default class PlayerIndex extends Component {
             { menuItem: 'Random', render: () =>
             <Tab.Pane attached={false}>
               <Container fluid textAlign='center'>
-                <PlayerShipTable account_id = {this.props.account_id} data={this.state.playShipTableData} shipnames={this.state.shipnames}/>
+                <PlayerShipTable account_id = {this.props.account_id} data={this.state.playerShipTableData} shipnames={this.state.shipnames}/>
               </Container>
             </Tab.Pane> },
             { menuItem: 'Rank', render: () =>
