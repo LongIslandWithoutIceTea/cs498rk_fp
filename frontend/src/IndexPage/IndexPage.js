@@ -8,6 +8,7 @@ import {
     Segment,
     Image,
 } from 'semantic-ui-react'
+import { Link } from "react-router-dom";
 import logo from '../assets/wows-icon.png'
 import './index.scss'
 
@@ -30,7 +31,12 @@ class IndexPage extends Component {
                         </Header>
                         <Divider/>
                     </Container>
-                    <Button primary>Start<Icon name='right arrow' /></Button>
+                    <Link to={'/player'}>
+                        <Button primary>
+                            Player Stats
+                            <Icon name='right arrow' />
+                        </Button>
+                    </Link>
                 </Segment>
 
             </div>
