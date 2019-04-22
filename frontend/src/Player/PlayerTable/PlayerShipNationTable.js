@@ -205,15 +205,10 @@ export default class PlayerShipNationTable extends Component {
         }
       }
     }
-    this.build = this.build.bind(this);
     this.buildrows = this.buildrows.bind(this);
   }
-  componentWillReceiveProps() {
-    if(this.props.data){
-      this.build(this.props.data);
-    }
-  }
-  build(input){
+  buildrows(){
+    if(!this.props.data){return <Table.Row/>;}
     var data = {
       usa:{
         wins:0,
@@ -381,14 +376,16 @@ export default class PlayerShipNationTable extends Component {
         count: 0,
       }
     }
-    input.forEach((row)=>{
+    this.props.data.forEach((row)=>{
       if(row.nation === "usa"){
         data.usa.max_damage_dealt = row.max_damage_dealt > data.usa.max_damage_dealt?row.max_damage_dealt:data.usa.max_damage_dealt;
         data.usa.max_frags_battle  = row.max_frags_battle > data.usa.max_frags_battle?row.max_frags_battle:data.usa.max_frags_battle ;
         data.usa.max_xp  = row.max_xp > data.usa.max_xp?row.max_xp:data.usa.max_xp ;
+        data.usa.max_planes_killed  = row.max_planes_killed > data.usa.max_planes_killed?row.max_planes_killed:data.usa.max_planes_killed ;
         data.usa.ave_xp = divisionWhole((row.ave_xp + data.usa.ave_xp * data.usa.count),(data.usa.count+1))
         data.usa.ave_damage_dealt = divisionWhole((row.ave_damage_dealt + data.usa.ave_damage_dealt * data.usa.count),(data.usa.count+1))
         data.usa.ave_frags = division((row.ave_frags + data.usa.ave_frags * data.usa.count),(data.usa.count+1))
+        data.usa.ave_planes_killed = division((row.ave_planes_killed + data.usa.ave_planes_killed * data.usa.count),(data.usa.count+1))
         data.usa.battles += row.battles
         data.usa.wins += row.wins
         data.usa.win_rate = division(data.usa.wins,data.usa.battles);
@@ -405,6 +402,8 @@ export default class PlayerShipNationTable extends Component {
         data.ussr.wins += row.wins
         data.ussr.win_rate = division(data.ussr.wins,data.ussr.battles);
         data.ussr.survival_rate = division((row.survival_rate + data.ussr.survival_rate * data.ussr.count),(data.ussr.count+1))
+        data.ussr.max_planes_killed  = row.max_planes_killed > data.ussr.max_planes_killed?row.max_planes_killed:data.ussr.max_planes_killed ;
+        data.ussr.ave_planes_killed = division((row.ave_planes_killed + data.ussr.ave_planes_killed * data.ussr.count),(data.ussr.count+1))
         data.ussr.count ++;
       }else if(row.nation === "uk"){
         data.uk.max_damage_dealt = row.max_damage_dealt > data.uk.max_damage_dealt?row.max_damage_dealt:data.uk.max_damage_dealt;
@@ -417,6 +416,8 @@ export default class PlayerShipNationTable extends Component {
         data.uk.wins += row.wins
         data.uk.win_rate = division(data.uk.wins,data.uk.battles);
         data.uk.survival_rate = division((row.survival_rate + data.uk.survival_rate * data.uk.count),(data.uk.count+1))
+        data.uk.max_planes_killed  = row.max_planes_killed > data.uk.max_planes_killed?row.max_planes_killed:data.uk.max_planes_killed ;
+        data.uk.ave_planes_killed = division((row.ave_planes_killed + data.uk.ave_planes_killed * data.uk.count),(data.uk.count+1))
         data.uk.count ++;
       }else if(row.nation === "japan"){
         data.japan.max_damage_dealt = row.max_damage_dealt > data.japan.max_damage_dealt?row.max_damage_dealt:data.japan.max_damage_dealt;
@@ -429,6 +430,8 @@ export default class PlayerShipNationTable extends Component {
         data.japan.wins += row.wins
         data.japan.win_rate = division(data.japan.wins,data.japan.battles);
         data.japan.survival_rate = division((row.survival_rate + data.japan.survival_rate * data.japan.count),(data.japan.count+1))
+        data.japan.max_planes_killed  = row.max_planes_killed > data.japan.max_planes_killed?row.max_planes_killed:data.japan.max_planes_killed ;
+        data.japan.ave_planes_killed = division((row.ave_planes_killed + data.japan.ave_planes_killed * data.japan.count),(data.japan.count+1))
         data.japan.count ++;
       }else if(row.nation === "france"){
         data.france.max_damage_dealt = row.max_damage_dealt > data.france.max_damage_dealt?row.max_damage_dealt:data.france.max_damage_dealt;
@@ -441,6 +444,8 @@ export default class PlayerShipNationTable extends Component {
         data.france.wins += row.wins
         data.france.win_rate = division(data.france.wins,data.france.battles);
         data.france.survival_rate = division((row.survival_rate + data.france.survival_rate * data.france.count),(data.france.count+1))
+        data.france.max_planes_killed  = row.max_planes_killed > data.france.max_planes_killed?row.max_planes_killed:data.france.max_planes_killed ;
+        data.france.ave_planes_killed = division((row.ave_planes_killed + data.france.ave_planes_killed * data.france.count),(data.france.count+1))
         data.france.count ++;
       }else if(row.nation === "germany"){
         data.germany.max_damage_dealt = row.max_damage_dealt > data.germany.max_damage_dealt?row.max_damage_dealt:data.germany.max_damage_dealt;
@@ -453,6 +458,8 @@ export default class PlayerShipNationTable extends Component {
         data.germany.wins += row.wins
         data.germany.win_rate = division(data.germany.wins,data.germany.battles);
         data.germany.survival_rate = division((row.survival_rate + data.germany.survival_rate * data.germany.count),(data.germany.count+1))
+        data.germany.max_planes_killed  = row.max_planes_killed > data.germany.max_planes_killed?row.max_planes_killed:data.germany.max_planes_killed ;
+        data.germany.ave_planes_killed = division((row.ave_planes_killed + data.germany.ave_planes_killed * data.germany.count),(data.germany.count+1))
         data.germany.count ++;
       }else if(row.nation === "poland"){
         data.poland.max_damage_dealt = row.max_damage_dealt > data.poland.max_damage_dealt?row.max_damage_dealt:data.poland.max_damage_dealt;
@@ -465,6 +472,8 @@ export default class PlayerShipNationTable extends Component {
         data.poland.wins += row.wins
         data.poland.win_rate = division(data.poland.wins,data.poland.battles);
         data.poland.survival_rate = division((row.survival_rate + data.poland.survival_rate * data.poland.count),(data.poland.count+1))
+        data.poland.max_planes_killed  = row.max_planes_killed > data.poland.max_planes_killed?row.max_planes_killed:data.poland.max_planes_killed ;
+        data.poland.ave_planes_killed = division((row.ave_planes_killed + data.poland.ave_planes_killed * data.poland.count),(data.poland.count+1))
         data.poland.count ++;
       }else if(row.nation === "italy"){
         data.italy.max_damage_dealt = row.max_damage_dealt > data.italy.max_damage_dealt?row.max_damage_dealt:data.italy.max_damage_dealt;
@@ -477,6 +486,8 @@ export default class PlayerShipNationTable extends Component {
         data.italy.wins += row.wins
         data.italy.win_rate = division(data.italy.wins,data.italy.battles);
         data.italy.survival_rate = division((row.survival_rate + data.italy.survival_rate * data.italy.count),(data.italy.count+1))
+        data.italy.max_planes_killed  = row.max_planes_killed > data.italy.max_planes_killed?row.max_planes_killed:data.italy.max_planes_killed ;
+        data.italy.ave_planes_killed = division((row.ave_planes_killed + data.italy.ave_planes_killed * data.italy.count),(data.italy.count+1))
         data.italy.count ++;
       }else if(row.nation === "pan_asia"){
         data.pan_asia.max_damage_dealt = row.max_damage_dealt > data.pan_asia.max_damage_dealt?row.max_damage_dealt:data.pan_asia.max_damage_dealt;
@@ -489,6 +500,8 @@ export default class PlayerShipNationTable extends Component {
         data.pan_asia.wins += row.wins
         data.pan_asia.win_rate = division(data.pan_asia.wins,data.pan_asia.battles);
         data.pan_asia.survival_rate = division((row.survival_rate + data.pan_asia.survival_rate * data.pan_asia.count),(data.pan_asia.count+1))
+        data.pan_asia.max_planes_killed  = row.max_planes_killed > data.pan_asia.max_planes_killed?row.max_planes_killed:data.pan_asia.max_planes_killed ;
+        data.pan_asia.ave_planes_killed = division((row.ave_planes_killed + data.pan_asia.ave_planes_killed * data.pan_asia.count),(data.pan_asia.count+1))
         data.pan_asia.count ++;
       }else if(row.nation === "commonwealth"){
         data.commonwealth.max_damage_dealt = row.max_damage_dealt > data.commonwealth.max_damage_dealt?row.max_damage_dealt:data.commonwealth.max_damage_dealt;
@@ -501,6 +514,8 @@ export default class PlayerShipNationTable extends Component {
         data.commonwealth.wins += row.wins
         data.commonwealth.win_rate = division(data.commonwealth.wins,data.commonwealth.battles);
         data.commonwealth.survival_rate = division((row.survival_rate + data.commonwealth.survival_rate * data.commonwealth.count),(data.commonwealth.count+1))
+        data.commonwealth.max_planes_killed  = row.max_planes_killed > data.commonwealth.max_planes_killed?row.max_planes_killed:data.commonwealth.max_planes_killed ;
+        data.commonwealth.ave_planes_killed = division((row.ave_planes_killed + data.commonwealth.ave_planes_killed * data.commonwealth.count),(data.commonwealth.count+1))
         data.commonwealth.count ++;
       }else if(row.nation === "pan_america"){
         data.pan_america.max_damage_dealt = row.max_damage_dealt > data.pan_america.max_damage_dealt?row.max_damage_dealt:data.pan_america.max_damage_dealt;
@@ -513,31 +528,30 @@ export default class PlayerShipNationTable extends Component {
         data.pan_america.wins += row.wins
         data.pan_america.win_rate = division(data.pan_america.wins,data.pan_america.battles);
         data.pan_america.survival_rate = division((row.survival_rate + data.pan_america.survival_rate * data.pan_america.count),(data.pan_america.count+1))
+        data.pan_america.max_planes_killed  = row.max_planes_killed > data.pan_america.max_planes_killed?row.max_planes_killed:data.pan_america.max_planes_killed ;
+        data.pan_america.ave_planes_killed = division((row.ave_planes_killed + data.pan_america.ave_planes_killed * data.pan_america.count),(data.pan_america.count+1))
         data.pan_america.count ++;
       }
     })
-    this.setState({data:data});
-  }
-  buildrows(){
     var arr = [];
-    for (const [nation, data] of Object.entries(nationDict)) {
+    for (const [nation, dat] of Object.entries(nationDict)) {
       arr.push(
         <Table.Row key={nation}>
-          <Table.Cell>{data.text}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].wins}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].battles}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].win_rate}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].survival_rate}</Table.Cell>
+          <Table.Cell>{dat.text}</Table.Cell>
+          <Table.Cell>{data[nation].wins}</Table.Cell>
+          <Table.Cell>{data[nation].battles}</Table.Cell>
+          <Table.Cell>{data[nation].win_rate}</Table.Cell>
+          <Table.Cell>{data[nation].survival_rate}</Table.Cell>
 
-          <Table.Cell>{this.state.data[nation].max_xp}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].max_frags_battle}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].max_damage_dealt}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].max_planes_killed}</Table.Cell>
+          <Table.Cell>{data[nation].max_xp}</Table.Cell>
+          <Table.Cell>{data[nation].max_frags_battle}</Table.Cell>
+          <Table.Cell>{data[nation].max_damage_dealt}</Table.Cell>
+          <Table.Cell>{data[nation].max_planes_killed}</Table.Cell>
 
-          <Table.Cell>{this.state.data[nation].ave_xp}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].ave_frags}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].ave_damage_dealt}</Table.Cell>
-          <Table.Cell>{this.state.data[nation].ave_planes_killed}</Table.Cell>
+          <Table.Cell>{data[nation].ave_xp}</Table.Cell>
+          <Table.Cell>{data[nation].ave_frags}</Table.Cell>
+          <Table.Cell>{data[nation].ave_damage_dealt}</Table.Cell>
+          <Table.Cell>{data[nation].ave_planes_killed}</Table.Cell>
         </Table.Row>
       )
     }
