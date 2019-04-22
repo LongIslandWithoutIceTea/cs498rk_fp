@@ -13,7 +13,8 @@ class App extends Component {
           <Router>
               <div>
                   <Route path={"/"} exact component={IndexPage} />
-                  <Route path={"/player"} exact component={PlayerIndex} />
+                  <Route path={"/player"} exact
+                         component={() => <PlayerIndex account_id ="1019218342" />}  />
               </div>
           </Router>
       </div>
