@@ -79,7 +79,13 @@ function division(a,b){
     return Math.round(a / b * 100) / 100;
   }
 }
-
+function divisionWhole(a,b){
+  if (b === 0){
+    return 0;
+  }else{
+    return Math.round(a / b);
+  }
+}
 class PlayerShipTableBody extends Component {
   constructor(props){
     super(props);
@@ -102,7 +108,7 @@ class PlayerShipTableBody extends Component {
           }
           rows.push(
               (
-              <Table.Row key={row.ship_id.toString()+'/'+row.season} ID={"PlayerRankTable"+row.ship_id.toString()+'/'+row.season} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
+              <Table.Row key={row.ship_id.toString()+'/'+row.season} id={"PlayerRankTable"+row.ship_id.toString()+'/'+row.season} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
                 <Table.Cell >{seasonName}</Table.Cell>
                 <Table.Cell selectable><a>{row.name}</a></Table.Cell>
                 <Table.Cell ><img src={row.image} alt="404" height="35"/></Table.Cell>
@@ -200,9 +206,9 @@ export default class PlayerRankTable extends Component {
                   max_damage_dealt: data.rank_solo.max_damage_dealt,
                   max_planes_killed: data.rank_solo.max_planes_killed,
 
-                  ave_xp: division(data.rank_solo.xp,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  ave_xp: divisionWhole(data.rank_solo.xp,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
                   ave_frags: division(data.rank_solo.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-                  ave_damage_dealt: division(data.rank_solo.damage_dealt,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  ave_damage_dealt: divisionWhole(data.rank_solo.damage_dealt,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
                   ave_planes_killed: division(data.rank_solo.planes_killed,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
 
                   main_battery_max_frags_battle: data.rank_solo.main_battery.max_frags_battle,
@@ -496,10 +502,10 @@ export default class PlayerRankTable extends Component {
                 <Table.HeaderCell rowSpan='2'></Table.HeaderCell>
               </Table.Row>
               <Table.Row>
-                <Table.Cell colSpan='2'><Dropdown clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value,"all","all","all")}}/></Table.Cell>
-                <Table.Cell colSpan='2'><Dropdown placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter("all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
-                <Table.Cell colSpan='2'><Dropdown placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
-                <Table.Cell><Dropdown placeholder='Select Tier ' selection options={tierOptions} value={this.state.selectedTier} onChange={(e,{value}) => {this.setState({selectedTier:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,this.state.selectedType,value)}}/></Table.Cell>
+                <Table.Cell colSpan='2' width="5"><Dropdown fluid clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value,"all","all","all")}}/></Table.Cell>
+                <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter("all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
+                <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
+                <Table.Cell width="5"><Dropdown fluid placeholder='Select Tier ' selection options={tierOptions} value={this.state.selectedTier} onChange={(e,{value}) => {this.setState({selectedTier:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,this.state.selectedType,value)}}/></Table.Cell>
                 <Table.HeaderCell sorted={this.state.column === 'max_xp' ? this.state.direction : null} onClick={() => this.handleSort('max_xp')}>XP</Table.HeaderCell>
                 <Table.HeaderCell sorted={this.state.column === 'max_frags_battle' ? this.state.direction : null} onClick={() => this.handleSort('max_frags_battle')}>Kills</Table.HeaderCell>
                 <Table.HeaderCell sorted={this.state.column === 'max_damage_dealt' ? this.state.direction : null} onClick={() => this.handleSort('max_damage_dealt')}>Damage</Table.HeaderCell>
@@ -516,7 +522,7 @@ export default class PlayerRankTable extends Component {
 
             <Table.Footer className="PlayerShipTableFooter">
               <Table.Row>
-                <Table.HeaderCell colSpan='20'>
+                <Table.HeaderCell colSpan='21'>
                   <Menu floated='right' pagination>
                     <Menu.Item as='a' icon onClick={()=>this.setState({page:0})}>
                       <Icon name='angle double left' />

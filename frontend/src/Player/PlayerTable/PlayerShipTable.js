@@ -80,6 +80,14 @@ function division(a,b){
   }
 }
 
+function divisionWhole(a,b){
+  if (b === 0){
+    return 0;
+  }else{
+    return Math.round(a / b);
+  }
+}
+
 class PlayerShipTableBody extends Component {
   constructor(props){
     super(props);
@@ -96,7 +104,7 @@ class PlayerShipTableBody extends Component {
         if (i < page * perpage + perpage){
           rows.push(
               (
-              <Table.Row key={row.ship_id} ID={"PlayerShipTable"+row.ship_id.toString()} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
+              <Table.Row key={row.ship_id} id={"PlayerShipTable"+row.ship_id.toString()} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
                 <Table.Cell selectable><a>{row.name}</a></Table.Cell>
                 <Table.Cell ><img src={row.image} alt="404" height="35"/></Table.Cell>
                 <Table.Cell ><img src={nationDict[row.nation].image} alt="404" height="25"/></Table.Cell>
@@ -189,9 +197,9 @@ export default class PlayerShipTable extends Component {
               max_damage_dealt: ship.pvp.max_damage_dealt,
               max_planes_killed: ship.pvp.max_planes_killed,
 
-              ave_xp: division(ship.pvp.xp,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
+              ave_xp: divisionWhole(ship.pvp.xp,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
               ave_frags: division(ship.pvp.frags,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
-              ave_damage_dealt: division(ship.pvp.damage_dealt,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
+              ave_damage_dealt: divisionWhole(ship.pvp.damage_dealt,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
               ave_planes_killed: division(ship.pvp.planes_killed,(ship.pvp.wins+ship.pvp.losses+ship.pvp.draws)),
 
               main_battery_max_frags_battle: ship.pvp.main_battery.max_frags_battle,
@@ -479,10 +487,10 @@ export default class PlayerShipTable extends Component {
                 <Table.HeaderCell rowSpan='2'></Table.HeaderCell>
               </Table.Row>
               <Table.Row>
-                <Table.Cell colSpan='2'><Dropdown clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value,"all","all","all")}}/></Table.Cell>
-                <Table.Cell colSpan='2'><Dropdown placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter("all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
-                <Table.Cell colSpan='2'><Dropdown placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
-                <Table.Cell><Dropdown placeholder='Select Tier ' selection options={tierOptions} value={this.state.selectedTier} onChange={(e,{value}) => {this.setState({selectedTier:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,this.state.selectedType,value)}}/></Table.Cell>
+                <Table.Cell colSpan='2' width="5"><Dropdown fluid clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value,"all","all","all")}}/></Table.Cell>
+                <Table.Cell colSpan='2' width="5"><Dropdown fluid placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter("all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
+                <Table.Cell colSpan='2' width="5"><Dropdown fluid placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
+                <Table.Cell width="5"><Dropdown fluid placeholder='Select Tier ' selection options={tierOptions} value={this.state.selectedTier} onChange={(e,{value}) => {this.setState({selectedTier:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,this.state.selectedType,value)}}/></Table.Cell>
                 <Table.HeaderCell sorted={this.state.column === 'max_xp' ? this.state.direction : null} onClick={() => this.handleSort('max_xp')}>XP</Table.HeaderCell>
                 <Table.HeaderCell sorted={this.state.column === 'max_frags_battle' ? this.state.direction : null} onClick={() => this.handleSort('max_frags_battle')}>Kills</Table.HeaderCell>
                 <Table.HeaderCell sorted={this.state.column === 'max_damage_dealt' ? this.state.direction : null} onClick={() => this.handleSort('max_damage_dealt')}>Damage</Table.HeaderCell>
