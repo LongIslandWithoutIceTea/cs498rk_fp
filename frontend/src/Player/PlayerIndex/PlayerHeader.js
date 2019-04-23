@@ -29,9 +29,12 @@ class PlayerHeader extends Component {
   }
 
   componentWillMount() {
+    window.scrollTo(0, 0);
     this.resetComponent();
   }
-
+  componentWillUnmount(){
+    window.scrollTo(0, 0);
+  }
   resetComponent(){
     this.setState({ isLoading: false, results: [], value: '' });
   }
