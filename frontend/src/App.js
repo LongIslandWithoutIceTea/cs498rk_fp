@@ -4,6 +4,8 @@ import 'semantic-ui-css/semantic.min.css'
 import IndexPage from './IndexPage/IndexPage'
 import Player from './Player/PlayerIndex/PlayerHeader.js'
 import Clan from './Clan/ClanIndex/ClanHeader'
+import Login from './User/Login.js'
+import Register from './User/Register.js'
 import { HashRouter as Router, Route } from "react-router-dom";
 
 
@@ -18,6 +20,10 @@ class App extends Component {
                          component={() => <Player/>}  />
                    <Route path={"/clan"} exact
                           component={() => <Clan/>}  />
+                  <Route path={"/login"} exact
+                         component={() => <Login/>}  />
+                 <Route path={"/register"} exact
+                        component={() => <Register/>}  />
               </div>
           </Router>
       </div>
