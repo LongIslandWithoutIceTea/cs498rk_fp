@@ -153,6 +153,7 @@ export default class PlayerRankTable extends Component {
   constructor(props){
     super(props);
     this.state = {
+      account_id:"",
       column: null,
       data: null,
       shipData: null,
@@ -179,8 +180,17 @@ export default class PlayerRankTable extends Component {
     this.handleFilter = this.handleFilter.bind(this);
     this.selected = this.selected.bind(this);
     this.handleselectedShipID = this.handleselectedShipID.bind(this);
+    this.loadData = this.loadData.bind(this);
   }
   componentDidMount() {
+    this.setState({account_id:this.props.account_id});
+    this.loadData(this.props.account_id);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({account_id:nextProps.account_id});
+    this.loadData(nextProps.account_id);
+  }
+  loadData(account_id){
     var data = [];
     var statdata = {};
     var ship_ids = [];
@@ -188,9 +198,9 @@ export default class PlayerRankTable extends Component {
     var seasonOptions = [];
     var seasons = new Set();
     this.setState({data:null,doneLoading:false});
-    axios.get("https://api.worldofwarships.com/wows/seasons/shipstats/?application_id=" + application_id + "&account_id=" + this.props.account_id)
+    axios.get("https://api.worldofwarships.com/wows/seasons/shipstats/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
-        var res = response.data.data[this.props.account_id];
+        var res = response.data.data[account_id];
         res.forEach((ship) => {
           ship_ids.push(ship.ship_id);
           for (const [season, data] of Object.entries(ship.seasons)) {
@@ -252,7 +262,6 @@ export default class PlayerRankTable extends Component {
           var limit = i * slice + slice;
         }else{
           var limit = ship_ids.length;
-          this.setState({doneLoading:true});
         }
         for(var j = i * slice; j < limit; j++){
           ship_id_strings += ship_ids[j] + ",";
@@ -319,6 +328,7 @@ export default class PlayerRankTable extends Component {
       }
     })
     .catch((error) => console.log(error));
+    this.setState({doneLoading:true});
   }
 
   handleSort(clickedColumn){
@@ -463,21 +473,21 @@ export default class PlayerRankTable extends Component {
         if(this.state.page < Math.round(totalpage/2)){
           for (var i = 0; i < totalpage ; i++){
             pages.push((
-              <Menu.Item as='a' name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+              <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
             ))
 
           }
         }else if(this.state.page > data.length/perpage - Math.round(totalpage/2)){
           for (var i = Math.round(data.length/perpage)-totalpage; i < data.length/perpage ; i++){
             pages.push((
-              <Menu.Item as='a' name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+              <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
             ))
           }
         }else{
           for (var i = 0; i < data.length/perpage ; i++){
             if(Math.abs(i - this.state.page) < Math.round(totalpage/2)){
               pages.push((
-                <Menu.Item as='a' name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+                <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
               ))
             }
           }
@@ -485,7 +495,7 @@ export default class PlayerRankTable extends Component {
       }else{
         for (var i = 0; i < data.length/perpage ; i++){
           pages.push((
-            <Menu.Item as='a' name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+            <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
           ))
         }
       }
@@ -502,7 +512,7 @@ export default class PlayerRankTable extends Component {
         <Dropdown fluid clearable placeholder='Select Season' selection options={this.state.seasonOptions.sort((a,b)=>a.key-b.key)} value={this.state.selectedSeason} onChange={(e,{value}) => {this.setState({selectedSeason: value, selectedName:null,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value, null,"all","all","all")}}/>
         <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
-              <Table.Row>
+              <Table.Row  key="header1">
                 <Table.HeaderCell colSpan='2'>Ship</Table.HeaderCell>
                 <Table.HeaderCell colSpan='2' sorted={this.state.column === 'nation' ? this.state.direction : null} onClick={() => this.handleSort('nation')}>Nation</Table.HeaderCell>
                 <Table.HeaderCell colSpan='2' sorted={this.state.column === 'type' ? this.state.direction : null} onClick={() => this.handleSort('type')}>Type</Table.HeaderCell>
@@ -515,7 +525,7 @@ export default class PlayerRankTable extends Component {
                 <Table.HeaderCell colSpan='4'>Average</Table.HeaderCell>
                 <Table.HeaderCell rowSpan='2'></Table.HeaderCell>
               </Table.Row>
-              <Table.Row>
+              <Table.Row  key="header2">
                 <Table.Cell colSpan='2' width="5"><Dropdown fluid clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(this.state.selectedSeason, value,"all","all","all")}}/></Table.Cell>
                 <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter(this.state.selectedSeason,"all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
                 <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter(this.state.selectedSeason,"all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
@@ -535,20 +545,20 @@ export default class PlayerRankTable extends Component {
             <PlayerShipTableBody data={this.state.selectedData} page={this.state.page} handleselectedShipID={this.handleselectedShipID}/>
 
             <Table.Footer className="PlayerShipTableFooter">
-              <Table.Row>
+              <Table.Row  key="header3">
                 <Table.HeaderCell colSpan='21'>
                   <Menu floated='right' pagination>
-                    <Menu.Item as='a' icon onClick={()=>this.setState({page:0})}>
+                    <Menu.Item key="menu1" as='a' icon onClick={()=>this.setState({page:0})}>
                       <Icon name='angle double left' />
                     </Menu.Item>
-                    <Menu.Item as='a' icon onClick={this.prevPage}>
+                    <Menu.Item key="menu2" as='a' icon onClick={this.prevPage}>
                       <Icon name='angle left' />
                     </Menu.Item>
                     {this.build(this.state.selectedData)}
-                    <Menu.Item as='a' icon onClick={this.nextPage}>
+                    <Menu.Item key="menu3" as='a' icon onClick={this.nextPage}>
                       <Icon name='angle right' />
                     </Menu.Item>
-                    <Menu.Item as='a' icon onClick={()=>this.setState({page:Math.ceil(this.state.selectedData.length/perpage-1)})}>
+                    <Menu.Item key="menu4" as='a' icon onClick={()=>this.setState({page:Math.ceil(this.state.selectedData.length/perpage-1)})}>
                       <Icon name='angle double right' />
                     </Menu.Item>
                   </Menu>

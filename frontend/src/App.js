@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css'
 import IndexPage from './IndexPage/IndexPage'
-import PlayerIndex from './Player/PlayerIndex/PlayerIndex'
+import Player from './Player/PlayerIndex/PlayerHeader'
 import { HashRouter as Router, Route } from "react-router-dom";
 
 
@@ -14,7 +14,7 @@ class App extends Component {
               <div>
                   <Route path={"/"} exact component={IndexPage} />
                   <Route path={"/player"} exact
-                         component={() => <PlayerIndex account_id ="1019218342" />}  />
+                         component={() => <Player/>}  />
               </div>
           </Router>
       </div>

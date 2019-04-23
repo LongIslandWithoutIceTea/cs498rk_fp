@@ -385,7 +385,7 @@ export default class PlayerShipTierTable extends Component {
     return (
       <Table celled structured striped unstackable>
         <Table.Header>
-          <Table.Row>
+          <Table.Row  key="header1">
           <Table.HeaderCell rowSpan='2'>Tier</Table.HeaderCell>
           <Table.HeaderCell rowSpan='2'>Wins</Table.HeaderCell>
           <Table.HeaderCell rowSpan='2'>Battles</Table.HeaderCell>
@@ -394,7 +394,7 @@ export default class PlayerShipTierTable extends Component {
           <Table.HeaderCell colSpan='4'>Max</Table.HeaderCell>
           <Table.HeaderCell colSpan='4'>Average</Table.HeaderCell>
           </Table.Row>
-          <Table.Row>
+          <Table.Row  key="header2">
             <Table.HeaderCell >XP</Table.HeaderCell>
             <Table.HeaderCell >Kills</Table.HeaderCell>
             <Table.HeaderCell >Damage</Table.HeaderCell>
