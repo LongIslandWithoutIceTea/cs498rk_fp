@@ -24,7 +24,7 @@ class Login extends Component {
   login(){
     var password = this.state.password;
     this.setState({wrongusername: false, wrongpassword: false, password: ""});
-    axios.get(server + "api/users/?name=" + this.state.username)
+    axios.get(server + 'api/users/?where={"name":"' + this.state.username + '"}')
     .then((response)=>{
         if (response.data.data.length === 0){
           this.setState({wrongusername: true});

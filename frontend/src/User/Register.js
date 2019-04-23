@@ -22,7 +22,7 @@ class Register extends Component {
 
   register(){
     this.setState({wrongusername: false, wrongpassword: false});
-    axios.get(server + "api/users/?name=" + this.state.username)
+    axios.get(server + 'api/users/?where={"name":"' + this.state.username + '"}')
     .then((response)=>{
         if (response.data.data.length !== 0){
             this.setState({wrongusername: true});
