@@ -410,7 +410,7 @@ export default class PlayerIndex extends Component {
         >
           <div style={{margin: '1.5em'}}>
           <Statistic horizontal size="small">
-            <Statistic.Value>{division(this.state.data.statistics.pvp.wins,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses) * 100 + "%"}</Statistic.Value>
+            <Statistic.Value>{(division(this.state.data.statistics.pvp.wins,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses)*100).toFixed(0) + "%"}</Statistic.Value>
             <Statistic.Label>Win Rate</Statistic.Label>
           </Statistic>
           </div>
@@ -434,7 +434,7 @@ export default class PlayerIndex extends Component {
           </div>
           <div style={{margin: '1.5em'}}>
           <Statistic horizontal size="small">
-            <Statistic.Value>{division(this.state.data.statistics.pvp.survived_battles,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses) * 100 + "%"}</Statistic.Value>
+            <Statistic.Value>{(division(this.state.data.statistics.pvp.survived_battles,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses) * 100).toFixed(0) + "%"}</Statistic.Value>
             <Statistic.Label>Survival Rate</Statistic.Label>
           </Statistic>
           </div>

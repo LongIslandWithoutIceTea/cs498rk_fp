@@ -66,6 +66,7 @@ class PlayerHeader extends Component {
           <Menu.Item as='a' inverted href='/'>Home</Menu.Item>
           <Menu.Item position='right'>
             <Search
+              selectFirstResult
               minCharacters = {3}
               fluid
               loading={this.state.isLoading}
