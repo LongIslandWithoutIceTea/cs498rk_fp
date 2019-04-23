@@ -7,14 +7,14 @@ export default class PlayerWeaponTable extends Component {
     return (
       <Table celled structured striped collapsing unstackable className="PlayerWeaponTable">
         <Table.Header className="PlayerWeaponTableHeader">
-          <Table.Row>
+          <Table.Row  key="header1">
             <Table.HeaderCell colSpan='3'>Main Battery</Table.HeaderCell>
             <Table.HeaderCell colSpan='3'>Torpedos</Table.HeaderCell>
             <Table.HeaderCell colSpan='3'>Secondary Battery</Table.HeaderCell>
             <Table.HeaderCell colSpan='2'>Aircraft</Table.HeaderCell>
             <Table.HeaderCell colSpan='2'>Ramming</Table.HeaderCell>
           </Table.Row>
-          <Table.Row>
+          <Table.Row  key="header2">
             <Table.HeaderCell>Max Kills</Table.HeaderCell>
             <Table.HeaderCell>Average Kills</Table.HeaderCell>
             <Table.HeaderCell>Hit Rate</Table.HeaderCell>

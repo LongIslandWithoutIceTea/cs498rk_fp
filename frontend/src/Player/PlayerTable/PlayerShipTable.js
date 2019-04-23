@@ -308,21 +308,21 @@ export default class PlayerShipTable extends Component {
         if(this.state.page < Math.round(totalpage/2)){
           for (var i = 0; i < totalpage ; i++){
             pages.push((
-              <Menu.Item as='a' name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+              <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
             ))
 
           }
         }else if(this.state.page > data.length/perpage - Math.round(totalpage/2)){
           for (var i = Math.round(data.length/perpage)-totalpage; i < data.length/perpage ; i++){
             pages.push((
-              <Menu.Item as='a' name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+              <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
             ))
           }
         }else{
           for (var i = 0; i < data.length/perpage ; i++){
             if(Math.abs(i - this.state.page) < Math.round(totalpage/2)){
               pages.push((
-                <Menu.Item as='a' name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+                <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
               ))
             }
           }
@@ -330,7 +330,7 @@ export default class PlayerShipTable extends Component {
       }else{
         for (var i = 0; i < data.length/perpage ; i++){
           pages.push((
-            <Menu.Item as='a' name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+            <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
           ))
         }
       }
@@ -347,7 +347,7 @@ export default class PlayerShipTable extends Component {
 
         <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
-              <Table.Row>
+              <Table.Row key="header1">
                 <Table.HeaderCell colSpan='2'>Ship</Table.HeaderCell>
                 <Table.HeaderCell colSpan='2' sorted={this.state.column === 'nation' ? this.state.direction : null} onClick={() => this.handleSort('nation')}>Nation</Table.HeaderCell>
                 <Table.HeaderCell colSpan='2' sorted={this.state.column === 'type' ? this.state.direction : null} onClick={() => this.handleSort('type')}>Type</Table.HeaderCell>
@@ -360,7 +360,7 @@ export default class PlayerShipTable extends Component {
                 <Table.HeaderCell colSpan='4'>Average</Table.HeaderCell>
                 <Table.HeaderCell rowSpan='2'></Table.HeaderCell>
               </Table.Row>
-              <Table.Row>
+              <Table.Row  key="header2">
                 <Table.Cell colSpan='2' width="5"><Dropdown fluid clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value,"all","all","all")}}/></Table.Cell>
                 <Table.Cell colSpan='2' width="5"><Dropdown fluid placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter("all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
                 <Table.Cell colSpan='2' width="5"><Dropdown fluid placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
@@ -380,20 +380,20 @@ export default class PlayerShipTable extends Component {
             <PlayerShipTableBody data={this.state.selectedData} page={this.state.page} handleselectedShipID={this.handleselectedShipID}/>
 
             <Table.Footer className="PlayerShipTableFooter">
-              <Table.Row>
+              <Table.Row  key="header3">
                 <Table.HeaderCell colSpan='20'>
                   <Menu floated='right' pagination>
-                    <Menu.Item as='a' icon onClick={()=>this.setState({page:0})}>
+                    <Menu.Item  key="menu1" as='a' icon onClick={()=>this.setState({page:0})}>
                       <Icon name='angle double left' />
                     </Menu.Item>
-                    <Menu.Item as='a' icon onClick={this.prevPage}>
+                    <Menu.Item key="menu2" as='a' icon onClick={this.prevPage}>
                       <Icon name='angle left' />
                     </Menu.Item>
                     {this.build(this.state.selectedData)}
-                    <Menu.Item as='a' icon onClick={this.nextPage}>
+                    <Menu.Item key="menu3" as='a' icon onClick={this.nextPage}>
                       <Icon name='angle right' />
                     </Menu.Item>
-                    <Menu.Item as='a' icon onClick={()=>this.setState({page:Math.ceil(this.state.selectedData.length/perpage-1)})}>
+                    <Menu.Item key="menu4" as='a' icon onClick={()=>this.setState({page:Math.ceil(this.state.selectedData.length/perpage-1)})}>
                       <Icon name='angle double right' />
                     </Menu.Item>
                   </Menu>
