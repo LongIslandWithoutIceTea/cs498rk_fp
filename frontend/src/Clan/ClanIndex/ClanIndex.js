@@ -61,7 +61,7 @@ export default class ClanIndex extends Component {
           for(var j = i * slice; j < limit; j++){
             account_id_strings += response.data.data[clan_id].members_ids[j] + ",";
           }
-          axios.get("https://api.worldofwarships.com/wows/account/info/?application_id=" + application_id + "&account_id=" + account_id_strings.substring(0,account_id_strings.length-1))
+          axios.get("https://api.worldofwarships.com/wows/account/info/?application_id=" + application_id,{params:{account_id:account_id_strings.substring(0,account_id_strings.length-1)}})
           .then((playerresponse)=>{
             for (const [account_id, playerres] of Object.entries(playerresponse.data.data)) {
               if(playerres){

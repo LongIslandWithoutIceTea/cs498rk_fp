@@ -163,7 +163,7 @@ export default class PlayerIndex extends Component {
         })
     })
     .then(()=>{
-      var slice = 24;
+      var slice = 99;
       for(var i = 0; i < ship_ids.length/slice; i++){
         var ship_id_strings = "";
         if (i * slice + slice < ship_ids.length){
@@ -174,8 +174,9 @@ export default class PlayerIndex extends Component {
         for(var j = i * slice; j < limit; j++){
           ship_id_strings += ship_ids[j] + ",";
         }
-        axios.get("https://api.worldofwarships.com/wows/encyclopedia/ships/?application_id=" + application_id + "&ship_id=" + ship_id_strings.substring(0,ship_id_strings.length-1))
+        axios.get("https://api.worldofwarships.com/wows/encyclopedia/ships/?application_id=" + application_id,{params:{ship_id:ship_id_strings.substring(0,ship_id_strings.length-1)}})
         .then((shipresponse)=>{
+          console.log(shipresponse.data.meta)
           for (const [ship_id, shipres] of Object.entries(shipresponse.data.data)) {
             if(shipres && statdata[ship_id.toString()]){
               shipnames.push({key: shipres.name, value: shipres.name, text: shipres.name});
