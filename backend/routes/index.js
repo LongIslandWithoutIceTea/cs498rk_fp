@@ -4,5 +4,5 @@
 module.exports = function (app, router) {
     app.use('/api', require('./home.js')(router));
     app.use('/api', require('./userRoute.js')(router));
-    app.use('/api', require('./servantRoute.js')(router));
+    app.use('/api', require('./postRoute.js')(router));
 };

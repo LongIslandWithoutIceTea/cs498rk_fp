@@ -1,4 +1,5 @@
 var User = require('../models/user.js');
+var fs = require('fs');
 
 module.exports = function (router) {
   var status_dict = {
@@ -53,7 +54,7 @@ module.exports = function (router) {
     var new_user = new User();
     new_user.name = req.param('name');
     new_user.password = req.param('password');
-    new_user.favorite = [];
+    new_user
 
     User.find({'name':new_user.name}, function (err, user_list) {
       if (err){
@@ -102,7 +103,6 @@ module.exports = function (router) {
       }
       name = req.param('name')?req.param('name'):user.name;
       password = req.param('password')?req.param('password'):user.password;
-      favorite = req.param('favorite')?req.param('favorite'):user.favorite;
       if(name != user.name) {
         User.find({'name':name}, function (err, user_list) {
           if (err){
@@ -111,7 +111,6 @@ module.exports = function (router) {
             if (user_list.length === 0) {
               user.name = name;
               user.password = password;
-              user.favorite = favorite;
               user.save({},(err, user) => {
                 if (err){
                   res.status(500).send({ message: "Server error", data:[] });
