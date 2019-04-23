@@ -153,6 +153,7 @@ export default class PlayerRankTable extends Component {
   constructor(props){
     super(props);
     this.state = {
+      account_id:"",
       column: null,
       data: null,
       shipData: null,
@@ -179,8 +180,17 @@ export default class PlayerRankTable extends Component {
     this.handleFilter = this.handleFilter.bind(this);
     this.selected = this.selected.bind(this);
     this.handleselectedShipID = this.handleselectedShipID.bind(this);
+    this.loadData = this.loadData.bind(this);
   }
   componentDidMount() {
+    this.setState({account_id:this.props.account_id});
+    this.loadData(this.props.account_id);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({account_id:nextProps.account_id});
+    this.loadData(nextProps.account_id);
+  }
+  loadData(account_id){
     var data = [];
     var statdata = {};
     var ship_ids = [];
@@ -188,9 +198,9 @@ export default class PlayerRankTable extends Component {
     var seasonOptions = [];
     var seasons = new Set();
     this.setState({data:null,doneLoading:false});
-    axios.get("https://api.worldofwarships.com/wows/seasons/shipstats/?application_id=" + application_id + "&account_id=" + this.props.account_id)
+    axios.get("https://api.worldofwarships.com/wows/seasons/shipstats/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
-        var res = response.data.data[this.props.account_id];
+        var res = response.data.data[account_id];
         res.forEach((ship) => {
           ship_ids.push(ship.ship_id);
           for (const [season, data] of Object.entries(ship.seasons)) {
@@ -252,7 +262,6 @@ export default class PlayerRankTable extends Component {
           var limit = i * slice + slice;
         }else{
           var limit = ship_ids.length;
-          this.setState({doneLoading:true});
         }
         for(var j = i * slice; j < limit; j++){
           ship_id_strings += ship_ids[j] + ",";
@@ -319,6 +328,7 @@ export default class PlayerRankTable extends Component {
       }
     })
     .catch((error) => console.log(error));
+    this.setState({doneLoading:true});
   }
 
   handleSort(clickedColumn){
