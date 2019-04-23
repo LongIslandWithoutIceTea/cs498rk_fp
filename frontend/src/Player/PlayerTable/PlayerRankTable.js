@@ -159,7 +159,6 @@ export default class PlayerRankTable extends Component {
       shipData: null,
       selectedData:null,
       direction: null,
-      doneLoading:false,
       page: 0,
       selectedName: "all",
       selectedNation: "all",
@@ -178,157 +177,17 @@ export default class PlayerRankTable extends Component {
     this.nextPage = this.nextPage.bind(this);
     this.prevPage = this.prevPage.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
+    this.handleFilterRaw = this.handleFilterRaw.bind(this);
     this.selected = this.selected.bind(this);
     this.handleselectedShipID = this.handleselectedShipID.bind(this);
-    this.loadData = this.loadData.bind(this);
   }
-  componentDidMount() {
-    this.setState({account_id:this.props.account_id});
-    this.loadData(this.props.account_id);
+  componentDidMount(){
+    this.setState({account_id:this.props.account_id, data:this.props.data,shipnames:this.props.rankshipnames,seasonOptions:this.props.seasonOptions});
+    this.handleFilterRaw(this.props.data,null,null,"all","all","all")
   }
-  componentWillReceiveProps(nextProps) {
-    this.setState({account_id:nextProps.account_id});
-    this.loadData(nextProps.account_id);
-  }
-  loadData(account_id){
-    var data = [];
-    var statdata = {};
-    var ship_ids = [];
-    var shipnames = [];
-    var seasonOptions = [];
-    var seasons = new Set();
-    this.setState({data:null,doneLoading:false});
-    axios.get("https://api.worldofwarships.com/wows/seasons/shipstats/?application_id=" + application_id + "&account_id=" + account_id)
-    .then((response)=>{
-        var res = response.data.data[account_id];
-        res.forEach((ship) => {
-          ship_ids.push(ship.ship_id);
-          for (const [season, data] of Object.entries(ship.seasons)) {
-            if(data.rank_solo){
-              seasons.add(season);
-              statdata[ship.ship_id.toString()+","+season.toString()]={
-                  ship_id: ship.ship_id,
-                  wins: data.rank_solo.wins,
-                  battles: (data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws),
-                  win_rate: division(data.rank_solo.wins,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-                  survival_rate: division(data.rank_solo.survived_battles,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-
-                  max_xp: data.rank_solo.max_xp,
-                  max_frags_battle: data.rank_solo.max_frags_battle,
-                  max_damage_dealt: data.rank_solo.max_damage_dealt,
-                  max_planes_killed: data.rank_solo.max_planes_killed,
-
-                  ave_xp: divisionWhole(data.rank_solo.xp,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-                  ave_frags: division(data.rank_solo.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-                  ave_damage_dealt: divisionWhole(data.rank_solo.damage_dealt,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-                  ave_planes_killed: division(data.rank_solo.planes_killed,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-
-                  main_battery_max_frags_battle: data.rank_solo.main_battery.max_frags_battle,
-                  main_battery_frags: division(data.rank_solo.main_battery.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-                  main_battery_hit_rate: division(data.rank_solo.main_battery.hits,data.rank_solo.main_battery.shots),
-
-                  torpedoes_max_frags_battle: data.rank_solo.torpedoes.max_frags_battle,
-                  torpedoes_frags: division(data.rank_solo.torpedoes.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-                  torpedoes_hit_rate: division(data.rank_solo.torpedoes.hits,data.rank_solo.torpedoes.shots),
-
-                  second_battery_max_frags_battle: data.rank_solo.second_battery.max_frags_battle,
-                  second_battery_frags: division(data.rank_solo.second_battery.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-                  second_battery_hit_rate: division(data.rank_solo.second_battery.hits,data.rank_solo.second_battery.shots),
-
-                  aircraft_max_frags_battle: data.rank_solo.aircraft.max_frags_battle,
-                  aircraft_frags: division(data.rank_solo.aircraft.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-
-                  ramming_max_frags_battle: data.rank_solo.ramming.max_frags_battle,
-                  ramming_frags: division(data.rank_solo.ramming.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
-
-                  survived_wins: data.rank_solo.survived_wins,
-              }
-            }
-          }
-        })
-    })
-    .then(()=>{
-      for (let season of seasons){
-        if (season >= 100){
-          seasonOptions.push({key: season, value: season, text: "Season: Sprint " + (parseInt(season)-100).toString()});
-        }else{
-          seasonOptions.push({key: season, value: season, text: "Season: " + season});
-        }
-      }
-      var slice = 24;
-      for(var i = 0; i < ship_ids.length/slice; i++){
-        var ship_id_strings = "";
-        if (i * slice + slice < ship_ids.length){
-          var limit = i * slice + slice;
-        }else{
-          var limit = ship_ids.length;
-        }
-        for(var j = i * slice; j < limit; j++){
-          ship_id_strings += ship_ids[j] + ",";
-        }
-        axios.get("https://api.worldofwarships.com/wows/encyclopedia/ships/?application_id=" + application_id + "&ship_id=" + ship_id_strings.substring(0,ship_id_strings.length-1))
-        .then((shipresponse)=>{
-          for (const [ship_id, shipres] of Object.entries(shipresponse.data.data)) {
-            if(shipres){
-              shipnames.push({key: shipres.name, value: shipres.name, text: shipres.name});
-              for (let season of seasons){
-                if(statdata[ship_id.toString()+","+season.toString()]){
-                  data.push({
-                    ship_id: shipres.ship_id,
-                    season: season,
-                    name: shipres.name,
-                    image: shipres.images.small,
-                    nation: shipres.nation,
-                    tier: shipres.tier,
-                    type: shipres.type,
-
-                    wins: statdata[ship_id.toString()+","+season.toString()].wins,
-                    battles: statdata[ship_id.toString()+","+season.toString()].battles,
-                    win_rate:statdata[ship_id.toString()+","+season.toString()].win_rate,
-                    survival_rate: statdata[ship_id.toString()+","+season.toString()].survival_rate,
-
-                    max_xp: statdata[ship_id.toString()+","+season.toString()].max_xp,
-                    max_frags_battle: statdata[ship_id.toString()+","+season.toString()].max_frags_battle,
-                    max_damage_dealt: statdata[ship_id.toString()+","+season.toString()].max_damage_dealt,
-                    max_planes_killed: statdata[ship_id.toString()+","+season.toString()].max_planes_killed,
-
-                    ave_xp: statdata[ship_id.toString()+","+season.toString()].ave_xp,
-                    ave_frags: statdata[ship_id.toString()+","+season.toString()].ave_frags,
-                    ave_damage_dealt: statdata[ship_id.toString()+","+season.toString()].ave_damage_dealt,
-                    ave_planes_killed: statdata[ship_id.toString()+","+season.toString()].ave_planes_killed,
-
-                    main_battery_max_frags_battle: statdata[ship_id.toString()+","+season.toString()].main_battery_max_frags_battle,
-                    main_battery_frags: statdata[ship_id.toString()+","+season.toString()].main_battery_frags,
-                    main_battery_hit_rate: statdata[ship_id.toString()+","+season.toString()].main_battery_hit_rate,
-
-                    torpedoes_max_frags_battle: statdata[ship_id.toString()+","+season.toString()].torpedoes_max_frags_battl,
-                    torpedoes_frags: statdata[ship_id.toString()+","+season.toString()].torpedoes_frags,
-                    torpedoes_hit_rate: statdata[ship_id.toString()+","+season.toString()].torpedoes_hit_rate,
-
-                    second_battery_max_frags_battle: statdata[ship_id.toString()+","+season.toString()].second_battery_max_frags_battle,
-                    second_battery_frags: statdata[ship_id.toString()+","+season.toString()].second_battery_frags,
-                    second_battery_hit_rate: statdata[ship_id.toString()+","+season.toString()].second_battery_hit_rate,
-
-                    aircraft_max_frags_battle: statdata[ship_id.toString()+","+season.toString()].aircraft_max_frags_battle,
-                    aircraft_frags: statdata[ship_id.toString()+","+season.toString()].aircraft_frags,
-
-                    ramming_max_frags_battle: statdata[ship_id.toString()+","+season.toString()].ramming_max_frags_battle,
-                    ramming_frags: statdata[ship_id.toString()+","+season.toString()].ramming_frags,
-
-                    survived_wins: statdata[ship_id.toString()+","+season.toString()].survived_wins,
-                  });
-                  this.setState({data:data,shipnames:shipnames,seasonOptions:seasonOptions});
-                  this.handleFilter(null,null,"all","all","all");
-                }
-              }
-            }
-          }
-        })
-        .catch((error) => console.log(error));
-      }
-    })
-    .catch((error) => console.log(error));
-    this.setState({doneLoading:true});
+  componentWillReceiveProps(){
+    this.setState({account_id:this.props.account_id, data:this.props.data,shipnames:this.props.rankshipnames,seasonOptions:this.props.seasonOptions});
+    this.handleFilterRaw(this.props.data,null,null,"all","all","all")
   }
 
   handleSort(clickedColumn){
@@ -362,14 +221,27 @@ export default class PlayerRankTable extends Component {
     }
   }
 
+  handleFilterRaw(data,selectedSeason, selectedName,selectedNation,selectedType,selectedTier){
+     var selectedData = [];
+     if(data){
+       data.forEach((row)=>{
+         if(this.selected(row,selectedSeason,selectedName,selectedNation,selectedType,selectedTier)){
+           selectedData.push(row);
+         }
+       })
+     }
+     this.setState({selectedData:selectedData, page: 0});
+   }
+
   handleFilter(selectedSeason, selectedName,selectedNation,selectedType,selectedTier){
      var selectedData = [];
-     this.state.data.forEach((row)=>{
-       if(this.selected(row,selectedSeason,selectedName,selectedNation,selectedType,selectedTier)){
-         selectedData.push(row);
-       }
-     })
-
+     if(this.props.data){
+       this.props.data.forEach((row)=>{
+         if(this.selected(row,selectedSeason,selectedName,selectedNation,selectedType,selectedTier)){
+           selectedData.push(row);
+         }
+       })
+     }
      this.setState({selectedData:selectedData, page: 0});
   }
 
@@ -506,9 +378,6 @@ export default class PlayerRankTable extends Component {
   render() {
     return (
       <div>
-        <Dimmer active={!this.state.doneLoading}>
-          <Loader>Loading</Loader>
-        </Dimmer>
         <Dropdown fluid clearable placeholder='Select Season' selection options={this.state.seasonOptions.sort((a,b)=>a.key-b.key)} value={this.state.selectedSeason} onChange={(e,{value}) => {this.setState({selectedSeason: value, selectedName:null,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value, null,"all","all","all")}}/>
         <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">

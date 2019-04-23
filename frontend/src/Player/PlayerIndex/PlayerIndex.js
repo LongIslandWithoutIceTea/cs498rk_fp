@@ -58,8 +58,11 @@ export default class PlayerIndex extends Component {
       achievementsVisible: window.innerWidth>400?true:false,
       playerTableVisible: window.innerWidth>=1920?true:false,
       playerShipTableData: null,
+      playerRankTableData: null,
       shipdetails: null,
       shipnames: null,
+      rankshipnames: null,
+      seasonOptions: null,
       data: {"last_battle_time":0,"account_id":0,"leveling_tier":0,"created_at":1457320991,"leveling_points":12806,"updated_at":1555877501,"private":null,"hidden_profile":false,"logout_at":1555877490,"karma":null,"statistics":{"distance":496492,"battles":12716,"pvp":{"max_xp":6511,"damage_to_buildings":619131,"main_battery":{"max_frags_battle":8,"frags":9655,"hits":763954,"max_frags_ship_id":3765384944,"shots":2056909},"max_ships_spotted_ship_id":3751786288,"max_damage_scouting":334282,"art_agro":4000000001,"max_xp_ship_id":3760109008,"ships_spotted":14066,"second_battery":{"max_frags_battle":3,"frags":364,"hits":98556,"max_frags_ship_id":3751753712,"shots":488873},"max_frags_ship_id":4184815568,"xp":20988609,"survived_battles":5087,"dropped_capture_points":0,"max_damage_dealt_to_buildings":213600,"torpedo_agro":848533559,"draws":4,"control_captured_points":99320,"battles_since_510":9057,"max_total_agro_ship_id":4276041424,"planes_killed":48366,"battles":11055,"max_ships_spotted":12,"max_suppressions_ship_id":4276041424,"survived_wins":4322,"frags":14915,"damage_scouting":257570466,"max_total_agro":4793200,"max_frags_battle":8,"capture_points":0,"ramming":{"max_frags_battle":1,"frags":117,"max_frags_ship_id":3760109008},"suppressions_count":3,"max_suppressions_count":1,"torpedoes":{"max_frags_battle":4,"frags":1359,"hits":6254,"max_frags_ship_id":4282267344,"shots":82849},"max_planes_killed_ship_id":4288591856,"aircraft":{"max_frags_battle":7,"frags":1551,"max_frags_ship_id":3763320816},"team_capture_points":1112945,"control_dropped_points":64546,"max_damage_dealt":342198,"max_damage_dealt_to_buildings_ship_id":4282333168,"max_damage_dealt_ship_id":4276041424,"wins":6872,"losses":4179,"damage_dealt":892778787,"max_planes_killed":83,"max_scouting_damage_ship_id":4279219920,"team_dropped_capture_points":542979,"battles_since_512":8542}},"nickname":"","stats_updated_at":1555877501},
       clandata: {"0":{"members_count":46,"name":"Hiryu Ride Face","creator_name":"Aikun96","clan_id":0,"created_at":1484747968,"updated_at":1555210651,"leader_name":"ChipsChan","members_ids":[1003333910],"creator_id":1016393566,"tag":"KUMA","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":1013587959,"description":""}},
       achievements:{"battle":{"FOOLSDAY_TROOPER":9}},
@@ -108,11 +111,18 @@ export default class PlayerIndex extends Component {
     })
     .catch((error) => console.log(error));
     var playerShipTableData = [];
+    var playerRankTableData = [];
+    var playerRankTableData = [];
+    var rankstatdata = {};
+    var rankship_ids = [];
+    var rankshipnames = [];
+    var seasonOptions = [];
+    var seasons = new Set();
     var statdata = {};
     var ship_ids = [];
     var shipnames = [];
     var shipdetails = [];
-    this.setState({playerShipTableData:null});
+    this.setState({playerShipTableData:null, playerRankTableData:null});
     axios.get("https://api.worldofwarships.com/wows/ships/stats/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
         var res = response.data.data[account_id];
@@ -176,7 +186,6 @@ export default class PlayerIndex extends Component {
         }
         axios.get("https://api.worldofwarships.com/wows/encyclopedia/ships/?application_id=" + application_id,{params:{ship_id:ship_id_strings.substring(0,ship_id_strings.length-1)}})
         .then((shipresponse)=>{
-          console.log(shipresponse.data.meta)
           for (const [ship_id, shipres] of Object.entries(shipresponse.data.data)) {
             if(shipres && statdata[ship_id.toString()]){
               shipnames.push({key: shipres.name, value: shipres.name, text: shipres.name});
@@ -236,9 +245,138 @@ export default class PlayerIndex extends Component {
                 max_damage_scouting: statdata[ship_id.toString()].max_damage_scouting,
                 survived_wins: statdata[ship_id.toString()].survived_wins,
               });
-              this.setState({playerShipTableData :playerShipTableData ,shipnames:shipnames,shipdetails:shipdetails});
             }
           }
+          this.setState({playerShipTableData :playerShipTableData ,shipnames:shipnames,shipdetails:shipdetails});
+        })
+        .catch((error) => console.log(error));
+      }
+    })
+    .catch((error) => console.log(error));
+    axios.get("https://api.worldofwarships.com/wows/seasons/shipstats/?application_id=" + application_id + "&account_id=" + account_id)
+    .then((response)=>{
+        var res = response.data.data[account_id];
+        res.forEach((ship) => {
+          rankship_ids.push(ship.ship_id);
+          for (const [season, data] of Object.entries(ship.seasons)) {
+            if(data.rank_solo){
+              seasons.add(season);
+              rankstatdata[ship.ship_id.toString()+","+season.toString()]={
+                  ship_id: ship.ship_id,
+                  wins: data.rank_solo.wins,
+                  battles: (data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws),
+                  win_rate: division(data.rank_solo.wins,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  survival_rate: division(data.rank_solo.survived_battles,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+
+                  max_xp: data.rank_solo.max_xp,
+                  max_frags_battle: data.rank_solo.max_frags_battle,
+                  max_damage_dealt: data.rank_solo.max_damage_dealt,
+                  max_planes_killed: data.rank_solo.max_planes_killed,
+
+                  ave_xp: divisionWhole(data.rank_solo.xp,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  ave_frags: division(data.rank_solo.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  ave_damage_dealt: divisionWhole(data.rank_solo.damage_dealt,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  ave_planes_killed: division(data.rank_solo.planes_killed,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+
+                  main_battery_max_frags_battle: data.rank_solo.main_battery.max_frags_battle,
+                  main_battery_frags: division(data.rank_solo.main_battery.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  main_battery_hit_rate: division(data.rank_solo.main_battery.hits,data.rank_solo.main_battery.shots),
+
+                  torpedoes_max_frags_battle: data.rank_solo.torpedoes.max_frags_battle,
+                  torpedoes_frags: division(data.rank_solo.torpedoes.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  torpedoes_hit_rate: division(data.rank_solo.torpedoes.hits,data.rank_solo.torpedoes.shots),
+
+                  second_battery_max_frags_battle: data.rank_solo.second_battery.max_frags_battle,
+                  second_battery_frags: division(data.rank_solo.second_battery.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+                  second_battery_hit_rate: division(data.rank_solo.second_battery.hits,data.rank_solo.second_battery.shots),
+
+                  aircraft_max_frags_battle: data.rank_solo.aircraft.max_frags_battle,
+                  aircraft_frags: division(data.rank_solo.aircraft.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+
+                  ramming_max_frags_battle: data.rank_solo.ramming.max_frags_battle,
+                  ramming_frags: division(data.rank_solo.ramming.frags,(data.rank_solo.wins+data.rank_solo.losses+data.rank_solo.draws)),
+
+                  survived_wins: data.rank_solo.survived_wins,
+              }
+            }
+          }
+        })
+    })
+    .then(()=>{
+      for (let season of seasons){
+        if (season >= 100){
+          seasonOptions.push({key: season, value: season, text: "Season: Sprint " + (parseInt(season)-100).toString()});
+        }else{
+          seasonOptions.push({key: season, value: season, text: "Season: " + season});
+        }
+      }
+      var slice = 99;
+      for(var i = 0; i < rankship_ids.length/slice; i++){
+        var ship_id_strings = "";
+        if (i * slice + slice < rankship_ids.length){
+          var limit = i * slice + slice;
+        }else{
+          var limit = rankship_ids.length;
+        }
+        for(var j = i * slice; j < limit; j++){
+          ship_id_strings += rankship_ids[j] + ",";
+        }
+        axios.get("https://api.worldofwarships.com/wows/encyclopedia/ships/?application_id=" + application_id,{params:{ship_id:ship_id_strings.substring(0,ship_id_strings.length-1)}})
+        .then((shipresponse)=>{
+          for (const [ship_id, shipres] of Object.entries(shipresponse.data.data)) {
+            if(shipres){
+              rankshipnames.push({key: shipres.name, value: shipres.name, text: shipres.name});
+              for (let season of seasons){
+                if(rankstatdata[ship_id.toString()+","+season.toString()]){
+                  playerRankTableData.push({
+                    ship_id: shipres.ship_id,
+                    season: season,
+                    name: shipres.name,
+                    image: shipres.images.small,
+                    nation: shipres.nation,
+                    tier: shipres.tier,
+                    type: shipres.type,
+
+                    wins: rankstatdata[ship_id.toString()+","+season.toString()].wins,
+                    battles: rankstatdata[ship_id.toString()+","+season.toString()].battles,
+                    win_rate:rankstatdata[ship_id.toString()+","+season.toString()].win_rate,
+                    survival_rate: rankstatdata[ship_id.toString()+","+season.toString()].survival_rate,
+
+                    max_xp: rankstatdata[ship_id.toString()+","+season.toString()].max_xp,
+                    max_frags_battle: rankstatdata[ship_id.toString()+","+season.toString()].max_frags_battle,
+                    max_damage_dealt: rankstatdata[ship_id.toString()+","+season.toString()].max_damage_dealt,
+                    max_planes_killed: rankstatdata[ship_id.toString()+","+season.toString()].max_planes_killed,
+
+                    ave_xp: rankstatdata[ship_id.toString()+","+season.toString()].ave_xp,
+                    ave_frags: rankstatdata[ship_id.toString()+","+season.toString()].ave_frags,
+                    ave_damage_dealt: rankstatdata[ship_id.toString()+","+season.toString()].ave_damage_dealt,
+                    ave_planes_killed: rankstatdata[ship_id.toString()+","+season.toString()].ave_planes_killed,
+
+                    main_battery_max_frags_battle: rankstatdata[ship_id.toString()+","+season.toString()].main_battery_max_frags_battle,
+                    main_battery_frags: rankstatdata[ship_id.toString()+","+season.toString()].main_battery_frags,
+                    main_battery_hit_rate: rankstatdata[ship_id.toString()+","+season.toString()].main_battery_hit_rate,
+
+                    torpedoes_max_frags_battle: rankstatdata[ship_id.toString()+","+season.toString()].torpedoes_max_frags_battl,
+                    torpedoes_frags: rankstatdata[ship_id.toString()+","+season.toString()].torpedoes_frags,
+                    torpedoes_hit_rate: rankstatdata[ship_id.toString()+","+season.toString()].torpedoes_hit_rate,
+
+                    second_battery_max_frags_battle: rankstatdata[ship_id.toString()+","+season.toString()].second_battery_max_frags_battle,
+                    second_battery_frags: rankstatdata[ship_id.toString()+","+season.toString()].second_battery_frags,
+                    second_battery_hit_rate: rankstatdata[ship_id.toString()+","+season.toString()].second_battery_hit_rate,
+
+                    aircraft_max_frags_battle: rankstatdata[ship_id.toString()+","+season.toString()].aircraft_max_frags_battle,
+                    aircraft_frags: rankstatdata[ship_id.toString()+","+season.toString()].aircraft_frags,
+
+                    ramming_max_frags_battle: rankstatdata[ship_id.toString()+","+season.toString()].ramming_max_frags_battle,
+                    ramming_frags: rankstatdata[ship_id.toString()+","+season.toString()].ramming_frags,
+
+                    survived_wins: rankstatdata[ship_id.toString()+","+season.toString()].survived_wins,
+                  });
+                }
+              }
+            }
+          }
+          this.setState({playerRankTableData:playerRankTableData,rankshipnames:rankshipnames,seasonOptions:seasonOptions});
         })
         .catch((error) => console.log(error));
       }
@@ -583,7 +721,7 @@ export default class PlayerIndex extends Component {
             { menuItem: 'Rank', render: () =>
             <Tab.Pane attached={false}>
               <Container fluid textAlign='center'>
-                <PlayerRankTable account_id = {this.state.account_id}/>
+                <PlayerRankTable account_id = {this.state.account_id} data={this.state.playerRankTableData} rankshipnames={this.state.rankshipnames} seasonOptions={this.state.seasonOptions}/>
               </Container>
             </Tab.Pane> },
           ]} />

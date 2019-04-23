@@ -163,7 +163,6 @@ export default class PlayerShipTable extends Component {
       ship_ids: [],
       shipnames: [{key: 'all', value: 'all', text: ''}],
       showModal: false,
-      doneLoading: false,
     }
     this.handleSort = this.handleSort.bind(this);
     this.build = this.build.bind(this);
@@ -171,13 +170,19 @@ export default class PlayerShipTable extends Component {
     this.nextPage = this.nextPage.bind(this);
     this.prevPage = this.prevPage.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
+    this.handleFilterRaw = this.handleFilterRaw.bind(this);
     this.selected = this.selected.bind(this);
     this.handleselectedShipID = this.handleselectedShipID.bind(this);
   }
-  componentWillReceiveProps() {
-    this.setState({data:this.props.data,shipnames:this.props.shipnames,doneLoading:true});
-    this.handleFilter(null,"all","all","all");
+  componentDidMount() {
+    this.setState({data:this.props.data,shipnames:this.props.shipnames});
+    this.handleFilterRaw(this.props.data,null,"all","all","all");
   }
+  componentWillReceiveProps(){
+    this.setState({data:this.props.data,shipnames:this.props.shipnames});
+    this.handleFilterRaw(this.props.data,null,"all","all","all");
+  }
+
   handleSort(clickedColumn){
     var selectedData = [];
     this.props.data.forEach((row)=>{
@@ -206,6 +211,18 @@ export default class PlayerShipTable extends Component {
           page: 0,
         })
       }
+    }
+  }
+
+  handleFilterRaw(data,selectedName,selectedNation,selectedType,selectedTier){
+    if(data){
+      var selectedData = [];
+      data.forEach((row)=>{
+        if(this.selected(row,selectedName,selectedNation,selectedType,selectedTier)){
+          selectedData.push(row);
+        }
+      })
+      this.setState({selectedData:selectedData, page: 0});
     }
   }
 
@@ -341,10 +358,6 @@ export default class PlayerShipTable extends Component {
   render() {
     return (
       <div>
-        <Dimmer active={!this.state.doneLoading}>
-          <Loader>Loading</Loader>
-        </Dimmer>
-
         <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
               <Table.Row key="header1">
