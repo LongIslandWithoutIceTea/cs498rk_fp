@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button } from 'semantic-ui-react';
+import {Link, NavLink} from "react-router-dom";
+import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import PlayerShipTable from '../PlayerTable/PlayerShipTable.js';
@@ -341,13 +342,15 @@ export default class PlayerIndex extends Component {
               marginTop: window.innerWidth>860?'0.5em':'0.25em',
             }}
           />
-          <Header as='h2' content={this.state.clansummary}
+          <Header as='h2'
             style={{
               fontSize: window.innerWidth>860?'1.7em':'1.2em',
               fontWeight: 'normal',
               marginTop: window.innerWidth>860?'0.5em':'0.25em',
             }}
-          />
+            >
+            <NavLink to={{pathname: '/clan',state: {clan_id: this.state.clandata.clan_id}}}>{this.state.clansummary}</NavLink>
+          </Header>
         </Container>
 
         <div
@@ -434,8 +437,8 @@ export default class PlayerIndex extends Component {
           </div>
           <div style={{margin: '1.5em'}}>
           <Statistic horizontal size="small">
-            <Statistic.Value>{(division(this.state.data.statistics.pvp.survived_battles,this.state.data.statistics.pvp.wins+this.state.data.statistics.pvp.draws+this.state.data.statistics.pvp.losses) * 100).toFixed(0) + "%"}</Statistic.Value>
-            <Statistic.Label>Survival Rate</Statistic.Label>
+            <Statistic.Value>{division(this.state.data.statistics.pvp.frags,this.state.data.statistics.pvp.battles-this.state.data.statistics.pvp.survived_battles)}</Statistic.Value>
+            <Statistic.Label>K/D</Statistic.Label>
           </Statistic>
           </div>
         </div>

@@ -4,15 +4,16 @@ import 'semantic-ui-css/semantic.min.css';
 import _ from 'lodash';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import PlayerIndex from './PlayerIndex.js';
+import ClanIndex from './ClanIndex.js';
 import {withRouter} from 'react-router-dom';
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 
-const resultRenderer = ({title, account_id}) => <Header as='h4' key={account_id}><Icon name='user circle'/><Header.Content>{title}</Header.Content></Header>
+const resultRenderer = ({title, clan_id, tag}) => <Header as='h4' key={clan_id}><Icon name='group'/><Header.Content>{'[' + tag + ']' + title}</Header.Content></Header>
 resultRenderer.propTypes = {
-  nickname: PropTypes.string,
-  account_id: PropTypes.string,
+  name: PropTypes.string,
+  clan_id: PropTypes.string,
+  tag: PropTypes.string,
 }
 
 const trigger = (
@@ -34,11 +35,11 @@ const options = [
   { key: 'sign-out', text: 'Sign Out', icon:'log out' },
 ]
 
-class PlayerHeader extends Component {
+class ClanHeader extends Component {
   constructor(props){
     super(props);
     this.state = {
-      account_id: '',
+      clan_id: '',
       isLoading: false,
       results: [],
       value: '',
@@ -60,21 +61,21 @@ class PlayerHeader extends Component {
   }
 
   handleResultSelect(e, { result }){
-    this.setState({ account_id: result.account_id, value: result.nickname });
-    if(result && result.account_id){
-      this.props.set_account_id(result.account_id);
+    this.setState({ clan_id: result.clan_id, value: result.name });
+    if(result && result.clan_id){
+      this.props.set_clan_id(result.clan_id);
     }
   }
 
   handleSearchChange(e, { value }){
     this.setState({value: value })
-    if(value.length > 3) {
+    if(value.length > 1) {
       this.setState({isLoading: true})
-      axios.get("https://api.worldofwarships.com/wows/account/list/?application_id=" + application_id + "&search=" + value)
+      axios.get("https://api.worldofwarships.com/wows/clans/list/?application_id=" + application_id + "&search=" + value)
       .then((response)=>{
           var results = [];
           response.data.data.forEach((row)=>{
-            results.push({title:row.nickname,account_id:row.account_id});
+            results.push({title:row.name,clan_id:row.clan_id,tag:row.tag});
           })
           this.setState({isLoading: false, results:results})
       })
@@ -86,15 +87,14 @@ class PlayerHeader extends Component {
     return(
       <Menu inverted stackable size='large'>
         <Container fluid>
-
           <Menu.Item as='a' inverted href='/'><Icon name='home'/>Home</Menu.Item>
           <Menu.Item as='a' inverted href='/'><Icon name='anchor'/>Ship</Menu.Item>
-          <Menu.Item as='a' inverted active href='/#/player'><Icon name='user'/>Player</Menu.Item>
-          <Menu.Item as='a' inverted href='/#/clan'><Icon name='group'/>Clan</Menu.Item>
+          <Menu.Item as='a' inverted href='/#/player'><Icon name='user'/>Player</Menu.Item>
+          <Menu.Item as='a' inverted active href='/#/clan'><Icon name='group'/>Clan</Menu.Item>
           <Menu.Item position='right'>
             <Search
               selectFirstResult
-              minCharacters = {4}
+              minCharacters = {2}
               fluid
               loading={this.state.isLoading}
               onResultSelect={this.handleResultSelect}
@@ -115,44 +115,44 @@ class PlayerHeader extends Component {
   }
 }
 
-class Player extends Component {
+class Clan extends Component {
   constructor(props){
     super(props);
     this.state = {
-      account_id: '',
+      clan_id: '',
     };
-    this.set_account_id = this.set_account_id.bind(this);
+    this.set_clan_id = this.set_clan_id.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.account_id !== nextState.account_id) {
+    if (this.state.clan_id !== nextState.clan_id) {
       return true;
     }
     return false;
   }
 
-  set_account_id(id){
-    this.setState({account_id:id});
+  set_clan_id(id){
+    this.setState({clan_id:id});
   }
   render(){
-    if(this.state.account_id && this.state.account_id !== ''){
+    if(this.state.clan_id && this.state.clan_id !== ''){
       return(
         <Container fluid>
-          <PlayerHeader set_account_id={this.set_account_id}/>
-          <PlayerIndex account_id={this.state.account_id}/>
+          <ClanHeader set_clan_id={this.set_clan_id}/>
+          <ClanIndex clan_id={this.state.clan_id}/>
         </Container>
       )
-    }else if(this.props.location && this.props.location.state && this.props.location.state.account_id){
+    }else if(this.props.location && this.props.location.state && this.props.location.state.clan_id){
       return(
         <Container fluid>
-          <PlayerHeader set_account_id={this.set_account_id}/>
-          <PlayerIndex account_id={this.props.location.state.account_id}/>
+          <ClanHeader set_clan_id={this.set_clan_id}/>
+          <ClanIndex clan_id={this.props.location.state.clan_id}/>
         </Container>
       )
     }else{
       return(
         <Container fluid>
-          <PlayerHeader set_account_id={this.set_account_id}/>
+          <ClanHeader set_clan_id={this.set_clan_id}/>
           <Placeholder fluid>
             <Placeholder.Header>
               <Placeholder.Line length='full' />
@@ -167,4 +167,4 @@ class Player extends Component {
   }
 }
 
-export default withRouter(Player);
+export default withRouter(Clan);

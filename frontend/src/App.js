@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css'
 import IndexPage from './IndexPage/IndexPage'
-import Player from './Player/PlayerIndex/PlayerHeader'
+import Player from './Player/PlayerIndex/PlayerHeader.js'
+import Clan from './Clan/ClanIndex/ClanHeader'
 import { HashRouter as Router, Route } from "react-router-dom";
 
 
@@ -15,6 +16,8 @@ class App extends Component {
                   <Route path={"/"} exact component={IndexPage} />
                   <Route path={"/player"} exact
                          component={() => <Player/>}  />
+                   <Route path={"/clan"} exact
+                          component={() => <Clan/>}  />
               </div>
           </Router>
       </div>
