@@ -108,30 +108,10 @@ class PlayerShipTableBody extends Component {
           }
           rows.push(
               (
-              <Table.Row key={row.ship_id.toString()+'/'+row.season} id={"PlayerRankTable"+row.ship_id.toString()+'/'+row.season} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
+              <Table.Row key={row.ship_id.toString()+'/'+row.season} id={"PlayerRankTableMobile"+row.ship_id.toString()+'/'+row.season} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
                 <Table.Cell selectable><a>{row.name}</a></Table.Cell>
-                <Table.Cell ><img src={row.image} alt="404" height="35"/></Table.Cell>
-                <Table.Cell ><img src={nationDict[row.nation].image} alt="404" height="25"/></Table.Cell>
-                <Table.Cell >{nationDict[row.nation].text}</Table.Cell>
-                <Table.Cell ><img src={typeDict[row.type].image} alt="404" height="25"/></Table.Cell>
-                <Table.Cell >{typeDict[row.type].text}</Table.Cell>
-                <Table.Cell >{tierDict[row.tier]}</Table.Cell>
-                <Table.Cell >{row.wins}</Table.Cell>
-                <Table.Cell >{row.battles}</Table.Cell>
                 <Table.Cell >{row.win_rate}</Table.Cell>
-                <Table.Cell >{row.survival_rate}</Table.Cell>
-
-                <Table.Cell >{row.max_xp}</Table.Cell>
-                <Table.Cell >{row.max_frags_battle}</Table.Cell>
-                <Table.Cell >{row.max_damage_dealt}</Table.Cell>
-                <Table.Cell >{row.max_planes_killed}</Table.Cell>
-
-                <Table.Cell >{row.ave_xp}</Table.Cell>
-                <Table.Cell >{row.ave_frags}</Table.Cell>
                 <Table.Cell >{row.ave_damage_dealt}</Table.Cell>
-                <Table.Cell >{row.ave_planes_killed}</Table.Cell>
-
-                <Table.Cell collapsing><Icon name="ellipsis horizontal"/></Table.Cell>
               </Table.Row>
             )
           )
@@ -149,7 +129,7 @@ class PlayerShipTableBody extends Component {
   }
 }
 
-export default class PlayerRankTable extends Component {
+export default class PlayerRankTableMobile extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -196,7 +176,6 @@ export default class PlayerRankTable extends Component {
     }else{
       this.setState({account_id:this.props.account_id, data:this.props.data,shipnames:this.props.rankshipnames});
     }
-    
     this.handleFilterRaw(this.props.data,null,null,"all","all","all")
   }
 
@@ -348,7 +327,7 @@ export default class PlayerRankTable extends Component {
   }
 
   build(data){
-    var totalpage = 5;
+    var totalpage = 2;
     var pages = [];
     if(data){
       if(data.length/perpage > totalpage){
@@ -360,18 +339,16 @@ export default class PlayerRankTable extends Component {
 
           }
         }else if(this.state.page > data.length/perpage - Math.round(totalpage/2)){
-          for (var i = Math.round(data.length/perpage)-totalpage; i < data.length/perpage ; i++){
+          for (var i = Math.round(data.length/perpage)-totalpage; i < data.length/perpage - 1 ; i++){
             pages.push((
               <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
             ))
           }
         }else{
-          for (var i = 0; i < data.length/perpage ; i++){
-            if(Math.abs(i - this.state.page) < Math.round(totalpage/2)){
-              pages.push((
-                <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
-              ))
-            }
+          for (var i = this.state.page; i < this.state.page+2; i++){
+            pages.push((
+              <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+            ))
           }
         }
       }else{
@@ -388,36 +365,13 @@ export default class PlayerRankTable extends Component {
   render() {
     return (
       <div>
-        <Dropdown fluid clearable placeholder='Select Season' selection options={this.state.seasonOptions.sort((a,b)=>a.key-b.key)} value={this.state.selectedSeason} onChange={(e,{value}) => {this.setState({selectedSeason: value, selectedName:null,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value, null,"all","all","all")}}/>
+        <Dropdown fluid clearable placeholder='Select Season' selection options={this.state.seasonOptions} value={this.state.selectedSeason} onChange={(e,{value}) => {this.setState({selectedSeason: value, selectedName:null,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value, null,"all","all","all")}}/>
         <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
             <Table.Header className="PlayerShipTableHeader">
               <Table.Row  key="header1">
-                <Table.HeaderCell colSpan='2'>Ship</Table.HeaderCell>
-                <Table.HeaderCell colSpan='2' sorted={this.state.column === 'nation' ? this.state.direction : null} onClick={() => this.handleSort('nation')}>Nation</Table.HeaderCell>
-                <Table.HeaderCell colSpan='2' sorted={this.state.column === 'type' ? this.state.direction : null} onClick={() => this.handleSort('type')}>Type</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'tier' ? this.state.direction : null} onClick={() => this.handleSort('tier')}>Tier</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'wins' ? this.state.direction : null} onClick={() => this.handleSort('wins')} rowSpan='2'>Wins</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'battles' ? this.state.direction : null} onClick={() => this.handleSort('battles')} rowSpan='2'>Battles</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'win_rate' ? this.state.direction : null} onClick={() => this.handleSort('win_rate')} rowSpan='2'>Win Rate</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'survival_rate' ? this.state.direction : null} onClick={() => this.handleSort('survival_rate')} rowSpan='2'>Survival Rate</Table.HeaderCell>
-                <Table.HeaderCell colSpan='4'>Max</Table.HeaderCell>
-                <Table.HeaderCell colSpan='4'>Average</Table.HeaderCell>
-                <Table.HeaderCell rowSpan='2'></Table.HeaderCell>
-              </Table.Row>
-              <Table.Row  key="header2">
-                <Table.Cell colSpan='2' width="5"><Dropdown fluid clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(this.state.selectedSeason, value,"all","all","all")}}/></Table.Cell>
-                <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter(this.state.selectedSeason,"all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
-                <Table.Cell colSpan='2'width="5"><Dropdown fluid placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter(this.state.selectedSeason,"all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
-                <Table.Cell width="5"><Dropdown fluid placeholder='Select Tier ' selection options={tierOptions} value={this.state.selectedTier} onChange={(e,{value}) => {this.setState({selectedTier:value,selectedName:"all"}); this.handleFilter(this.state.selectedSeason,"all",this.state.selectedNation,this.state.selectedType,value)}}/></Table.Cell>
-                <Table.HeaderCell sorted={this.state.column === 'max_xp' ? this.state.direction : null} onClick={() => this.handleSort('max_xp')}>XP</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'max_frags_battle' ? this.state.direction : null} onClick={() => this.handleSort('max_frags_battle')}>Kills</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'max_damage_dealt' ? this.state.direction : null} onClick={() => this.handleSort('max_damage_dealt')}>Damage</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'max_planes_killed' ? this.state.direction : null} onClick={() => this.handleSort('max_planes_killed')}>Plane Kills</Table.HeaderCell>
-
-                <Table.HeaderCell sorted={this.state.column === 'ave_xp' ? this.state.direction : null} onClick={() => this.handleSort('ave_xp')}>XP</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'ave_frags' ? this.state.direction : null} onClick={() => this.handleSort('ave_frags')}>Kills</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'ave_damage_dealt' ? this.state.direction : null} onClick={() => this.handleSort('ave_damage_dealt')}>Damage</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'ave_planes_killed' ? this.state.direction : null} onClick={() => this.handleSort('ave_planes_killed')}>Plane Kills</Table.HeaderCell>
+                <Table.HeaderCell >Ship</Table.HeaderCell>
+                <Table.HeaderCell sorted={this.state.column === 'win_rate' ? this.state.direction : null} onClick={() => this.handleSort('win_rate')}>Win Rate</Table.HeaderCell>
+                <Table.HeaderCell sorted={this.state.column === 'ave_damage_dealt' ? this.state.direction : null} onClick={() => this.handleSort('ave_damage_dealt')}>Ave Dmg</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 

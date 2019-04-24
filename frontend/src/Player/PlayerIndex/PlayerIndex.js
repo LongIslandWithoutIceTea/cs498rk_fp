@@ -4,10 +4,15 @@ import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, He
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import PlayerShipTable from '../PlayerTable/PlayerShipTable.js';
+import PlayerShipTableMobile from '../PlayerTable/PlayerShipTableMobile.js';
 import PlayerRankTable from '../PlayerTable/PlayerRankTable.js';
+import PlayerRankTableMobile from '../PlayerTable/PlayerRankTableMobile.js';
 import PlayerShipTypeTable from '../PlayerTable/PlayerShipTypeTable.js';
 import PlayerShipTierTable from '../PlayerTable/PlayerShipTierTable.js';
 import PlayerShipNationTable from '../PlayerTable/PlayerShipNationTable.js';
+import PlayerShipTypeTableMobile from '../PlayerTable/PlayerShipTypeTableMobile.js';
+import PlayerShipTierTableMobile from '../PlayerTable/PlayerShipTierTableMobile.js';
+import PlayerShipNationTableMobile from '../PlayerTable/PlayerShipNationTableMobile.js';
 import PlayerShipTypeGraph from '../PlayerGraph/PlayerShipTypeGraph.js';
 import PlayerShipNationGraph from '../PlayerGraph/PlayerShipNationGraph.js';
 import PlayerShipTierGraph from '../PlayerGraph/PlayerShipTierGraph.js';
@@ -62,7 +67,7 @@ export default class PlayerIndex extends Component {
       shipdetails: null,
       shipnames: null,
       rankshipnames: null,
-      seasonOptions: null,
+      seasonOptions: [{key: '0', value: 'all', text: ''}],
       data: {"last_battle_time":0,"account_id":0,"leveling_tier":0,"created_at":1457320991,"leveling_points":12806,"updated_at":1555877501,"private":null,"hidden_profile":false,"logout_at":1555877490,"karma":null,"statistics":{"distance":496492,"battles":12716,"pvp":{"max_xp":6511,"damage_to_buildings":619131,"main_battery":{"max_frags_battle":8,"frags":9655,"hits":763954,"max_frags_ship_id":3765384944,"shots":2056909},"max_ships_spotted_ship_id":3751786288,"max_damage_scouting":334282,"art_agro":4000000001,"max_xp_ship_id":3760109008,"ships_spotted":14066,"second_battery":{"max_frags_battle":3,"frags":364,"hits":98556,"max_frags_ship_id":3751753712,"shots":488873},"max_frags_ship_id":4184815568,"xp":20988609,"survived_battles":5087,"dropped_capture_points":0,"max_damage_dealt_to_buildings":213600,"torpedo_agro":848533559,"draws":4,"control_captured_points":99320,"battles_since_510":9057,"max_total_agro_ship_id":4276041424,"planes_killed":48366,"battles":11055,"max_ships_spotted":12,"max_suppressions_ship_id":4276041424,"survived_wins":4322,"frags":14915,"damage_scouting":257570466,"max_total_agro":4793200,"max_frags_battle":8,"capture_points":0,"ramming":{"max_frags_battle":1,"frags":117,"max_frags_ship_id":3760109008},"suppressions_count":3,"max_suppressions_count":1,"torpedoes":{"max_frags_battle":4,"frags":1359,"hits":6254,"max_frags_ship_id":4282267344,"shots":82849},"max_planes_killed_ship_id":4288591856,"aircraft":{"max_frags_battle":7,"frags":1551,"max_frags_ship_id":3763320816},"team_capture_points":1112945,"control_dropped_points":64546,"max_damage_dealt":342198,"max_damage_dealt_to_buildings_ship_id":4282333168,"max_damage_dealt_ship_id":4276041424,"wins":6872,"losses":4179,"damage_dealt":892778787,"max_planes_killed":83,"max_scouting_damage_ship_id":4279219920,"team_dropped_capture_points":542979,"battles_since_512":8542}},"nickname":"","stats_updated_at":1555877501},
       clandata: {"0":{"members_count":46,"name":"Hiryu Ride Face","creator_name":"Aikun96","clan_id":0,"created_at":1484747968,"updated_at":1555210651,"leader_name":"ChipsChan","members_ids":[1003333910],"creator_id":1016393566,"tag":"KUMA","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":1013587959,"description":""}},
       achievements:{"battle":{"FOOLSDAY_TROOPER":9}},
@@ -694,10 +699,31 @@ export default class PlayerIndex extends Component {
           ]} />
         </Container>
 
+        <Container
+        style={{
+          margin: 'auto',
+          display:window.innerWidth>=1080?'none':'block',
+        }}
+        >
+          <Container fluid textAlign='center' style={{marginBottom:"3em"}}>
+            <Header size='small' style={{margin:'0'}}>Ship Stats By Type</Header>
+            <PlayerShipTypeTableMobile data={this.state.playerShipTableData}/>
+          </Container>
+
+          <Container fluid textAlign='center' style={{marginBottom:"3em"}}>
+            <Header size='small' style={{margin:'0'}}>Ship Stats By Tier</Header>
+            <PlayerShipTierTableMobile data={this.state.playerShipTableData}/>
+          </Container>
+
+          <Container fluid textAlign='center' style={{marginBottom:"3em"}}>
+            <Header size='small' style={{margin:'0'}}>Ship Stats By Nation</Header>
+            <PlayerShipNationTableMobile data={this.state.playerShipTableData}/>
+          </Container>
+        </Container>
+
         <Divider horizontal
         style={{
             marginTop: '5em',
-            visibility: this.state.playerTableVisible?'visible':'hidden',
           }}
         >
           <Header as='h4'>
@@ -725,6 +751,29 @@ export default class PlayerIndex extends Component {
               </Container>
             </Tab.Pane> },
           ]} />
+        </div>
+
+        <div
+        style={{
+          display:this.state.playerTableVisible?'none':'block',
+        }}
+        >
+        <Container fluid textAlign='center'>
+          <PlayerShipTableMobile account_id = {this.state.account_id} data={this.state.playerShipTableData} shipnames={this.state.shipnames}/>
+        </Container>
+        <Divider horizontal
+        style={{
+            marginTop: '5em',
+          }}
+        >
+          <Header as='h4'>
+            <Icon name='bar chart' />
+            Rank Performance
+          </Header>
+        </Divider>
+        <Container fluid textAlign='center'>
+          <PlayerRankTableMobile account_id = {this.state.account_id} data={this.state.playerRankTableData} rankshipnames={this.state.rankshipnames} seasonOptions={this.state.seasonOptions}/>
+        </Container>
         </div>
 
       </Container>
