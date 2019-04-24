@@ -68,10 +68,10 @@ class ShipHeader extends Component {
     if(value.length > 1) {
       this.setState({isLoading: true})
       var results = [];
-      let filtered = this.state.shipList.filter(name => name.toLowerCase().includes(value.toLowerCase()))
+      let filtered = this.state.shipList.filter(ship => ship.name.toLowerCase().includes(value.toLowerCase()))
       console.log(filtered)
       filtered.forEach((ship)=>{
-        results.push({title:ship});
+        results.push({title:ship.name, image:ship.images.small, description:"Tier "+ship.tier+" "+ship.nation+" "+ship.type});
       })
       this.setState({isLoading: false, results:results})
     }
@@ -81,30 +81,33 @@ class ShipHeader extends Component {
     this.getShipList();
   }
 
+  /*
+   * Load basic info of all the ships by nations from api
+   */
   getShipList() {
-    axios.get("https://api.worldofwarships.ru/wows/encyclopedia/info/?application_id=" + application_id + "&language=en" + "&fields=ship_types")
+    axios.get("https://api.worldofwarships.ru/wows/encyclopedia/info/?application_id=" + application_id + "&language=en" + "&fields=ship_nations")
         .then((response)=>{
           var results = [];
-          let ship_types = Object.keys(response.data.data.ship_types);
-          let ship_promise = ship_types.map(type => new Promise(function (resolve, reject) {
-            axios.get("https://api.worldofwarships.ru/wows/encyclopedia/ships/?application_id=" + application_id + "&language=en" + "&type=" + type + "&fields=name")
+          let ship_nations = Object.keys(response.data.data.ship_nations);
+          let ship_promise = ship_nations.map(nation => new Promise(function (resolve, reject) {
+            axios.get("https://api.worldofwarships.ru/wows/encyclopedia/ships/?application_id=" + application_id + "&language=en" + "&nation=" + nation + "&fields=name,images.small,nation,tier,type")
                 .then((response)=>{
                   resolve(response.data.data)
                 })
                 .catch((error) => reject(error));
           }));
           Promise.all(ship_promise).then(values => {
-            let shipList = []
+            let shipList = {}
             values.forEach( curr => {
               if (curr == undefined){
                 return;
               }
-              let keys = Object.keys(curr);
-              let vals = keys.map(key => curr[key].name)
-              shipList = shipList.concat(vals)
+              shipList = Object.assign(shipList,curr)
             })
-            this.setState({shipList:shipList})
-            console.log(shipList)
+            let keys = Object.keys(shipList);
+            let vals = keys.map(key => shipList[key])
+            this.setState({shipList:vals})
+            console.log(vals)
           })
         })
   }
