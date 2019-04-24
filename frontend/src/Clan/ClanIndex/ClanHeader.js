@@ -5,6 +5,8 @@ import _ from 'lodash';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import ClanIndex from './ClanIndex.js';
+import Login from '../../User/Login.js'
+import Register from '../../User/Register.js'
 import {withRouter} from 'react-router-dom';
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
@@ -21,19 +23,6 @@ const trigger = (
     <Icon name='user' /> Hello, xxx
   </span>
 )
-const options = [
-  {
-    key: 'user',
-    text: (
-      <span>
-        Signed in as <strong>xxx</strong>
-      </span>
-    ),
-    disabled: true,
-  },
-  { key: 'sign-in', text: 'Sign In' , icon:'sign in'},
-  { key: 'sign-out', text: 'Sign Out', icon:'log out' },
-]
 
 class ClanHeader extends Component {
   constructor(props){
@@ -43,10 +32,15 @@ class ClanHeader extends Component {
       isLoading: false,
       results: [],
       value: '',
+      showLogin: false,
+      Register: false,
     };
     this.resetComponent = this.resetComponent.bind(this);
     this.handleResultSelect = this.handleResultSelect.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.LoginClick = this.LoginClick.bind(this);
+    this.RegisterClick = this.RegisterClick.bind(this);
+    this.LogoutClick = this.LogoutClick.bind(this);
   }
 
   componentWillMount() {
@@ -83,8 +77,19 @@ class ClanHeader extends Component {
     }
   }
 
+  LoginClick(){
+    this.setState({showLogin: true});
+  }
+  RegisterClick(){
+    this.setState({showRegister: true});
+  }
+  LogoutClick(){
+    alert("Loggedt out!")
+  }
+
   render(){
     return(
+      <div>
       <Menu inverted stackable size='large'>
         <Container fluid>
           <Menu.Item as='a' inverted href='/'><Icon name='home'/>Home</Menu.Item>
@@ -94,7 +99,7 @@ class ClanHeader extends Component {
           <Menu.Item position='right'>
             <Search
               selectFirstResult
-              minCharacters = {2}
+              minCharacters = {4}
               fluid
               loading={this.state.isLoading}
               onResultSelect={this.handleResultSelect}
@@ -107,10 +112,27 @@ class ClanHeader extends Component {
               />
           </Menu.Item>
           <Menu.Item >
-          <Dropdown trigger={trigger} options={options} />
+          <Dropdown trigger={trigger} options={
+            [{
+                key: 'user',
+                text: (
+                  <span>
+                    Signed in as <strong>xxx</strong>
+                  </span>
+                ),
+                disabled: true,
+              },
+              { key: 'sign-in', text: 'Sign In' , icon:'sign in', onClick:()=>{this.LoginClick()} },
+              { key: 'register', text: 'Register', icon:'pencil alternate', onClick:()=>{this.RegisterClick()} },
+              { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
+            ]
+          } />
           </Menu.Item>
         </Container>
       </Menu>
+      <Modal closeIcon  open={this.state.showLogin} onClose={()=>this.setState({showLogin:false})}><Modal.Content><Login/></Modal.Content></Modal>
+      <Modal closeIcon  open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register/></Modal.Content></Modal>
+      </div>
     )
   }
 }
@@ -134,6 +156,8 @@ class Clan extends Component {
   set_clan_id(id){
     this.setState({clan_id:id});
   }
+
+
   render(){
     if(this.state.clan_id && this.state.clan_id !== ''){
       return(

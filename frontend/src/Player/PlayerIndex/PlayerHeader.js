@@ -5,6 +5,8 @@ import _ from 'lodash';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import PlayerIndex from './PlayerIndex.js';
+import Login from '../../User/Login.js'
+import Register from '../../User/Register.js'
 import {withRouter} from 'react-router-dom';
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
@@ -20,19 +22,6 @@ const trigger = (
     <Icon name='user' /> Hello, xxx
   </span>
 )
-const options = [
-  {
-    key: 'user',
-    text: (
-      <span>
-        Signed in as <strong>xxx</strong>
-      </span>
-    ),
-    disabled: true,
-  },
-  { key: 'sign-in', text: 'Sign In' , icon:'sign in'},
-  { key: 'sign-out', text: 'Sign Out', icon:'log out' },
-]
 
 class PlayerHeader extends Component {
   constructor(props){
@@ -42,10 +31,15 @@ class PlayerHeader extends Component {
       isLoading: false,
       results: [],
       value: '',
+      showLogin: false,
+      Register: false,
     };
     this.resetComponent = this.resetComponent.bind(this);
     this.handleResultSelect = this.handleResultSelect.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.LoginClick = this.LoginClick.bind(this);
+    this.RegisterClick = this.RegisterClick.bind(this);
+    this.LogoutClick = this.LogoutClick.bind(this);
   }
 
   componentWillMount() {
@@ -82,11 +76,21 @@ class PlayerHeader extends Component {
     }
   }
 
+  LoginClick(){
+    this.setState({showLogin: true});
+  }
+  RegisterClick(){
+    this.setState({showRegister: true});
+  }
+  LogoutClick(){
+    alert("Loggedt out!")
+  }
+
   render(){
     return(
+      <div>
       <Menu inverted stackable size='large'>
         <Container fluid>
-
           <Menu.Item as='a' inverted href='/'><Icon name='home'/>Home</Menu.Item>
           <Menu.Item as='a' inverted href='/'><Icon name='anchor'/>Ship</Menu.Item>
           <Menu.Item as='a' inverted active href='/#/player'><Icon name='user'/>Player</Menu.Item>
@@ -107,10 +111,27 @@ class PlayerHeader extends Component {
               />
           </Menu.Item>
           <Menu.Item >
-          <Dropdown trigger={trigger} options={options} />
+          <Dropdown trigger={trigger} options={
+            [{
+                key: 'user',
+                text: (
+                  <span>
+                    Signed in as <strong>xxx</strong>
+                  </span>
+                ),
+                disabled: true,
+              },
+              { key: 'sign-in', text: 'Sign In' , icon:'sign in', onClick:()=>{this.LoginClick()} },
+              { key: 'register', text: 'Register', icon:'pencil alternate', onClick:()=>{this.RegisterClick()} },
+              { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
+            ]
+          } />
           </Menu.Item>
         </Container>
       </Menu>
+      <Modal closeIcon  open={this.state.showLogin} onClose={()=>this.setState({showLogin:false})}><Modal.Content><Login/></Modal.Content></Modal>
+      <Modal closeIcon  open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register/></Modal.Content></Modal>
+      </div>
     )
   }
 }
