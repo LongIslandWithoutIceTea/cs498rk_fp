@@ -180,9 +180,7 @@ export default class PlayerShipTierGraph extends Component {
     this.build = this.build.bind(this);
   }
   componentWillReceiveProps() {
-    if(this.props.data){
-      this.build(this.props.data);
-    }
+    this.build(this.props.data);
   }
   build(input){
     var data = [
@@ -337,20 +335,22 @@ export default class PlayerShipTierGraph extends Component {
         count: 0,
       },
     ];
-    input.forEach((row)=>{
-      var tier = parseInt(row.tier);
-      data[tier-1].max_damage_dealt = row.max_damage_dealt > data[tier-1].max_damage_dealt?row.max_damage_dealt:data[tier-1].max_damage_dealt;
-      data[tier-1].max_frags_battle  = row.max_frags_battle > data[tier-1].max_frags_battle?row.max_frags_battle:data[tier-1].max_frags_battle ;
-      data[tier-1].max_xp  = row.max_xp > data[tier-1].max_xp?row.max_xp:data[tier-1].max_xp ;
-      data[tier-1].ave_xp = divisionWhole((row.ave_xp + data[tier-1].ave_xp * data[tier-1].count),(data[tier-1].count+1))
-      data[tier-1].ave_damage_dealt = divisionWhole((row.ave_damage_dealt + data[tier-1].ave_damage_dealt * data[tier-1].count),(data[tier-1].count+1))
-      data[tier-1].ave_frags = division((row.ave_frags + data[tier-1].ave_frags * data[tier-1].count),(data[tier-1].count+1))
-      data[tier-1].battles += row.battles
-      data[tier-1].wins += row.wins
-      data[tier-1].win_rate = division(data[tier-1].wins,data[tier-1].battles);
-      data[tier-1].survival_rate = division((row.survival_rate + data[tier-1].survival_rate * data[tier-1].count),(data[tier-1].count+1))
-      data[tier-1].count ++;
-    })
+    if(input){
+      input.forEach((row)=>{
+        var tier = parseInt(row.tier);
+        data[tier-1].max_damage_dealt = row.max_damage_dealt > data[tier-1].max_damage_dealt?row.max_damage_dealt:data[tier-1].max_damage_dealt;
+        data[tier-1].max_frags_battle  = row.max_frags_battle > data[tier-1].max_frags_battle?row.max_frags_battle:data[tier-1].max_frags_battle ;
+        data[tier-1].max_xp  = row.max_xp > data[tier-1].max_xp?row.max_xp:data[tier-1].max_xp ;
+        data[tier-1].ave_xp = divisionWhole((row.ave_xp + data[tier-1].ave_xp * data[tier-1].count),(data[tier-1].count+1))
+        data[tier-1].ave_damage_dealt = divisionWhole((row.ave_damage_dealt + data[tier-1].ave_damage_dealt * data[tier-1].count),(data[tier-1].count+1))
+        data[tier-1].ave_frags = division((row.ave_frags + data[tier-1].ave_frags * data[tier-1].count),(data[tier-1].count+1))
+        data[tier-1].battles += row.battles
+        data[tier-1].wins += row.wins
+        data[tier-1].win_rate = division(data[tier-1].wins,data[tier-1].battles);
+        data[tier-1].survival_rate = division((row.survival_rate + data[tier-1].survival_rate * data[tier-1].count),(data[tier-1].count+1))
+        data[tier-1].count ++;
+      })
+    }
     this.setState({data:data});
   }
   render() {

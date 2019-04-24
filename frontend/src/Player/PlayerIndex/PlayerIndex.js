@@ -4,9 +4,11 @@ import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, He
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import PlayerShipTable from '../PlayerTable/PlayerShipTable.js';
+import PlayerShipTablePad from '../PlayerTable/PlayerShipTablePad.js';
 import PlayerShipTableMobile from '../PlayerTable/PlayerShipTableMobile.js';
 import PlayerRankTable from '../PlayerTable/PlayerRankTable.js';
 import PlayerRankTableMobile from '../PlayerTable/PlayerRankTableMobile.js';
+import PlayerRankTablePad from '../PlayerTable/PlayerRankTablePad.js';
 import PlayerShipTypeTable from '../PlayerTable/PlayerShipTypeTable.js';
 import PlayerShipTierTable from '../PlayerTable/PlayerShipTierTable.js';
 import PlayerShipNationTable from '../PlayerTable/PlayerShipNationTable.js';
@@ -55,13 +57,48 @@ function divisionWhole(a,b){
   }
 }
 
+class ScrollButton extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+        intervalId: 0
+    };
+  }
+
+  scrollStep() {
+    if (window.pageYOffset === 0) {
+        clearInterval(this.state.intervalId);
+    }
+    window.scroll(0, window.pageYOffset - this.props.scrollStepInPx);
+  }
+
+  scrollToTop() {
+    let intervalId = setInterval(this.scrollStep.bind(this), this.props.delayInMs);
+    this.setState({ intervalId: intervalId });
+  }
+
+  render () {
+      return <Button
+              size="massive"
+              circular
+              icon ='angle double up'
+              color="blue"
+              style={{
+                position: "fixed",
+                bottom: "50px",
+                right: "50px",
+              }}
+              onClick={ () => { this.scrollToTop(); }}>
+              </Button>;
+   }
+}
+
 export default class PlayerIndex extends Component {
   constructor(props){
     super(props);
     this.state = {
       account_id: '',
-      achievementsVisible: window.innerWidth>400?true:false,
-      playerTableVisible: window.innerWidth>=1920?true:false,
+      windowwidth: window.innerWidth,
       playerShipTableData: null,
       playerRankTableData: null,
       shipdetails: null,
@@ -70,7 +107,7 @@ export default class PlayerIndex extends Component {
       seasonOptions: [{key: '0', value: 'all', text: ''}],
       data: {"last_battle_time":0,"account_id":0,"leveling_tier":0,"created_at":1457320991,"leveling_points":12806,"updated_at":1555877501,"private":null,"hidden_profile":false,"logout_at":1555877490,"karma":null,"statistics":{"distance":496492,"battles":12716,"pvp":{"max_xp":6511,"damage_to_buildings":619131,"main_battery":{"max_frags_battle":8,"frags":9655,"hits":763954,"max_frags_ship_id":3765384944,"shots":2056909},"max_ships_spotted_ship_id":3751786288,"max_damage_scouting":334282,"art_agro":4000000001,"max_xp_ship_id":3760109008,"ships_spotted":14066,"second_battery":{"max_frags_battle":3,"frags":364,"hits":98556,"max_frags_ship_id":3751753712,"shots":488873},"max_frags_ship_id":4184815568,"xp":20988609,"survived_battles":5087,"dropped_capture_points":0,"max_damage_dealt_to_buildings":213600,"torpedo_agro":848533559,"draws":4,"control_captured_points":99320,"battles_since_510":9057,"max_total_agro_ship_id":4276041424,"planes_killed":48366,"battles":11055,"max_ships_spotted":12,"max_suppressions_ship_id":4276041424,"survived_wins":4322,"frags":14915,"damage_scouting":257570466,"max_total_agro":4793200,"max_frags_battle":8,"capture_points":0,"ramming":{"max_frags_battle":1,"frags":117,"max_frags_ship_id":3760109008},"suppressions_count":3,"max_suppressions_count":1,"torpedoes":{"max_frags_battle":4,"frags":1359,"hits":6254,"max_frags_ship_id":4282267344,"shots":82849},"max_planes_killed_ship_id":4288591856,"aircraft":{"max_frags_battle":7,"frags":1551,"max_frags_ship_id":3763320816},"team_capture_points":1112945,"control_dropped_points":64546,"max_damage_dealt":342198,"max_damage_dealt_to_buildings_ship_id":4282333168,"max_damage_dealt_ship_id":4276041424,"wins":6872,"losses":4179,"damage_dealt":892778787,"max_planes_killed":83,"max_scouting_damage_ship_id":4279219920,"team_dropped_capture_points":542979,"battles_since_512":8542}},"nickname":"","stats_updated_at":1555877501},
       clandata: {"0":{"members_count":46,"name":"Hiryu Ride Face","creator_name":"Aikun96","clan_id":0,"created_at":1484747968,"updated_at":1555210651,"leader_name":"ChipsChan","members_ids":[1003333910],"creator_id":1016393566,"tag":"KUMA","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":1013587959,"description":""}},
-      achievements:{"battle":{"FOOLSDAY_TROOPER":9}},
+      achievements:{"battle":{"":0}},
       clansummary: "",
       rankdata:null,
     }
@@ -78,6 +115,7 @@ export default class PlayerIndex extends Component {
     this.buildRankSummary = this.buildRankSummary.bind(this);
     this.buildSprintRankSummary = this.buildSprintRankSummary.bind(this);
     this.reloadData = this.reloadData.bind(this);
+    this.updateDimensions = this.updateDimensions.bind(this);
   }
   componentWillReceiveProps(nextProps) {
     this.setState({account_id:nextProps.account_id});
@@ -85,49 +123,56 @@ export default class PlayerIndex extends Component {
   }
   componentDidMount(){
     this.reloadData(this.props.account_id);
+    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions.bind(this));
   }
   reloadData(account_id){
     axios.get("https://api.worldofwarships.com/wows/account/info/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
-        this.setState({data: response.data.data[account_id]});
+      this.setState({data: response.data.data[account_id]});
     })
     .catch((error) => console.log(error));
+
+    this.setState({
+      clandata: {"0":{"members_count":46,"name":"Hiryu Ride Face","creator_name":"Aikun96","clan_id":0,"created_at":1484747968,"updated_at":1555210651,"leader_name":"ChipsChan","members_ids":[1003333910],"creator_id":1016393566,"tag":"KUMA","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":1013587959,"description":""}},
+      clansummary: "",
+    });
     axios.get("https://api.worldofwarships.com/wows/clans/accountinfo/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
         var clan_id = response.data.data[account_id].clan_id;
         axios.get("  https://api.worldofwarships.com/wows/clans/info/?application_id=" + application_id + "&clan_id=" + clan_id)
         .then((response)=>{
-            this.setState({
-              clandata: response.data.data[clan_id],
-              clansummary: "[" + response.data.data[clan_id].tag + "] " + response.data.data[clan_id].name,
-            });
+
+              this.setState({
+                clandata: response.data.data[clan_id],
+                clansummary: "[" + response.data.data[clan_id].tag + "] " + response.data.data[clan_id].name,
+              });
+
         })
         .catch((error) => console.log(error));
     })
     .catch((error) => console.log(error));
+
+    this.setState({achievements:{"battle":{"":0}}});
     axios.get("https://api.worldofwarships.com/wows/account/achievements/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
-        this.setState({achievements:response.data.data[account_id]})
+        this.setState({achievements:response.data.data[account_id]});
     })
     .catch((error) => console.log(error));
+
+    this.setState({rankdata:null});
     axios.get("https://api.worldofwarships.com/wows/seasons/accountinfo/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
-        this.setState({rankdata:response.data.data[account_id].seasons})
+        this.setState({rankdata:response.data.data[account_id].seasons});
     })
     .catch((error) => console.log(error));
+
     var playerShipTableData = [];
-    var playerRankTableData = [];
-    var playerRankTableData = [];
-    var rankstatdata = {};
-    var rankship_ids = [];
-    var rankshipnames = [];
-    var seasonOptions = [];
-    var seasons = new Set();
     var statdata = {};
     var ship_ids = [];
     var shipnames = [];
     var shipdetails = [];
-    this.setState({playerShipTableData:null, playerRankTableData:null});
+    this.setState({playerShipTableData :null ,shipnames:null,shipdetails:null});
     axios.get("https://api.worldofwarships.com/wows/ships/stats/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
         var res = response.data.data[account_id];
@@ -252,12 +297,20 @@ export default class PlayerIndex extends Component {
               });
             }
           }
-          this.setState({playerShipTableData :playerShipTableData ,shipnames:shipnames,shipdetails:shipdetails});
+            this.setState({playerShipTableData :playerShipTableData ,shipnames:shipnames,shipdetails:shipdetails});
         })
         .catch((error) => console.log(error));
       }
     })
     .catch((error) => console.log(error));
+
+    var playerRankTableData = [];
+    var rankstatdata = {};
+    var rankship_ids = [];
+    var rankshipnames = [];
+    var seasonOptions = [];
+    var seasons = new Set();
+    this.setState({playerRankTableData:null,rankshipnames:null,seasonOptions:[{key: '0', value: 'all', text: ''}]});
     axios.get("https://api.worldofwarships.com/wows/seasons/shipstats/?application_id=" + application_id + "&account_id=" + account_id)
     .then((response)=>{
         var res = response.data.data[account_id];
@@ -389,6 +442,14 @@ export default class PlayerIndex extends Component {
     .catch((error) => console.log(error));
   }
 
+  updateDimensions() {
+      this.setState({ windowwidth: window.innerWidth});
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions.bind(this));
+  }
+
   buildAchievements() {
     var arr = [];
     var achievements = this.state.achievements.battle;
@@ -396,7 +457,7 @@ export default class PlayerIndex extends Component {
       if(achievementsDict[name]){
         arr.push(
           <Card raised key={name}>
-            <Image src={achievementsDict[name].image} size={window.innerWidth>400?window.innerWidth>1080?'medium':'medium':'small'} />
+            <Image src={achievementsDict[name].image} size={this.state.windowwidth>400?this.state.windowwidth>1080?'medium':'medium':'small'} />
             <Card.Content key="cardcnt"
               style={{
                 padding: '0.5em',
@@ -472,25 +533,25 @@ export default class PlayerIndex extends Component {
         <Container text>
           <Icon name='user circle'
             style={{
-              fontSize: window.innerWidth>860?'4em':'3em',
+              fontSize: this.state.windowwidth>860?'4em':'3em',
               fontWeight: 'normal',
               marginBottom: 0,
-              marginTop: window.innerWidth>860?'2em':'1em',
+              marginTop: this.state.windowwidth>860?'2em':'1em',
             }}
           />
           <Header as='h1' content={this.state.data.nickname}
             style={{
-              fontSize: window.innerWidth>860?'4em':'3em',
+              fontSize: this.state.windowwidth>860?'4em':'3em',
               fontWeight: 'normal',
               marginBottom: 0,
-              marginTop: window.innerWidth>860?'0.5em':'0.25em',
+              marginTop: this.state.windowwidth>860?'0.5em':'0.25em',
             }}
           />
           <Header as='h2'
             style={{
-              fontSize: window.innerWidth>860?'1.7em':'1.2em',
+              fontSize: this.state.windowwidth>860?'1.7em':'1.2em',
               fontWeight: 'normal',
-              marginTop: window.innerWidth>860?'0.5em':'0.25em',
+              marginTop: this.state.windowwidth>860?'0.5em':'0.25em',
             }}
             >
             <NavLink to={{pathname: '/clan',state: {clan_id: this.state.clandata.clan_id}}}>{this.state.clansummary}</NavLink>
@@ -592,7 +653,7 @@ export default class PlayerIndex extends Component {
             marginTop: '5em',
           }}
         >
-          <Header as='h4' onClick={() => this.setState({ playerTableVisible: !this.state.playerTableVisible })}>
+          <Header as='h4'>
             <Icon name='trophy' />
             Achievements
           </Header>
@@ -603,7 +664,7 @@ export default class PlayerIndex extends Component {
             marginTop: '5em',
           }}
         >
-          <Card.Group itemsPerRow={window.innerWidth>400?window.innerWidth>1080?9:4:2} centered>
+          <Card.Group itemsPerRow={this.state.windowwidth>400?(this.state.windowwidth>1080?"nine":"four"):"two"} centered>
             {this.buildAchievements()}
           </Card.Group>
         </Container>
@@ -670,7 +731,7 @@ export default class PlayerIndex extends Component {
         <Container
         style={{
           margin: 'auto',
-          display:window.innerWidth>=1080?'block':'none',
+          display:this.state.windowwidth>=1080?'block':'none',
         }}
         >
         <Tab menu={{ secondary: true, pointing: true }} panes={
@@ -702,7 +763,7 @@ export default class PlayerIndex extends Component {
         <Container
         style={{
           margin: 'auto',
-          display:window.innerWidth>=1080?'none':'block',
+          display:this.state.windowwidth>=1080?'none':'block',
         }}
         >
           <Container fluid textAlign='center' style={{marginBottom:"3em"}}>
@@ -733,7 +794,7 @@ export default class PlayerIndex extends Component {
         </Divider>
         <div
         style={{
-          display:this.state.playerTableVisible?'block':'none',
+          display:this.state.windowwidth>=1920&&this.state.playerShipTableData?'block':'none',
         }}
         >
         <Tab menu={{ secondary: true, pointing: true }} panes={
@@ -755,7 +816,31 @@ export default class PlayerIndex extends Component {
 
         <div
         style={{
-          display:this.state.playerTableVisible?'none':'block',
+          display:this.state.windowwidth>=768&&this.state.windowwidth<1920&&this.state.playerShipTableData?'block':'none',
+        }}
+        >
+        <Container fluid textAlign='center'>
+          <PlayerShipTablePad account_id = {this.state.account_id} data={this.state.playerShipTableData} shipnames={this.state.shipnames}/>
+        </Container>
+        <Divider horizontal
+        style={{
+            marginTop: '5em',
+            display: this.state.playerRankTableData?'block':'none',
+          }}
+        >
+          <Header as='h4'>
+            <Icon name='bar chart' />
+            Rank Performance
+          </Header>
+        </Divider>
+        <Container fluid textAlign='center'>
+          <PlayerRankTablePad account_id = {this.state.account_id} data={this.state.playerRankTableData} rankshipnames={this.state.rankshipnames} seasonOptions={this.state.seasonOptions}/>
+        </Container>
+        </div>
+
+        <div
+        style={{
+          display:this.state.windowwidth<768&&this.state.playerShipTableData?'block':'none',
         }}
         >
         <Container fluid textAlign='center'>
@@ -764,6 +849,7 @@ export default class PlayerIndex extends Component {
         <Divider horizontal
         style={{
             marginTop: '5em',
+            display: this.state.playerRankTableData?'block':'none',
           }}
         >
           <Header as='h4'>
@@ -775,12 +861,8 @@ export default class PlayerIndex extends Component {
           <PlayerRankTableMobile account_id = {this.state.account_id} data={this.state.playerRankTableData} rankshipnames={this.state.rankshipnames} seasonOptions={this.state.seasonOptions}/>
         </Container>
         </div>
-
+        <ScrollButton scrollStepInPx="100" delayInMs="16.66"/>
       </Container>
     );
   }
 }
-/*
-<Button secondary onClick={() => this.setState({ playerTableVisible: this.state.playerTableVisible?false:true })}>
-
-</Button>*/
