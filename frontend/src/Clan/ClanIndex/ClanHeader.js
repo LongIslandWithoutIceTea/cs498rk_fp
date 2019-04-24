@@ -93,7 +93,7 @@ class ClanHeader extends Component {
       <Menu inverted stackable size='large'>
         <Container fluid>
           <Menu.Item as='a' inverted href='/'><Icon name='home'/>Home</Menu.Item>
-          <Menu.Item as='a' inverted href='/'><Icon name='anchor'/>Ship</Menu.Item>
+          <Menu.Item as='a' inverted href='/#/ship'><Icon name='anchor'/>Ship</Menu.Item>
           <Menu.Item as='a' inverted href='/#/player'><Icon name='user'/>Player</Menu.Item>
           <Menu.Item as='a' inverted active href='/#/clan'><Icon name='group'/>Clan</Menu.Item>
           <Menu.Item position='right'>
