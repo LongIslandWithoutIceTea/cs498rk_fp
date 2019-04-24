@@ -23,7 +23,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://Quincy0v0.github.io/cs498rk_fp",
+  "homepage": "https://LongIslandWithoutIceTea.github.io/cs498rk_fp",
   "eslintConfig": {
     "extends": "react-app"
   },
