@@ -8,7 +8,8 @@ import ClanIndex from './ClanIndex.js';
 import Login from '../../User/Login.js'
 import Register from '../../User/Register.js'
 import {withRouter} from 'react-router-dom';
-
+import HeaderMenu from '../../Common/HeaderMenu.js'
+/*
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 
 const resultRenderer = ({title, clan_id, tag}) => <Header as='h4' key={clan_id}><Icon name='group'/><Header.Content>{'[' + tag + ']' + title}</Header.Content></Header>
@@ -136,7 +137,7 @@ class ClanHeader extends Component {
     )
   }
 }
-
+*/
 class Clan extends Component {
   constructor(props){
     super(props);
@@ -162,21 +163,21 @@ class Clan extends Component {
     if(this.state.clan_id && this.state.clan_id !== ''){
       return(
         <Container fluid>
-          <ClanHeader set_clan_id={this.set_clan_id}/>
+          <HeaderMenu set_clan_id={this.set_clan_id} mode="clan"/>
           <ClanIndex clan_id={this.state.clan_id}/>
         </Container>
       )
     }else if(this.props.location && this.props.location.state && this.props.location.state.clan_id){
       return(
         <Container fluid>
-          <ClanHeader set_clan_id={this.set_clan_id}/>
+          <HeaderMenu set_clan_id={this.set_clan_id} mode="clan"/>
           <ClanIndex clan_id={this.props.location.state.clan_id}/>
         </Container>
       )
     }else{
       return(
         <Container fluid>
-          <ClanHeader set_clan_id={this.set_clan_id}/>
+          <HeaderMenu set_clan_id={this.set_clan_id} mode="clan"/>
           <Placeholder fluid>
             <Placeholder.Header>
               <Placeholder.Line length='full' />

@@ -8,7 +8,8 @@ import PlayerIndex from './PlayerIndex.js';
 import Login from '../../User/Login.js'
 import Register from '../../User/Register.js'
 import {withRouter} from 'react-router-dom';
-
+import HeaderMenu from '../../Common/HeaderMenu.js'
+/*
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 
 const resultRenderer = ({title, account_id}) => <Header as='h4' key={account_id}><Icon name='user circle'/><Header.Content>{title}</Header.Content></Header>
@@ -135,7 +136,7 @@ class PlayerHeader extends Component {
     )
   }
 }
-
+*/
 class Player extends Component {
   constructor(props){
     super(props);
@@ -159,21 +160,21 @@ class Player extends Component {
     if(this.state.account_id && this.state.account_id !== ''){
       return(
         <Container fluid>
-          <PlayerHeader set_account_id={this.set_account_id}/>
+          <HeaderMenu set_account_id={this.set_account_id} mode="player"/>
           <PlayerIndex account_id={this.state.account_id}/>
         </Container>
       )
     }else if(this.props.location && this.props.location.state && this.props.location.state.account_id){
       return(
         <Container fluid>
-          <PlayerHeader set_account_id={this.set_account_id}/>
+          <HeaderMenu set_account_id={this.set_account_id} mode="player"/>
           <PlayerIndex account_id={this.props.location.state.account_id}/>
         </Container>
       )
     }else{
       return(
         <Container fluid>
-          <PlayerHeader set_account_id={this.set_account_id}/>
+          <HeaderMenu set_account_id={this.set_account_id} mode="player"/>
           <Placeholder fluid>
             <Placeholder.Header>
               <Placeholder.Line length='full' />

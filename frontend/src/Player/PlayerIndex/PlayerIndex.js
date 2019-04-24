@@ -18,6 +18,7 @@ import PlayerShipNationTableMobile from '../PlayerTable/PlayerShipNationTableMob
 import PlayerShipTypeGraph from '../PlayerGraph/PlayerShipTypeGraph.js';
 import PlayerShipNationGraph from '../PlayerGraph/PlayerShipNationGraph.js';
 import PlayerShipTierGraph from '../PlayerGraph/PlayerShipTierGraph.js';
+import ToTopButton from '../../Common/ToTopButton.js';
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 const achievementsDict = {
@@ -55,42 +56,6 @@ function divisionWhole(a,b){
   }else{
     return Math.round(a / b);
   }
-}
-
-class ScrollButton extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-        intervalId: 0
-    };
-  }
-
-  scrollStep() {
-    if (window.pageYOffset === 0) {
-        clearInterval(this.state.intervalId);
-    }
-    window.scroll(0, window.pageYOffset - this.props.scrollStepInPx);
-  }
-
-  scrollToTop() {
-    let intervalId = setInterval(this.scrollStep.bind(this), this.props.delayInMs);
-    this.setState({ intervalId: intervalId });
-  }
-
-  render () {
-      return <Button
-              size="massive"
-              circular
-              icon ='angle double up'
-              color="blue"
-              style={{
-                position: "fixed",
-                bottom: "50px",
-                right: "50px",
-              }}
-              onClick={ () => { this.scrollToTop(); }}>
-              </Button>;
-   }
 }
 
 export default class PlayerIndex extends Component {
@@ -861,7 +826,7 @@ export default class PlayerIndex extends Component {
           <PlayerRankTableMobile account_id = {this.state.account_id} data={this.state.playerRankTableData} rankshipnames={this.state.rankshipnames} seasonOptions={this.state.seasonOptions}/>
         </Container>
         </div>
-        <ScrollButton scrollStepInPx="100" delayInMs="16.66"/>
+        <ToTopButton scrollStepInPx="100" delayInMs="16.66"/>
       </Container>
     );
   }

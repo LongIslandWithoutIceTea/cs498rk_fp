@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail } from 'semantic-ui-react';
 import {Link, NavLink} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
+import ToTopButton from '../../Common/ToTopButton.js';
 import axios from 'axios';
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
@@ -263,7 +264,7 @@ export default class ClanIndex extends Component {
             {this.buildMembers()}
           </Container>
         </Container>
-
+        <ToTopButton scrollStepInPx="100" delayInMs="16.66"/>
       </Container>
     );
   }
