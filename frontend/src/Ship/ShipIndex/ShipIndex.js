@@ -10,55 +10,88 @@ export default class ShipIndex extends Component {
     constructor(props){
         super(props);
         this.state = {
-            clan_id: '',
-            playerlist: [],
-            data: {"members_count":0,"name":"","creator_name":"","clan_id":1000043952,"created_at":1484747968,"updated_at":1555905684,"leader_name":"","members_ids":[],"creator_id":0,"tag":"","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":0,"description":""},
-        }
+            ship_id: '',
+            icon_url: '',
+            data: undefined,
+            }
         this.reloadData = this.reloadData.bind(this);
-        this.buildMembers = this.buildMembers.bind(this);
     }
     componentWillReceiveProps(nextProps) {
-        this.setState({clan_id:nextProps.clan_id});
-        this.reloadData(nextProps.clan_id);
+        this.setState({ship_id :nextProps.ship_id});
+        this.reloadData(nextProps.ship_id);
     }
     componentDidMount(){
-        this.reloadData(this.props.clan_id);
+        this.reloadData(this.props.ship_id);
     }
-    reloadData(clan_id){
-        axios.get("https://api.worldofwarships.com/wows/clans/info/?application_id=" + application_id + "&clan_id=" + clan_id)
+
+    async reloadData(ship_id){
+        console.log(ship_id)
+        await axios.get("https://api.worldofwarships.ru/wows/encyclopedia/ships/?application_id=" + application_id + "&language=en" + "&ship_id=" + ship_id)
             .then((response)=>{
-                this.setState({data: response.data.data[clan_id]});
-                var playerlist = [];
-                var slice = 23;
-                for(var i = 0; i < response.data.data[clan_id].members_ids.length/slice; i++){
-                    var account_id_strings = "";
-                    if (i * slice + slice < response.data.data[clan_id].members_ids.length){
-                        var limit = i * slice + slice;
-                    }else{
-                        var limit = response.data.data[clan_id].members_ids.length;
-                    }
-                    for(var j = i * slice; j < limit; j++){
-                        account_id_strings += response.data.data[clan_id].members_ids[j] + ",";
-                    }
-                    axios.get("https://api.worldofwarships.com/wows/account/info/?application_id=" + application_id,{params:{account_id:account_id_strings.substring(0,account_id_strings.length-1)}})
-                        .then((playerresponse)=>{
-                            for (const [account_id, playerres] of Object.entries(playerresponse.data.data)) {
-                                if(playerres){
-                                    playerlist.push(playerres);
-                                    this.setState({playerlist: playerlist});
-                                }
-                            }
-                        })
-                        .catch((error) => console.log(error));
-                }
+                let key = Object.keys(response.data.data)
+                this.setState({data: response.data.data[key[0]]})
+                console.log(response.data.data[key[0]])
             })
-            .catch((error) => console.log(error));
+
+        axios.get("https://api.worldofwarships.ru/wows/encyclopedia/info/?application_id=" + application_id + "&language=en" + "&fields=ship_type_images")
+            .then((response)=>{
+                let icons = response.data.data.ship_type_images;
+                let icon = this.state.data.is_premium ? icons[this.state.data.type].image_premium : icons[this.state.data.type].image
+                this.setState({icon_url: icon})
+                console.log(icons)
+            })
     }
 
     render() {
-        return (
-            <Container fluid>
+        if (this.state.data != undefined ){
+            return (
+                <Container fluid>
+                    <Container text>
+                        <Image src={this.state.data.images.large}  />
+                        <Header as='h1' content={this.state.data.name}
+                                style={{
+                                    fontSize: window.innerWidth>860?'4em':'3em',
+                                    fontWeight: 'normal',
+                                    marginBottom: 0,
+                                    marginTop: window.innerWidth>860?'0.5em':'0.25em',
+                                }}
+                        />
+                        <div>
+                            <Image avatar src={this.state.icon_url}  />
+                            <Header as='span' content={"Tier "+this.state.data.tier+" "+this.state.data.nation+" "+this.state.data.type}
+                                    style={{
+                                        fontSize: window.innerWidth>860?'1.7em':'1.2em',
+                                        fontWeight: 'normal',
+                                        marginTop: window.innerWidth>860?'0.5em':'0.25em',
+                                    }}
+                            />
+                        </div>
+                    </Container>
 
+                    <Divider horizontal
+                             style={{
+                                 marginTop: '5em',
+                             }}
+                    >
+                        <Header as='h4'>
+                            <Icon name='align justify' />
+                            Description
+                        </Header>
+                    </Divider>
+                    <Container
+                        style={{
+                            marginTop: '5em',
+                        }}
+                    >
+                        <Header as="h6">{this.state.data.description}</Header>
+                    </Container>
+                </Container>
+            );
+        }
+        else return (
+            <Container fluid>
+                <br/>
+                <Loader active inline='centered' />
             </Container>
         );
     }

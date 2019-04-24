@@ -57,10 +57,8 @@ class ShipHeader extends Component {
   }
 
   handleResultSelect(e, { result }){
-    this.setState({ ship_id: result.ship_id, value: result.name });
-    if(result && result.ship_id){
-      this.props.set_ship_id(result.ship_id);
-    }
+    this.setState({ ship_id: result.title, value: result.title});
+    this.props.set_ship_id(result.ship_id)
   }
 
   handleSearchChange(e, { value }){
@@ -69,9 +67,9 @@ class ShipHeader extends Component {
       this.setState({isLoading: true})
       var results = [];
       let filtered = this.state.shipList.filter(ship => ship.name.toLowerCase().includes(value.toLowerCase()))
-      console.log(filtered)
+      //console.log(filtered)
       filtered.forEach((ship)=>{
-        results.push({title:ship.name, image:ship.images.small, description:"Tier "+ship.tier+" "+ship.nation+" "+ship.type});
+        results.push({title:ship.name, image:ship.images.small, description:"Tier "+ship.tier+" "+ship.nation+" "+ship.type, ship_id: ship.ship_id});
       })
       this.setState({isLoading: false, results:results})
     }
@@ -85,12 +83,13 @@ class ShipHeader extends Component {
    * Load basic info of all the ships by nations from api
    */
   getShipList() {
+    this.setState({isLoading: true})
     axios.get("https://api.worldofwarships.ru/wows/encyclopedia/info/?application_id=" + application_id + "&language=en" + "&fields=ship_nations")
         .then((response)=>{
           var results = [];
           let ship_nations = Object.keys(response.data.data.ship_nations);
           let ship_promise = ship_nations.map(nation => new Promise(function (resolve, reject) {
-            axios.get("https://api.worldofwarships.ru/wows/encyclopedia/ships/?application_id=" + application_id + "&language=en" + "&nation=" + nation + "&fields=name,images.small,nation,tier,type")
+            axios.get("https://api.worldofwarships.ru/wows/encyclopedia/ships/?application_id=" + application_id + "&language=en" + "&nation=" + nation + "&fields=name,images.small,nation,tier,type,ship_id")
                 .then((response)=>{
                   resolve(response.data.data)
                 })
@@ -107,9 +106,11 @@ class ShipHeader extends Component {
             let keys = Object.keys(shipList);
             let vals = keys.map(key => shipList[key])
             this.setState({shipList:vals})
-            console.log(vals)
+            this.setState({isLoading: false})
+            //console.log(vals)
           })
         })
+
   }
 
   LoginClick(){
@@ -134,7 +135,7 @@ class ShipHeader extends Component {
               <Menu.Item position='right'>
                 <Search
                     selectFirstResult
-                    minCharacters = {4}
+                    minCharacters = {3}
                     fluid
                     loading={this.state.isLoading}
                     onResultSelect={this.handleResultSelect}
@@ -188,7 +189,7 @@ class Ship extends Component {
   }
 
   set_ship_id(id){
-    this.setState({ship_id:id});
+    this.setState({ship_id: id});
   }
 
 
