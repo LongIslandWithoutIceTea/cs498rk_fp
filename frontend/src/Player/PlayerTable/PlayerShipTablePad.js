@@ -9,17 +9,17 @@ const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 const perpage = 10;
 const nationOptions=[
   {key: 'all', value: 'all', text: ''},
-  {key: 'usa', value: 'usa', image: 'http://wiki.gcdn.co/images/f/f2/Wows_flag_USA.png', text: 'USA'},
-  {key: 'ussr', value: 'ussr', image: 'http://wiki.gcdn.co/images/0/04/Wows_flag_Russian_Empire_and_USSR.png',text: 'USSR'},
-  {key: 'uk', value: 'uk', image: 'http://wiki.gcdn.co/images/3/34/Wows_flag_UK.png',text: 'UK'},
-  {key: 'japan', value: 'japan', image: 'http://wiki.gcdn.co/images/5/5b/Wows_flag_Japan.png',text: 'Japan'},
-  {key: 'france', value: 'france', image: 'http://wiki.gcdn.co/images/7/71/Wows_flag_France.png', text: 'France'},
-  {key: 'germany', value: 'germany', image: 'http://wiki.gcdn.co/images/6/6b/Wows_flag_Germany.png',text: 'Germany'},
-  {key: 'poland', value: 'poland', image: 'http://wiki.gcdn.co/images/5/5f/Wows_flag_Poland.png', text: 'Poland'},
-  {key: 'pan_asia', value: 'pan_asia', image: 'http://wiki.gcdn.co/images/3/33/Wows_flag_Pan_Asia.png', text: 'Pan Asia'},
-  {key: 'italy', value: 'italy', image: 'http://wiki.gcdn.co/images/d/d1/Wows_flag_Italy.png', text: 'Italy'},
-  {key: 'commonwealth', value: 'commonwealth', image: 'http://wiki.gcdn.co/images/3/3e/Wows_flag_Commonwealth.PNG', text: 'Com. Wealth'},
-  {key: 'pan_america', value: 'pan_america', image: 'http://wiki.gcdn.co/images/9/9e/Wows_flag_Pan_America.png', text: 'Pan America'}
+  {key: 'usa', value: 'usa', text: 'USA'},
+  {key: 'ussr', value: 'ussr', text: 'USSR'},
+  {key: 'uk', value: 'uk', text: 'UK'},
+  {key: 'japan', value: 'japan', text: 'Japan'},
+  {key: 'france', value: 'france',text: 'France'},
+  {key: 'germany', value: 'germany', text: 'Germany'},
+  {key: 'poland', value: 'poland', text: 'Poland'},
+  {key: 'pan_asia', value: 'pan_asia',  text: 'Pan Asia'},
+  {key: 'italy', value: 'italy', text: 'Italy'},
+  {key: 'commonwealth', value: 'commonwealth', text: 'Com. Wealth'},
+  {key: 'pan_america', value: 'pan_america', text: 'Pan America'}
 ];
 const nationDict={
   'usa':{image: 'http://wiki.gcdn.co/images/f/f2/Wows_flag_USA.png', text: 'USA'},
@@ -36,10 +36,10 @@ const nationDict={
 }
 const typeOptions=[
   {key: 'all', value: 'all', text: ''},
-  {key: 'Destroyer', value: 'Destroyer', image: 'http://wiki.gcdn.co/images/d/d2/Wows-destroyer-icon.png', text: 'Destroyer'},
-  {key: 'Cruiser', value: 'Cruiser', image: 'http://wiki.gcdn.co/images/f/f5/Wows-cruiser-icon.png', text: 'Cruiser'},
-  {key: 'Battleship', value: 'Battleship', image: 'http://wiki.gcdn.co/images/2/24/Wows-battleship-icon.png', text: 'Battleship'},
-  {key: 'AirCarrier', value: 'AirCarrier', image: 'http://wiki.gcdn.co/images/d/d8/Wows-aircarrier-icon.png', text: 'Carrier'}
+  {key: 'Destroyer', value: 'Destroyer', text: 'Destroyer'},
+  {key: 'Cruiser', value: 'Cruiser', text: 'Cruiser'},
+  {key: 'Battleship', value: 'Battleship',text: 'Battleship'},
+  {key: 'AirCarrier', value: 'AirCarrier',text: 'Carrier'}
 ];
 const typeDict={
    'Destroyer':{image: 'http://wiki.gcdn.co/images/d/d2/Wows-destroyer-icon.png', text: 'Destroyer'},
@@ -79,6 +79,7 @@ function division(a,b){
     return Math.round(a / b * 100) / 100;
   }
 }
+
 function divisionWhole(a,b){
   if (b === 0){
     return 0;
@@ -86,7 +87,8 @@ function divisionWhole(a,b){
     return Math.round(a / b);
   }
 }
-class PlayerShipTableBody extends Component {
+
+class PlayerShipTablePadBody extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -100,18 +102,20 @@ class PlayerShipTableBody extends Component {
       for (var i = page * perpage; i < data.length; i++){
         var row = data[i];
         if (i < page * perpage + perpage){
-          var seasonName = "";
-          if (parseInt(row.season) < 100){
-            seasonName = row.season;
-          }else{
-            seasonName = "Sprint " + (parseInt(row.season)-100).toString()
-          }
           rows.push(
               (
-              <Table.Row key={row.ship_id.toString()+'/'+row.season} id={"PlayerRankTableMobile"+row.ship_id.toString()+'/'+row.season} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
+              <Table.Row key={row.ship_id} id={"PlayerShipTablePad"+row.ship_id.toString()} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
                 <Table.Cell selectable><a>{row.name}</a></Table.Cell>
+                <Table.Cell >{nationDict[row.nation].text}</Table.Cell>
+                <Table.Cell >{typeDict[row.type].text}</Table.Cell>
+                <Table.Cell >{tierDict[row.tier]}</Table.Cell>
                 <Table.Cell >{row.win_rate}</Table.Cell>
+
+                <Table.Cell >{row.ave_xp}</Table.Cell>
+                <Table.Cell >{row.ave_frags}</Table.Cell>
                 <Table.Cell >{row.ave_damage_dealt}</Table.Cell>
+                <Table.Cell >{row.ave_planes_killed}</Table.Cell>
+
               </Table.Row>
             )
           )
@@ -122,18 +126,17 @@ class PlayerShipTableBody extends Component {
   }
   render() {
     return (
-      <Table.Body className="PlayerShipTableBody">
+      <Table.Body className="PlayerShipTablePadBody">
         {this.build(this.props.data,this.props.page,this.props.selectedName,this.props.selectedNation,this.props.selectedType,this.props.selectedTier)}
       </Table.Body>
     )
   }
 }
 
-export default class PlayerRankTableMobile extends Component {
+export default class PlayerShipTablePad extends Component {
   constructor(props){
     super(props);
     this.state = {
-      account_id:"",
       column: null,
       data: null,
       shipData: null,
@@ -148,8 +151,6 @@ export default class PlayerRankTableMobile extends Component {
       ship_ids: [],
       shipnames: [{key: 'all', value: 'all', text: ''}],
       showModal: false,
-      seasonOptions:[{key: '0', value: 'all', text: ''}],
-      selectedSeason: null,
     }
     this.handleSort = this.handleSort.bind(this);
     this.build = this.build.bind(this);
@@ -161,27 +162,18 @@ export default class PlayerRankTableMobile extends Component {
     this.selected = this.selected.bind(this);
     this.handleselectedShipID = this.handleselectedShipID.bind(this);
   }
-  componentDidMount(){
-    if(this.props.seasonOptions){
-      this.setState({account_id:this.props.account_id, data:this.props.data,shipnames:this.props.rankshipnames,seasonOptions:this.props.seasonOptions.sort((a,b)=>a.key-b.key)});
-    }else{
-      this.setState({account_id:this.props.account_id, data:this.props.data,shipnames:this.props.rankshipnames});
-    }
-
-    this.handleFilterRaw(this.props.data,null,null,"all","all","all")
+  componentDidMount() {
+    this.setState({data:this.props.data,shipnames:this.props.shipnames});
+    this.handleFilterRaw(this.props.data,null,"all","all","all");
   }
   componentWillReceiveProps(){
-    if(this.props.seasonOptions){
-      this.setState({account_id:this.props.account_id, data:this.props.data,shipnames:this.props.rankshipnames,seasonOptions:this.props.seasonOptions.sort((a,b)=>a.key-b.key)});
-    }else{
-      this.setState({account_id:this.props.account_id, data:this.props.data,shipnames:this.props.rankshipnames});
-    }
-    this.handleFilterRaw(this.props.data,null,null,"all","all","all")
+    this.setState({data:this.props.data,shipnames:this.props.shipnames});
+    this.handleFilterRaw(this.props.data,null,"all","all","all");
   }
 
   handleSort(clickedColumn){
     var selectedData = [];
-    this.state.data.forEach((row)=>{
+    this.props.data.forEach((row)=>{
       if(this.selected(row,this.state.selectedName,this.state.selectedNation,this.state.selectedType,this.state.selectedTier)){
         selectedData.push(row);
       }
@@ -210,44 +202,32 @@ export default class PlayerRankTableMobile extends Component {
     }
   }
 
-  handleFilterRaw(data,selectedSeason, selectedName,selectedNation,selectedType,selectedTier){
-     var selectedData = [];
-     if(data){
-       data.forEach((row)=>{
-         if(this.selected(row,selectedSeason,selectedName,selectedNation,selectedType,selectedTier)){
-           selectedData.push(row);
-         }
-       })
-     }
-     this.setState({selectedData:selectedData, page: 0});
-   }
-
-  handleFilter(selectedSeason, selectedName,selectedNation,selectedType,selectedTier){
-     var selectedData = [];
-     if(this.props.data){
-       this.props.data.forEach((row)=>{
-         if(this.selected(row,selectedSeason,selectedName,selectedNation,selectedType,selectedTier)){
-           selectedData.push(row);
-         }
-       })
-     }
-     this.setState({selectedData:selectedData, page: 0});
+  handleFilterRaw(data,selectedName,selectedNation,selectedType,selectedTier){
+    if(data){
+      this.setState({selectedData:data, page: 0});
+    }else{
+      this.setState({selectedData:[], page: 0});
+    }
   }
 
-  handleselectedShipID(input){
-    var str = input.substring(15,input.length)
-    var loc = 0;
-    for (var i = 0; i < str.length; i++) {
-      if(str.charAt(i)==='/'){
-        loc = i;
-      }
+  handleFilter(selectedName,selectedNation,selectedType,selectedTier){
+    if(this.props.data){
+      var selectedData = [];
+      this.props.data.forEach((row)=>{
+        if(this.selected(row,selectedName,selectedNation,selectedType,selectedTier)){
+          selectedData.push(row);
+        }
+      })
+      this.setState({selectedData:selectedData, page: 0});
     }
-    var selectedShipID = parseInt(str.substring(0,loc));
-    var season = str.substring(loc+1,str.length);
+  }
+
+  handleselectedShipID(selectedShipID){
+    var selectedShipID = parseInt(selectedShipID.substring(15,selectedShipID.length))
     var selectedShipData = {};
     if(this.state.selectedData){
       this.state.selectedData.forEach((row)=>{
-        if(row.ship_id === selectedShipID && row.season === season){
+        if(row.ship_id === selectedShipID){
             selectedShipData.ship_id = row.ship_id;
             selectedShipData.main_battery_max_frags_battle = row.main_battery_max_frags_battle;
             selectedShipData.main_battery_frags = row.main_battery_frags;
@@ -274,7 +254,7 @@ export default class PlayerRankTableMobile extends Component {
     }
   }
 
-  selected(row,selectedSeason, selectedName,selectedNation,selectedType,selectedTier){
+  selected(row,selectedName,selectedNation,selectedType,selectedTier){
     if(selectedName && selectedName !== "all" && selectedName !== ""){
       if(row.name !== selectedName){
         return false;
@@ -294,11 +274,6 @@ export default class PlayerRankTableMobile extends Component {
         if(row.tier !== parseInt(selectedTier)){
           return false;
         }
-      }
-    }
-    if(selectedSeason && selectedSeason !== "all" && selectedSeason !== ""){
-      if(row.season !== selectedSeason){
-        return false;
       }
     }
     return true
@@ -327,7 +302,7 @@ export default class PlayerRankTableMobile extends Component {
   }
 
   build(data){
-    var totalpage = 2;
+    var totalpage = 5;
     var pages = [];
     if(data){
       if(data.length/perpage > totalpage){
@@ -339,16 +314,18 @@ export default class PlayerRankTableMobile extends Component {
 
           }
         }else if(this.state.page > data.length/perpage - Math.round(totalpage/2)){
-          for (var i = Math.round(data.length/perpage)-totalpage; i < data.length/perpage - 1 ; i++){
+          for (var i = Math.round(data.length/perpage)-totalpage; i < data.length/perpage ; i++){
             pages.push((
               <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
             ))
           }
         }else{
-          for (var i = this.state.page; i < this.state.page+2; i++){
-            pages.push((
-              <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
-            ))
+          for (var i = 0; i < data.length/perpage ; i++){
+            if(Math.abs(i - this.state.page) < Math.round(totalpage/2)){
+              pages.push((
+                <Menu.Item as='a' key={i.toString()} name={i.toString()} active={this.state.page===i} onClick={this.setPage}>{i + 1}</Menu.Item>
+              ))
+            }
           }
         }
       }else{
@@ -368,23 +345,35 @@ export default class PlayerRankTableMobile extends Component {
     }
     return (
       <div>
-        <Dropdown fluid clearable placeholder='Select Season' selection options={this.state.seasonOptions} value={this.state.selectedSeason} onChange={(e,{value}) => {this.setState({selectedSeason: value, selectedName:null,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value, null,"all","all","all")}}/>
-        <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
-            <Table.Header className="PlayerShipTableHeader">
-              <Table.Row  key="header1">
-                <Table.HeaderCell >Ship</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'win_rate' ? this.state.direction : null} onClick={() => this.handleSort('win_rate')}>Win Rate</Table.HeaderCell>
-                <Table.HeaderCell sorted={this.state.column === 'ave_damage_dealt' ? this.state.direction : null} onClick={() => this.handleSort('ave_damage_dealt')}>Ave Dmg</Table.HeaderCell>
+        <Table sortable selectable celled structured striped unstackable className="PlayerShipTablePad">
+            <Table.Header className="PlayerShipTablePadHeader">
+              <Table.Row key="header1">
+                <Table.HeaderCell colSpan='1'>Ship</Table.HeaderCell>
+                <Table.HeaderCell colSpan='1' sorted={this.state.column === 'nation' ? this.state.direction : null} onClick={() => this.handleSort('nation')}>Nation</Table.HeaderCell>
+                <Table.HeaderCell colSpan='1' sorted={this.state.column === 'type' ? this.state.direction : null} onClick={() => this.handleSort('type')}>Type</Table.HeaderCell>
+                <Table.HeaderCell sorted={this.state.column === 'tier' ? this.state.direction : null} onClick={() => this.handleSort('tier')}>Tier</Table.HeaderCell>
+                <Table.HeaderCell sorted={this.state.column === 'win_rate' ? this.state.direction : null} onClick={() => this.handleSort('win_rate')} rowSpan='2'>Win Rate</Table.HeaderCell>
+                <Table.HeaderCell colSpan='4'>Average</Table.HeaderCell>
+              </Table.Row>
+              <Table.Row  key="header2">
+                <Table.Cell colSpan='1' width="5"><Dropdown fluid clearable placeholder='Select Ship' search selection options={this.state.shipnames} value={this.state.selectedName} onChange={(e,{value}) => {this.setState({selectedName:value,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value,"all","all","all")}}/></Table.Cell>
+                <Table.Cell colSpan='1' width="5"><Dropdown fluid placeholder='Select Nation' selection options={nationOptions} value={this.state.selectedNation} onChange={(e,{value}) => {this.setState({selectedNation:value,selectedName:"all"}); this.handleFilter("all",value,this.state.selectedType,this.state.selectedTier)}}/></Table.Cell>
+                <Table.Cell colSpan='1' width="5"><Dropdown fluid placeholder='Select Type' selection options={typeOptions} value={this.state.selectedType} onChange={(e,{value}) => {this.setState({selectedType:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,value,this.state.selectedTier)}}/></Table.Cell>
+                <Table.Cell width="5"><Dropdown fluid placeholder='Select Tier ' selection options={tierOptions} value={this.state.selectedTier} onChange={(e,{value}) => {this.setState({selectedTier:value,selectedName:"all"}); this.handleFilter("all",this.state.selectedNation,this.state.selectedType,value)}}/></Table.Cell>
+                <Table.HeaderCell sorted={this.state.column === 'ave_xp' ? this.state.direction : null} onClick={() => this.handleSort('ave_xp')}>XP</Table.HeaderCell>
+                <Table.HeaderCell sorted={this.state.column === 'ave_frags' ? this.state.direction : null} onClick={() => this.handleSort('ave_frags')}>Kills</Table.HeaderCell>
+                <Table.HeaderCell sorted={this.state.column === 'ave_damage_dealt' ? this.state.direction : null} onClick={() => this.handleSort('ave_damage_dealt')}>Damage</Table.HeaderCell>
+                <Table.HeaderCell sorted={this.state.column === 'ave_planes_killed' ? this.state.direction : null} onClick={() => this.handleSort('ave_planes_killed')}>Plane Kills</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
 
-            <PlayerShipTableBody data={this.state.selectedData} page={this.state.page} handleselectedShipID={this.handleselectedShipID}/>
+            <PlayerShipTablePadBody data={this.state.selectedData} page={this.state.page} handleselectedShipID={this.handleselectedShipID}/>
 
-            <Table.Footer className="PlayerShipTableFooter">
+            <Table.Footer className="PlayerShipTablePadFooter">
               <Table.Row  key="header3">
-                <Table.HeaderCell colSpan='21'>
+                <Table.HeaderCell colSpan='15'>
                   <Menu floated='right' pagination>
-                    <Menu.Item key="menu1" as='a' icon onClick={()=>this.setState({page:0})}>
+                    <Menu.Item  key="menu1" as='a' icon onClick={()=>this.setState({page:0})}>
                       <Icon name='angle double left' />
                     </Menu.Item>
                     <Menu.Item key="menu2" as='a' icon onClick={this.prevPage}>

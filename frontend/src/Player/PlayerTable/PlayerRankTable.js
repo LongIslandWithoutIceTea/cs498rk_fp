@@ -196,7 +196,7 @@ export default class PlayerRankTable extends Component {
     }else{
       this.setState({account_id:this.props.account_id, data:this.props.data,shipnames:this.props.rankshipnames});
     }
-    
+
     this.handleFilterRaw(this.props.data,null,null,"all","all","all")
   }
 
@@ -386,6 +386,9 @@ export default class PlayerRankTable extends Component {
   }
 
   render() {
+    if(!this.props.data){
+      return (<div/>)
+    }
     return (
       <div>
         <Dropdown fluid clearable placeholder='Select Season' selection options={this.state.seasonOptions.sort((a,b)=>a.key-b.key)} value={this.state.selectedSeason} onChange={(e,{value}) => {this.setState({selectedSeason: value, selectedName:null,selectedNation: "all",selectedType: "all",selectedTier: "all"}); this.handleFilter(value, null,"all","all","all")}}/>

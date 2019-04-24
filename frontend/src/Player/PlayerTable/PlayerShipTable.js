@@ -216,13 +216,9 @@ export default class PlayerShipTable extends Component {
 
   handleFilterRaw(data,selectedName,selectedNation,selectedType,selectedTier){
     if(data){
-      var selectedData = [];
-      data.forEach((row)=>{
-        if(this.selected(row,selectedName,selectedNation,selectedType,selectedTier)){
-          selectedData.push(row);
-        }
-      })
-      this.setState({selectedData:selectedData, page: 0});
+      this.setState({selectedData:data, page: 0});
+    }else{
+      this.setState({selectedData:[], page: 0});
     }
   }
 
@@ -356,6 +352,9 @@ export default class PlayerShipTable extends Component {
   }
 
   render() {
+    if(!this.props.data){
+      return (<div/>)
+    }
     return (
       <div>
         <Table sortable selectable celled structured striped unstackable className="PlayerShipTable">
