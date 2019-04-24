@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "gh-pages": "^2.0.1",
     "lodash": "^4.17.11",
     "node-sass": "^4.11.0",
     "react": "^16.8.6",
@@ -15,11 +16,14 @@
     "semantic-ui-react": "^0.86.0"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "homepage": "https://Quincy0v0.github.io/cs498rk_fp",
   "eslintConfig": {
     "extends": "react-app"
   },

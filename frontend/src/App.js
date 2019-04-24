@@ -7,14 +7,14 @@ import Clan from './Clan/ClanIndex/ClanHeader'
 import Login from './User/Login.js'
 import Register from './User/Register.js'
 import Ship from './Ship/ShipIndex/ShipHeader'
-import { HashRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-          <Router>
+          <Router basename={process.env.PUBLIC_URL}>
               <div>
                   <Route path={"/"} exact component={IndexPage} />
                   <Route path={"/player"} exact
