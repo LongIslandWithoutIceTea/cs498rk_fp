@@ -96,7 +96,7 @@ module.exports = function (router) {
       });
     });
   }).put( function (req, res) {
-    User.findById(req.param('_id'), async function (err, user) {
+    User.findById(req.param('_id'), function (err, user) {
       if(err) {
         res.status(404);
         res.json({
@@ -178,5 +178,33 @@ module.exports = function (router) {
       }
     })
   });
+
+  var registerRoute = router.route('/users/register');
+
+  registerRoute.post((req, res) => {
+    var new_user = new User();
+    new_user.name = req.param('name');
+    new_user.password = req.param('password');
+    new_user.posts = [];
+
+    User.find({'name':new_user.name}, function (err, user_list) {
+      if (err){
+        res.status(500).send({ message: "Server error", data:[] });
+      } else{
+        if (user_list.length === 0) {
+          new_user.save({},(err, user) => {
+            if (err){
+              res.status(500).send({ message: "Server error", data:[] });
+            } else{
+              user['password'] = undefined;
+              res.status(201).send({ message: "Complete", data:user });
+            }
+          });
+        }else{
+          res.status(500).send({ message: "Try a differnt name", data:[] });
+        }
+      }
+    });
+  })
   return router;
 };
