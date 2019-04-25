@@ -4,6 +4,7 @@ import _ from 'lodash';
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import PlayerWeaponTable from './PlayerWeaponTable.js';
+import {Link, NavLink} from "react-router-dom";
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 const perpage = 10;
@@ -105,7 +106,7 @@ class PlayerShipTableBody extends Component {
           rows.push(
               (
               <Table.Row key={row.ship_id} id={"PlayerShipTable"+row.ship_id.toString()} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
-                <Table.Cell selectable><a>{row.name}</a></Table.Cell>
+                <Table.Cell selectable><NavLink style={{color:"cornflowerblue"}} to={{pathname: '/ship',state: {ship_id: row.ship_id}}}>{row.name}</NavLink></Table.Cell>
                 <Table.Cell ><img src={row.image} alt="404" height="35"/></Table.Cell>
                 <Table.Cell ><img src={nationDict[row.nation].image} alt="404" height="25"/></Table.Cell>
                 <Table.Cell >{nationDict[row.nation].text}</Table.Cell>

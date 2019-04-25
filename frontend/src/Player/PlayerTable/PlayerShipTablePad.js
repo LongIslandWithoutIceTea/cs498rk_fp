@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Container } from 'semantic-ui-react';
+import {Link, NavLink} from "react-router-dom";
 import _ from 'lodash';
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
@@ -105,7 +106,7 @@ class PlayerShipTablePadBody extends Component {
           rows.push(
               (
               <Table.Row key={row.ship_id} id={"PlayerShipTablePad"+row.ship_id.toString()} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
-                <Table.Cell selectable><a>{row.name}</a></Table.Cell>
+                <Table.Cell selectable><NavLink style={{color:"cornflowerblue"}} to={{pathname: '/ship',state: {ship_id: row.ship_id}}}>{row.name}</NavLink></Table.Cell>
                 <Table.Cell >{nationDict[row.nation].text}</Table.Cell>
                 <Table.Cell >{typeDict[row.type].text}</Table.Cell>
                 <Table.Cell >{tierDict[row.tier]}</Table.Cell>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link, NavLink} from "react-router-dom";
 import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Container } from 'semantic-ui-react';
 import _ from 'lodash';
 import 'semantic-ui-css/semantic.min.css';
@@ -109,7 +110,7 @@ class PlayerShipTableBody extends Component {
           rows.push(
               (
               <Table.Row key={row.ship_id.toString()+'/'+row.season} id={"PlayerRankTablePad"+row.ship_id.toString()+'/'+row.season} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
-                <Table.Cell selectable><a>{row.name}</a></Table.Cell>
+                <Table.Cell selectable><NavLink style={{color:"cornflowerblue"}} to={{pathname: '/ship',state: {ship_id: row.ship_id}}}>{row.name}</NavLink></Table.Cell>
                 <Table.Cell >{nationDict[row.nation].text}</Table.Cell>
                 <Table.Cell >{typeDict[row.type].text}</Table.Cell>
                 <Table.Cell >{tierDict[row.tier]}</Table.Cell>

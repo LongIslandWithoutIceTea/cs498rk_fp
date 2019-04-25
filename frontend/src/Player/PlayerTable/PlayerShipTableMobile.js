@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Container } from 'semantic-ui-react';
+import {Link, NavLink} from "react-router-dom";
 import _ from 'lodash';
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import PlayerWeaponTable from './PlayerWeaponTable.js';
+
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 const perpage = 10;
@@ -105,7 +107,7 @@ class PlayerShipTableMobileBody extends Component {
           rows.push(
               (
               <Table.Row key={row.ship_id} id={"PlayerShipTableMobile"+row.ship_id.toString()} onClick={(e)=>{this.props.handleselectedShipID(e.currentTarget.id)}}>
-                <Table.Cell selectable><a>{row.name}</a></Table.Cell>
+                <Table.Cell selectable><NavLink style={{color:"cornflowerblue"}} to={{pathname: '/ship',state: {ship_id: row.ship_id}}}>{row.name}</NavLink></Table.Cell>
                 <Table.Cell >{row.win_rate}</Table.Cell>
                 <Table.Cell >{row.ave_damage_dealt}</Table.Cell>
               </Table.Row>
