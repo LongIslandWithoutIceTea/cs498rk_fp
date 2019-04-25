@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail } from 'semantic-ui-react';
+import { Progress, Grid, Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail } from 'semantic-ui-react';
 import {Link, NavLink} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
@@ -15,6 +15,7 @@ export default class ShipIndex extends Component {
             data: undefined,
             }
         this.reloadData = this.reloadData.bind(this);
+        this.getColorByValue = this.getColorByValue.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ship_id :nextProps.ship_id});
@@ -42,6 +43,21 @@ export default class ShipIndex extends Component {
             })
     }
 
+    getColorByValue(value){
+        if (value < 30){
+            return 'red';
+        }
+        else if (value < 50){
+            return 'yellow';
+        }
+        else if (value < 70){
+            return 'olive';
+        }
+        else {
+            return 'blue';
+        }
+    }
+
     render() {
         if (this.state.data != undefined ){
             return (
@@ -67,7 +83,6 @@ export default class ShipIndex extends Component {
                             />
                         </div>
                     </Container>
-
                     <Divider horizontal
                              style={{
                                  marginTop: '5em',
@@ -83,8 +98,59 @@ export default class ShipIndex extends Component {
                             marginTop: '5em',
                         }}
                     >
-                        <Header as="h6">{this.state.data.description}</Header>
+                        <Grid>
+                            <Grid.Column width={10}>
+                                <Header as="div" textAlign='left'>{this.state.data.description}</Header>
+                            </Grid.Column>
+                            <Grid.Column width={6}>
+                                <Progress percent={this.state.data.default_profile.armour.total}size='small'progress color={this.getColorByValue(this.state.data.default_profile.armour.total)}>Survivability</Progress>
+                                <Progress percent={this.state.data.default_profile.weaponry.artillery}size='small'progress color={this.getColorByValue(this.state.data.default_profile.weaponry.artillery)}>Artillery</Progress>
+                                <Progress percent={this.state.data.default_profile.weaponry.anti_aircraft}size='small'progress color={this.getColorByValue(this.state.data.default_profile.weaponry.anti_aircraft)}>AA Defense</Progress>
+                                <Progress percent={this.state.data.default_profile.mobility.total}size='small'progress color={this.getColorByValue(this.state.data.default_profile.mobility.total)}>Maneuverability</Progress>
+                                <Progress percent={this.state.data.default_profile.concealment.total}size='small'progress color={this.getColorByValue(this.state.data.default_profile.concealment.total)}>Concealment</Progress>
+                            </Grid.Column>
+                        </Grid>
                     </Container>
+
+                    <Divider horizontal
+                             style={{
+                                 marginTop: '5em',
+                             }}
+                    >
+                        <Header as='h4'>
+                            <Icon name='bar chart' />
+                            Specifications
+                        </Header>
+                    </Divider>
+                    <Container
+                        style={{
+                            marginTop: '5em',
+                        }}
+                    >
+                    </Container>
+
+
+                    <Divider horizontal
+                             style={{
+                                 marginTop: '5em',
+                             }}
+                    >
+                        <Header as='h4'>
+                            <Icon name='winner' />
+                            LeaderBoard
+                        </Header>
+                    </Divider>
+                    <Divider horizontal
+                             style={{
+                                 marginTop: '5em',
+                             }}
+                    >
+                        <Header as='h4'>
+                            <Icon name='chat' />
+                            Discussion Thread
+                        </Header>
+                    </Divider>
+
                 </Container>
             );
         }

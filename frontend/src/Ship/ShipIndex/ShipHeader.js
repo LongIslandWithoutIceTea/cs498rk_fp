@@ -129,7 +129,7 @@ class ShipHeader extends Component {
     this.setState({showRegister: true});
   }
   LogoutClick(){
-    alert("Loggedt out!")
+    alert("Logged out!")
   }
 
   render(){
@@ -140,7 +140,7 @@ class ShipHeader extends Component {
               <Menu.Item as='a' inverted href='/'><Icon name='home'/>Home</Menu.Item>
               <Menu.Item as='a' inverted active href='/#/ship'><Icon name='anchor'/>Ship</Menu.Item>
               <Menu.Item as='a' inverted href='/#/player'><Icon name='user'/>Player</Menu.Item>
-              <Menu.Item as='a' inverted href='/#/ship'><Icon name='group'/>Clan</Menu.Item>
+              <Menu.Item as='a' inverted href='/#/clan'><Icon name='group'/>Clan</Menu.Item>
               <Menu.Item position='right'>
                 <Search
                     selectFirstResult
@@ -155,7 +155,7 @@ class ShipHeader extends Component {
                     value={this.state.value}
                 />
               </Menu.Item>
-              <Menu.Item >
+              <Menu.Item>
                 <Dropdown trigger={trigger} options={
                   [{
                     key: 'user',
