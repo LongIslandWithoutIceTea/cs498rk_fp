@@ -182,7 +182,7 @@ class HeaderMenu extends Component {
   }
 
   render(){
-    console.log("username: " + getCookie("username"))
+    console.log("username: " + getCookie("username"), this.state.mode)
     return(
         <div>
           <Menu inverted stackable size='large'>

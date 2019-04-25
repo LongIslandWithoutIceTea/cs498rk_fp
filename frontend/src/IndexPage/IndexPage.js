@@ -8,13 +8,25 @@ import {
     Segment,
     Image,
 } from 'semantic-ui-react'
+import axios from 'axios';
 import { Link } from "react-router-dom";
 import logo from '../assets/wows-icon.png'
 import './index.scss'
+const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 
 class IndexPage extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            version: '',
+        }
+    }
     componentDidMount() {
-        document.title = "Chaldea Wiki";
+        document.title = "USS Illini mkII";
+        axios.get("https://api.worldofwarships.ru/wows/encyclopedia/info/?application_id=" + application_id + "&language=en&fields=game_version")
+            .then((response)=>{
+                this.setState({version : response.data.data.game_version})
+            })
     }
 
     render() {
@@ -30,10 +42,13 @@ class IndexPage extends Component {
                             A wiki site for World of Warships
                         </Header>
                         <Divider/>
+                        <Header as='h2' inverted>
+                            Game Version: {this.state.version}
+                        </Header>
                     </Container>
                     <Link to={'/player'}>
                         <Button primary>
-                            Player Stats
+                            Get Started
                             <Icon name='right arrow' />
                         </Button>
                     </Link>
