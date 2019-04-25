@@ -21,7 +21,7 @@ class App extends Component {
                          component={() => <Player/>}  />
                   <Route path={"/clan"} exact
                           component={() => <Clan/>}  />
-                  <Route path={"/Ship"} exact
+                  <Route path={"/ship"} exact
                          component={() => <Ship/>}  />
                   <Route path={"/login"} exact
                          component={() => <Login/>}  />
