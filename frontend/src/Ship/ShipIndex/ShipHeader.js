@@ -64,14 +64,13 @@ class ShipHeader extends Component {
   handleSearchChange(e, { value }){
     this.setState({value: value })
     if(value.length > 1) {
-      this.setState({isLoading: true})
       var results = [];
       let filtered = this.state.shipList.filter(ship => ship.name.toLowerCase().includes(value.toLowerCase()))
       //console.log(filtered)
       filtered.forEach((ship)=>{
         results.push({title:ship.name, image:ship.images.small, description:"Tier "+ship.tier+" "+ship.nation+" "+ship.type, ship_id: ship.ship_id});
       })
-      this.setState({isLoading: false, results:results})
+      this.setState({results:results})
     }
   }
 
@@ -107,7 +106,17 @@ class ShipHeader extends Component {
             let vals = keys.map(key => shipList[key])
             this.setState({shipList:vals})
             this.setState({isLoading: false})
-            //console.log(vals)
+            let value = this.state.value;
+            if(value.length > 1) {
+              this.setState({isLoading: true})
+              var results = [];
+              let filtered = this.state.shipList.filter(ship => ship.name.toLowerCase().includes(value.toLowerCase()))
+              //console.log(filtered)
+              filtered.forEach((ship)=>{
+                results.push({title:ship.name, image:ship.images.small, description:"Tier "+ship.tier+" "+ship.nation+" "+ship.type, ship_id: ship.ship_id});
+              })
+              this.setState({isLoading: false, results:results})
+            }
           })
         })
 
