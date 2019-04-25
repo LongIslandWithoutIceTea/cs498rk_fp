@@ -187,10 +187,10 @@ class HeaderMenu extends Component {
         <div>
           <Menu inverted stackable size='large'>
             <Container fluid>
-              <Menu.Item as='a' inverted active={this.state.mode==="home"} href='/'><Icon name='home'/>Home</Menu.Item>
-              <Menu.Item as='a' inverted active={this.state.mode==="ship"} href='/#/ship'><Icon name='anchor'/>Ship</Menu.Item>
-              <Menu.Item as='a' inverted active={this.state.mode==="player"} href='/#/player'><Icon name='user'/>Player</Menu.Item>
-              <Menu.Item as='a' inverted active={this.state.mode==="clan"} href='/#/clan'><Icon name='group'/>Clan</Menu.Item>
+              <Menu.Item as='a' inverted active={this.state.mode==="home"} href='/'><div style={{margin:"auto"}}><Icon name='home'/>Home</div></Menu.Item>
+              <Menu.Item as='a' inverted active={this.state.mode==="ship"} href='/#/ship'><div style={{margin:"auto"}}><Icon name='anchor'/>Ship</div></Menu.Item>
+              <Menu.Item as='a' inverted active={this.state.mode==="player"} href='/#/player'><div style={{margin:"auto"}}><Icon name='user'/>Player</div></Menu.Item>
+              <Menu.Item as='a' inverted active={this.state.mode==="clan"} href='/#/clan'><div style={{margin:"auto"}}><Icon name='group'/>Clan</div></Menu.Item>
               <Menu.Item position='right'>
                 <Search
                     selectFirstResult
@@ -203,10 +203,12 @@ class HeaderMenu extends Component {
                     })}
                     results={this.state.results}
                     value={this.state.value}
+                    style={{margin:"auto"}}
                     resultRenderer={this.state.mode==="player"?resultRendererPlayer:(this.state.mode==="clan"?resultRendererClan:null)}
                 />
               </Menu.Item>
               <Menu.Item >
+                <div style={{margin:"auto"}}>
                 <Dropdown trigger={(<span><Icon name='user' /> {this.state.greeting} </span>)} options={
                   [{
                     key: 'user',
@@ -218,6 +220,7 @@ class HeaderMenu extends Component {
                     { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
                   ]
                 }/>
+                </div>
               </Menu.Item>
             </Container>
           </Menu>
