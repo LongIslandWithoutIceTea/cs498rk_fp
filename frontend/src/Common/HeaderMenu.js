@@ -47,6 +47,7 @@ class HeaderMenu extends Component {
       Register: false,
       username: "",
       greeting: getCookie("username") !==""? ("Hello," + getCookie("username")) : "Plase Sign in",
+      cookieModalOpen: false,
     };
     this.resetComponent = this.resetComponent.bind(this);
     this.handleResultSelect = this.handleResultSelect.bind(this);
@@ -64,6 +65,9 @@ class HeaderMenu extends Component {
     this.setState({username:getCookie("username")});
     if(this.state.mode==="ship"){
       this.getShipList();
+    }
+    if(getCookie("agreed") !== "true"){
+      this.setState({ cookieModalOpen: true })
     }
   }
   componentWillMount() {
@@ -179,10 +183,10 @@ class HeaderMenu extends Component {
   LogoutClick(){
     setCookie("username","",0.1);
     this.setState({username:"",greeting: "Plase Sign in",});
+    window.location.reload();
   }
 
   render(){
-    console.log("username: " + getCookie("username"), this.state.mode)
     return(
         <div>
           <Menu inverted stackable size='large'>
@@ -217,6 +221,7 @@ class HeaderMenu extends Component {
                   },
                     { key: 'sign-in', text: 'Sign In' , icon:'sign in', onClick:()=>{this.LoginClick()} },
                     { key: 'register', text: 'Register', icon:'pencil alternate', onClick:()=>{this.RegisterClick()} },
+                    { key: 'setting', text: 'Account', icon:'setting', onClick:()=>{this.props.history.push('/user')} },
                     { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
                   ]
                 }/>
@@ -226,6 +231,21 @@ class HeaderMenu extends Component {
           </Menu>
           <Modal closeIcon  size="mini" centered={false} open={this.state.showLogin} onClose={()=>this.setState({showLogin:false})}><Modal.Content><Login loginCallBack={this.loginCallBack}/></Modal.Content></Modal>
           <Modal closeIcon  size="mini" centered={false} open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register/></Modal.Content></Modal>
+          <Modal
+            open={this.state.cookieModalOpen}
+            basic
+            size='small'
+          >
+            <Header icon='browser' content='Cookies policy' />
+            <Modal.Content>
+              <h3>This website uses cookies to ensure the best user experience.</h3>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color='green' onClick={() => {this.setState({ cookieModalOpen: false });setCookie("agreed","true",1)}} inverted>
+                <Icon name='checkmark' /> Got it
+              </Button>
+            </Modal.Actions>
+          </Modal>
         </div>
     )
   }
