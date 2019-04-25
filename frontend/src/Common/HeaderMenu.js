@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Login from '../User/Login.js'
 import Register from '../User/Register.js'
 import {withRouter} from 'react-router-dom';
+import {getCookie, setCookie, checkCookie} from './cookie.js';
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 
@@ -30,12 +31,6 @@ resultRendererClan.propTypes = {
   tag: PropTypes.string,
 }
 
-const trigger = (
-    <span>
-    <Icon name='user' /> Hello, xxx
-  </span>
-)
-
 class HeaderMenu extends Component {
   constructor(props){
     super(props);
@@ -50,6 +45,8 @@ class HeaderMenu extends Component {
       value: '',
       showLogin: false,
       Register: false,
+      username: "",
+      greeting: getCookie("username") !==""? ("Hello," + getCookie("username")) : "Plase Sign in",
     };
     this.resetComponent = this.resetComponent.bind(this);
     this.handleResultSelect = this.handleResultSelect.bind(this);
@@ -58,11 +55,13 @@ class HeaderMenu extends Component {
     this.RegisterClick = this.RegisterClick.bind(this);
     this.LogoutClick = this.LogoutClick.bind(this);
     this.getShipList = this.getShipList.bind(this);
+    this.loginCallBack = this.loginCallBack.bind(this);
   }
 
 
   componentDidMount() {
     this.setState({mode:this.props.mode});
+    this.setState({username:getCookie("username")});
     if(this.state.mode==="ship"){
       this.getShipList();
     }
@@ -166,6 +165,11 @@ class HeaderMenu extends Component {
 
   }
 
+  loginCallBack(){
+    this.setState({username:getCookie("username"), greeting: "Hello," + getCookie("username"),});
+    this.setState({showLogin: false});
+  }
+
   LoginClick(){
     this.setState({showLogin: true});
   }
@@ -173,10 +177,12 @@ class HeaderMenu extends Component {
     this.setState({showRegister: true});
   }
   LogoutClick(){
-    alert("Logged out!")
+    setCookie("username","",0.1);
+    this.setState({username:"",greeting: "Plase Sign in",});
   }
 
   render(){
+    console.log("username: " + getCookie("username"))
     return(
         <div>
           <Menu inverted stackable size='large'>
@@ -201,26 +207,22 @@ class HeaderMenu extends Component {
                 />
               </Menu.Item>
               <Menu.Item >
-                <Dropdown trigger={trigger} options={
+                <Dropdown trigger={(<span><Icon name='user' /> {this.state.greeting} </span>)} options={
                   [{
                     key: 'user',
-                    text: (
-                        <span>
-                    Signed in as <strong>xxx</strong>
-                  </span>
-                    ),
+                    text: (<span>{this.state.greeting}</span>),
                     disabled: true,
                   },
                     { key: 'sign-in', text: 'Sign In' , icon:'sign in', onClick:()=>{this.LoginClick()} },
                     { key: 'register', text: 'Register', icon:'pencil alternate', onClick:()=>{this.RegisterClick()} },
                     { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
                   ]
-                } />
+                }/>
               </Menu.Item>
             </Container>
           </Menu>
-          <Modal closeIcon  open={this.state.showLogin} onClose={()=>this.setState({showLogin:false})}><Modal.Content><Login/></Modal.Content></Modal>
-          <Modal closeIcon  open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register/></Modal.Content></Modal>
+          <Modal closeIcon  size="mini" centered={false} open={this.state.showLogin} onClose={()=>this.setState({showLogin:false})}><Modal.Content><Login loginCallBack={this.loginCallBack}/></Modal.Content></Modal>
+          <Modal closeIcon  size="mini" centered={false} open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register/></Modal.Content></Modal>
         </div>
     )
   }

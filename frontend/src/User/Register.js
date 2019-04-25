@@ -8,7 +8,7 @@ class Register extends Component {
   constructor(props){
     super(props);
     this.state = {
-      username: "TeaInTea",
+      username: "",
       password: "",
       loggedin: false,
       wrongusername: false,
@@ -59,10 +59,9 @@ class Register extends Component {
               <label>Password</label>
               <Input fluid label={{ icon: 'key' }} iconPosition='right' icon={<Icon name={this.state.hide?"eye":"eye slash"} link onClick={()=>this.setState({hide:this.state.hide?false:true})}/>} labelPosition='left corner' type={this.state.hide?"password":"text"} error={this.state.wrongpassword} placeholder='password' value={this.state.password} onChange={(e,{value})=>this.setState({password:value})}/>
             </Form.Field>
-            <Button onClick={() => this.register()}>Register</Button>
+            <Button fluid onClick={() => this.register()}>Register</Button>
           </Form>
         </Segment>
-        <p>Logged In: {this.state.loggedin.toString()}</p>
       </Container>
 
     );
