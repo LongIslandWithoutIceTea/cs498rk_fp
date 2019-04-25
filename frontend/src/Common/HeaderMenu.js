@@ -232,7 +232,6 @@ class HeaderMenu extends Component {
           <Modal closeIcon  size="mini" centered={false} open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register/></Modal.Content></Modal>
           <Modal
             open={this.state.cookieModalOpen}
-            onClose={() => this.setState({ cookieModalOpen: false })}
             basic
             size='small'
           >
