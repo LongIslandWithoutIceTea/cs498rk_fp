@@ -5,8 +5,8 @@ import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import PlayerWeaponTable from './PlayerWeaponTable.js';
 import {Link, NavLink} from "react-router-dom";
+import {division, divisionWhole, time, application_id} from '../../Common/utlity.js';
 
-const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 const perpage = 10;
 const nationOptions=[
   {key: 'all', value: 'all', text: ''},
@@ -72,21 +72,6 @@ const tierDict={
   '8':'VIII',
   '9': 'IX',
   '10': 'X',
-}
-function division(a,b){
-  if (b === 0){
-    return 0;
-  }else{
-    return Math.round(a / b * 100) / 100;
-  }
-}
-
-function divisionWhole(a,b){
-  if (b === 0){
-    return 0;
-  }else{
-    return Math.round(a / b);
-  }
 }
 
 class PlayerShipTableBody extends Component {

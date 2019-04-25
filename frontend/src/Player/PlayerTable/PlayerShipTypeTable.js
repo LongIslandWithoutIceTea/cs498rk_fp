@@ -1,22 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Label, Menu, Table } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
-
-function division(a,b){
-  if (b === 0){
-    return 0;
-  }else{
-    return Math.round(a / b * 100) / 100;
-  }
-}
-
-function divisionWhole(a,b){
-  if (b === 0){
-    return 0;
-  }else{
-    return Math.round(a / b);
-  }
-}
+import {division, divisionWhole, time, application_id} from '../../Common/utlity.js';
 
 export default class PlayerShipTypeTable extends Component {
   constructor(props){

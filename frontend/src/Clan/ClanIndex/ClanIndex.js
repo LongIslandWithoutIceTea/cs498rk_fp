@@ -4,29 +4,7 @@ import {Link, NavLink} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import ToTopButton from '../../Common/ToTopButton.js';
 import axios from 'axios';
-
-const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
-
-function division(a,b){
-  if (b === 0){
-    return 0;
-  }else{
-    return Math.round(a / b * 100) / 100;
-  }
-}
-
-function divisionWhole(a,b){
-  if (b === 0){
-    return 0;
-  }else{
-    return Math.round(a / b);
-  }
-}
-
-function time(input) {
-    var date = new Date(parseInt(input.toString()+"000"));
-    return (date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + (date.getDate()))
-}
+import {division, divisionWhole, time, application_id} from '../../Common/utlity.js';
 
 export default class ClanIndex extends Component {
   constructor(props){
@@ -36,7 +14,7 @@ export default class ClanIndex extends Component {
       playerlist: [],
       playerclanlist: {},
       clans_roles: {"executive_officer": "Deputy Commander","recruitment_officer": "Recruiter","private": "Line Officer", "commander": "Commander"},
-      data: {"members_count":0,"name":"","creator_name":"","clan_id":1000043952,"created_at":1484747968,"updated_at":1555905684,"leader_name":"","members_ids":[],"creator_id":0,"tag":"","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":0,"description":""},
+      data: {"members_count":0,"name":"","creator_name":"","clan_id":1,"created_at":1,"updated_at":1,"leader_name":"","members_ids":[],"creator_id":0,"tag":"","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":0,"description":""},
     }
     this.reloadData = this.reloadData.bind(this);
     this.buildMembers = this.buildMembers.bind(this);

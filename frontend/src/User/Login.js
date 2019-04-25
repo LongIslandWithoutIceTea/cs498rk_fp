@@ -26,9 +26,10 @@ class Login extends Component {
   login(){
     var password = this.state.password;
     this.setState({wrongusername: false, wrongpassword: false, password: ""});
-    axios.get(server + 'api/users/?where={"name":"' + this.state.username + '"}')
+    axios.post(server + "api/login?name="+ this.state.username +"&password="+ this.state.password)
     .then((response)=>{
-        if (response.data.data.length === 0){
+        console.log(response);
+        /*if (response.data.data.length === 0){
           this.setState({wrongusername: true});
         }else if (response.data.data[0].password === password){
           this.setState({loggedin: true});
@@ -38,7 +39,7 @@ class Login extends Component {
           }
         }else{
           this.setState({wrongpassword: true});
-        }
+        }*/
     })
     .catch((error) => console.log(error));
   }

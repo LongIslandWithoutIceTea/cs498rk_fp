@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Icon, Label, Menu, Table } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import {division, divisionWhole, time, application_id} from '../../Common/utlity.js';
 
 export default class PlayerWeaponTable extends Component {
   render() {

@@ -19,8 +19,8 @@ import PlayerShipTypeGraph from '../PlayerGraph/PlayerShipTypeGraph.js';
 import PlayerShipNationGraph from '../PlayerGraph/PlayerShipNationGraph.js';
 import PlayerShipTierGraph from '../PlayerGraph/PlayerShipTierGraph.js';
 import ToTopButton from '../../Common/ToTopButton.js';
+import {division, divisionWhole, time, application_id} from '../../Common/utlity.js';
 
-const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 const achievementsDict = {
     "DOUBLE_KILL":{'text':'Double Strike','image':'http://wiki.gcdn.co/images/f/f3/Icon_achievement_DOUBLE_KILL.png'},
     "MAIN_CALIBER":{'text':'High Caliber','image':'http://wiki.gcdn.co/images/5/51/Icon_achievement_MAIN_CALIBER.png'},
@@ -41,22 +41,6 @@ const achievementsDict = {
     "ATBA_CALIBER":{'text':'Close Quarters Expert','image':'http://wiki.gcdn.co/images/1/1a/Icon_achievement_ATBA_CALIBER.png'},
     "RETRIBUTION":{'text':"It's Just A Flesh Wound!",'image':'http://wiki.gcdn.co/images/4/4d/Icon_achievement_RETRIBUTION.png'},
 };
-
-function division(a,b){
-  if (b === 0){
-    return 0;
-  }else{
-    return Math.round(a / b * 100) / 100;
-  }
-}
-
-function divisionWhole(a,b){
-  if (b === 0){
-    return 0;
-  }else{
-    return Math.round(a / b);
-  }
-}
 
 export default class PlayerIndex extends Component {
   constructor(props){
