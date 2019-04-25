@@ -3,8 +3,7 @@ import {  Message, Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dro
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import {getCookie, setCookie, checkCookie} from '../Common/cookie.js';
-
-const server = "http://localhost:4000/"
+import {server} from '../Common/utlity.js';
 
 class Login extends Component {
   constructor(props){

@@ -183,10 +183,10 @@ class HeaderMenu extends Component {
   LogoutClick(){
     setCookie("username","",0.1);
     this.setState({username:"",greeting: "Plase Sign in",});
+    window.location.reload();
   }
 
   render(){
-    console.log("username: " + getCookie("username"))
     return(
         <div>
           <Menu inverted stackable size='large'>
@@ -221,6 +221,7 @@ class HeaderMenu extends Component {
                   },
                     { key: 'sign-in', text: 'Sign In' , icon:'sign in', onClick:()=>{this.LoginClick()} },
                     { key: 'register', text: 'Register', icon:'pencil alternate', onClick:()=>{this.RegisterClick()} },
+                    { key: 'setting', text: 'Account', icon:'setting', onClick:()=>{this.props.history.push('/user')} },
                     { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
                   ]
                 }/>

@@ -4,23 +4,26 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import {server} from '../Common/utlity.js';
 
-class Register extends Component {
+class ChangePassword extends Component {
   constructor(props){
     super(props);
     this.state = {
       username: "",
       password: "",
+      oldpassword: "",
       loggedin: false,
       wrongusername: false,
+      wrongpassword: false,
+      wrongoldpassword: false,
       hide: false,
     }
-    this.register = this.register.bind(this);
+    this.ChangePassword = this.ChangePassword.bind(this);
   }
 
   componentDidMount() {
   }
 
-  register(){
+  ChangePassword(){
     this.setState({wrongusername: false, wrongpassword: false});
     axios.get(server + 'api/users/?where={"name":"' + this.state.username + '"}')
     .then((response)=>{
@@ -48,7 +51,7 @@ class Register extends Component {
             margin:"auto"
           }}
         >
-          <Header as="h1">Register</Header>
+          <Header as="h1">ChangePassword</Header>
           <Form>
             <Form.Field required>
               <label>Username</label>
@@ -56,10 +59,14 @@ class Register extends Component {
               <Message style={{display:this.state.wrongusername?"block":"none"}} error header='Username Exists' content='Please try again.'/>
             </Form.Field>
             <Form.Field required>
-              <label>Password</label>
+              <label>Old Password</label>
+              <Input fluid label={{ icon: 'key' }} iconPosition='right' icon={<Icon name={this.state.hide?"eye":"eye slash"} link onClick={()=>this.setState({hide:this.state.hide?false:true})}/>} labelPosition='left corner' type={this.state.hide?"password":"text"} error={this.state.wrongoldpassword} placeholder='password' value={this.state.oldpassword} onChange={(e,{value})=>this.setState({oldpassword:value})}/>
+            </Form.Field>
+            <Form.Field required>
+              <label>New Password</label>
               <Input fluid label={{ icon: 'key' }} iconPosition='right' icon={<Icon name={this.state.hide?"eye":"eye slash"} link onClick={()=>this.setState({hide:this.state.hide?false:true})}/>} labelPosition='left corner' type={this.state.hide?"password":"text"} error={this.state.wrongpassword} placeholder='password' value={this.state.password} onChange={(e,{value})=>this.setState({password:value})}/>
             </Form.Field>
-            <Button fluid onClick={() => this.register()}>Register</Button>
+            <Button fluid onClick={() => this.ChangePassword()}>Change Password</Button>
           </Form>
         </Segment>
       </Container>
@@ -68,4 +75,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default ChangePassword;
