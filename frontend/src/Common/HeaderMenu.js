@@ -47,6 +47,7 @@ class HeaderMenu extends Component {
       Register: false,
       username: "",
       greeting: getCookie("username") !==""? ("Hello," + getCookie("username")) : "Plase Sign in",
+      cookieModalOpen: false,
     };
     this.resetComponent = this.resetComponent.bind(this);
     this.handleResultSelect = this.handleResultSelect.bind(this);
@@ -64,6 +65,9 @@ class HeaderMenu extends Component {
     this.setState({username:getCookie("username")});
     if(this.state.mode==="ship"){
       this.getShipList();
+    }
+    if(getCookie("agreed") !== "true"){
+      this.setState({ cookieModalOpen: true })
     }
   }
   componentWillMount() {
@@ -226,6 +230,22 @@ class HeaderMenu extends Component {
           </Menu>
           <Modal closeIcon  size="mini" centered={false} open={this.state.showLogin} onClose={()=>this.setState({showLogin:false})}><Modal.Content><Login loginCallBack={this.loginCallBack}/></Modal.Content></Modal>
           <Modal closeIcon  size="mini" centered={false} open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register/></Modal.Content></Modal>
+          <Modal
+            open={this.state.cookieModalOpen}
+            onClose={() => this.setState({ cookieModalOpen: false })}
+            basic
+            size='small'
+          >
+            <Header icon='browser' content='Cookies policy' />
+            <Modal.Content>
+              <h3>This website uses cookies to ensure the best user experience.</h3>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color='green' onClick={() => {this.setState({ cookieModalOpen: false });setCookie("agreed","true",1)}} inverted>
+                <Icon name='checkmark' /> Got it
+              </Button>
+            </Modal.Actions>
+          </Modal>
         </div>
     )
   }
