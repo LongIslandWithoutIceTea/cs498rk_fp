@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail } from 'semantic-ui-react';
+import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail, Popup } from 'semantic-ui-react';
 import {Link, NavLink} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import ToTopButton from '../../Common/ToTopButton.js';
@@ -34,6 +34,8 @@ export default class ClanIndex extends Component {
     this.state = {
       clan_id: '',
       playerlist: [],
+      playerclanlist: {},
+      clans_roles: {"executive_officer": "Deputy Commander","recruitment_officer": "Recruiter","private": "Line Officer", "commander": "Commander"},
       data: {"members_count":0,"name":"","creator_name":"","clan_id":1000043952,"created_at":1484747968,"updated_at":1555905684,"leader_name":"","members_ids":[],"creator_id":0,"tag":"","old_name":null,"is_clan_disbanded":false,"renamed_at":null,"old_tag":null,"leader_id":0,"description":""},
     }
     this.reloadData = this.reloadData.bind(this);
@@ -51,6 +53,7 @@ export default class ClanIndex extends Component {
     .then((response)=>{
         this.setState({data: response.data.data[clan_id]});
         var playerlist = [];
+        var playerclanlist = {};
         var slice = 23;
         for(var i = 0; i < response.data.data[clan_id].members_ids.length/slice; i++){
           var account_id_strings = "";
@@ -69,6 +72,23 @@ export default class ClanIndex extends Component {
                 playerlist.push(playerres);
                 this.setState({playerlist: playerlist});
               }
+            }
+          })
+          .catch((error) => console.log(error));
+          axios.get("https://api.worldofwarships.com/wows/clans/accountinfo/?application_id=" + application_id,{params:{account_id:account_id_strings.substring(0,account_id_strings.length-1)}})
+          .then((playerclanresponse)=>{
+            for (const [account_id, playerclanres] of Object.entries(playerclanresponse.data.data)) {
+              if(playerclanres){
+                playerclanlist[playerclanres.account_id] = playerclanres.role;
+                this.setState({playerclanlist: playerclanlist});
+              }
+            }
+          })
+          .catch((error) => console.log(error));
+          axios.get("https://api.worldofwarships.com/wows/clans/glossary/?application_id=" + application_id)
+          .then((glossaryresponse)=>{
+            if(glossaryresponse["clans_roles"]){
+              this.setState({clans_roles: glossaryresponse["clans_roles"]});
             }
           })
           .catch((error) => console.log(error));
@@ -94,7 +114,13 @@ export default class ClanIndex extends Component {
                 >
                   <div style={{margin: '1.5em'}}>
                     <Icon name='user circle' size='large'/>
-                    <NavLink to={{pathname: '/player',state: {account_id: row.account_id}}}>{row.nickname}</NavLink>
+                    <Popup
+                      trigger={<NavLink to={{pathname: '/player',state: {account_id: row.account_id}}}>{row.nickname}</NavLink>}
+                      header = "Position"
+                      content= {this.state.clans_roles[this.state.playerclanlist[row.account_id]]}
+                      position='top right'
+                      size='large'
+                    />
                   </div>
                   <div style={{margin: '1.5em'}}
                     style={{

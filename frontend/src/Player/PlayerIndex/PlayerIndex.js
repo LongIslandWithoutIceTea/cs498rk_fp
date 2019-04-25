@@ -493,6 +493,9 @@ export default class PlayerIndex extends Component {
   }
 
   render() {
+    if(!this.state.data.statistics){
+      return (<Container fluid><Header as="h1">Data Unavailable</Header></Container>)
+    }
     return (
       <Container fluid>
         <Container text>
