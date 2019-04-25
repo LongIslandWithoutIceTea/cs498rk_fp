@@ -57,7 +57,6 @@ module.exports = function (router) {
     var new_user = new User();
     new_user.name = req.param('name');
     new_user.password = req.param('password');
-    new_user
 
     User.find({'name':new_user.name}, function (err, user_list) {
       if (err){
@@ -107,6 +106,7 @@ module.exports = function (router) {
       }
       name = req.param('name')?req.param('name'):user.name;
       password = req.param('password')?req.param('password'):user.password;
+      posts = req.param('posts')?req.param('posts'):user.posts;
       if(name != user.name) {
         User.find({'name':name}, function (err, user_list) {
           if (err){
@@ -115,6 +115,7 @@ module.exports = function (router) {
             if (user_list.length === 0) {
               user.name = name;
               user.password = password;
+              user.posts = posts;
               user.save({},(err, user) => {
                 if (err){
                   res.status(500).send({ message: "Server error", data:[] });
@@ -131,7 +132,7 @@ module.exports = function (router) {
       }else {
         user.name = name;
         user.password = password;
-        user.favorite = favorite;
+        user.posts = posts
         user.save({},(err, user) => {
           if (err){
             res.status(500).send({ message: "Server error", data:[] });
