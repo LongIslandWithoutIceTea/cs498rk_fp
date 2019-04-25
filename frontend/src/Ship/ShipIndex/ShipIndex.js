@@ -3,6 +3,7 @@ import { Progress, Grid, Icon, Label, Menu, Table, Dimmer, Loader, Segment, Inpu
 import {Link, NavLink} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
+import DiscussionThread from '../DiscussionThread/Discussion.js'
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 
@@ -127,29 +128,69 @@ export default class ShipIndex extends Component {
                             marginTop: '5em',
                         }}
                     >
+                        <Grid columns={3} divided>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        <Icon name='crosshairs' />
+                                        Artillery
+                                    </Header>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        <Icon name='eye dropper' />
+                                        Torpedoes
+                                    </Header>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        <Icon name='ship' />
+                                        Hull
+                                    </Header>
+                                </Grid.Column>
+                            </Grid.Row>
+
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        <Icon name='fighter jet' />
+                                        Aircrafts
+                                    </Header>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        <Icon name='exclamation triangle' />
+                                        Concealment
+                                    </Header>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        <Icon name='expand arrows alternate' />
+                                        Mobility
+                                    </Header>
+                                </Grid.Column>
+                            </Grid.Row>
+
+                        </Grid>
                     </Container>
 
-
                     <Divider horizontal
                              style={{
                                  marginTop: '5em',
                              }}
                     >
                         <Header as='h4'>
-                            <Icon name='winner' />
-                            LeaderBoard
-                        </Header>
-                    </Divider>
-                    <Divider horizontal
-                             style={{
-                                 marginTop: '5em',
-                             }}
-                    >
-                        <Header as='h4'>
-                            <Icon name='chat' />
+                            <Icon name='comments' />
                             Discussion Thread
                         </Header>
                     </Divider>
+                    <Container
+                        style={{
+                            marginTop: '5em',
+                        }}
+                    >
+                        <DiscussionThread/>
+                    </Container>
 
                 </Container>
             );
