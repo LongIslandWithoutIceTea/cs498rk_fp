@@ -14,6 +14,7 @@ class Login extends Component {
       loggedin: false,
       loginfail: false,
       hide: false,
+      loading: false,
     }
     this.login = this.login.bind(this);
   }
@@ -23,26 +24,26 @@ class Login extends Component {
 
   login(){
     var password = this.state.password;
-    this.setState({loginfail: false, password: ""});
+    this.setState({loginfail: false, password: "", loading: true});
     if(password === "" && this.state.username === ""){
-        this.setState({loginfail: true});
+        this.setState({loginfail: true, loading: false});
         return;
     }
     axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/login",{name:this.state.username,password:password})
     .then((response)=>{
         if (response.data.success){
-          this.setState({loggedin: true});
+          this.setState({loggedin: true, loading: false});
           setCookie("username", this.state.username, 0.1);
           if(this.props.loginCallBack){
             this.props.loginCallBack();
           }
         }else{
-          this.setState({loginfail: true});
+          this.setState({loginfail: true, loading: false});
         }
     })
     .catch((error) => {
       console.log(error);
-      this.setState({loginfail: true});
+      this.setState({loginfail: true, loading: false});
     });
   }
 
@@ -55,6 +56,9 @@ class Login extends Component {
           margin:"auto"
         }}
         >
+        <Dimmer active={this.state.loading}>
+          <Loader />
+        </Dimmer>
           <Header as="h1">Login</Header>
           <Form>
             <Form.Field>
