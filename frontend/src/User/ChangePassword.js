@@ -12,9 +12,7 @@ class ChangePassword extends Component {
       password: "",
       oldpassword: "",
       loggedin: false,
-      wrongusername: false,
       wrongpassword: false,
-      wrongoldpassword: false,
       hide: false,
     }
     this.ChangePassword = this.ChangePassword.bind(this);
@@ -24,22 +22,27 @@ class ChangePassword extends Component {
   }
 
   ChangePassword(){
-    this.setState({wrongusername: false, wrongpassword: false});
-    axios.get(server + 'api/users/?where={"name":"' + this.state.username + '"}')
+    var password = this.state.password;
+    this.setState({loginfail: false, password: ""});
+    if(password === "" && this.state.username === ""){
+        this.setState({loginfail: true});
+        return;
+    }
+    axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/change_password",{name:this.state.username,old_password:this.state.oldpassword,new_password:this.state.password})
     .then((response)=>{
-        if (response.data.data.length !== 0){
-            this.setState({wrongusername: true});
+        if (response.data && response.data.data && response.data.data.name && response.data.data.name===this.state.username){
+          if(this.props.changepassCallBack){
+            alert("Success");
+            this.props.changepassCallBack();
+          }
         }else{
-            axios.post(server + "api/users/",{name:this.state.username,password:this.state.password})
-            .then((response)=>{
-                if (response.data.data[0]){
-                    this.setState({loggedin: true});
-                }
-            })
-            .catch((error) => console.log(error));
+          this.setState({wrongpassword: true});
         }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      this.setState({wrongpassword: true});
+    });
   }
 
   render() {
@@ -56,11 +59,11 @@ class ChangePassword extends Component {
             <Form.Field required>
               <label>Username</label>
               <Input fluid label={{ icon: 'tag' }} labelPosition='left corner' error={this.state.wrongusername} placeholder='username' value={this.state.username} onChange={(e,{value})=>this.setState({username:value})}/>
-              <Message style={{display:this.state.wrongusername?"block":"none"}} error header='Username Exists' content='Please try again.'/>
             </Form.Field>
             <Form.Field required>
               <label>Old Password</label>
               <Input fluid label={{ icon: 'key' }} iconPosition='right' icon={<Icon name={this.state.hide?"eye":"eye slash"} link onClick={()=>this.setState({hide:this.state.hide?false:true})}/>} labelPosition='left corner' type={this.state.hide?"password":"text"} error={this.state.wrongoldpassword} placeholder='password' value={this.state.oldpassword} onChange={(e,{value})=>this.setState({oldpassword:value})}/>
+              <Message style={{display:this.state.wrongpassword?"block":"none"}} error header='Wrong Username and Password' content='Please try again.'/>
             </Form.Field>
             <Form.Field required>
               <label>New Password</label>

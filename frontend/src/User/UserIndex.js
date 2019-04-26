@@ -17,7 +17,7 @@ class UserIndex extends Component {
     super(props);
     this.state = {
       username:'',
-      showCahangePass: false,
+      showChangePass: false,
       windowwidth: window.innerWidth,
     }
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -70,7 +70,7 @@ class UserIndex extends Component {
             alignItems: 'center',
           }}>
             <div style={{margin:"2.5em"}}>
-              <Button size="massive" circular icon onClick={()=>this.setState({showCahangePass:true})}>
+              <Button size="massive" circular icon onClick={()=>this.setState({showChangePass:true})}>
                 <Icon name="key" circular size="huge"/>
               </Button>
               <Header as="h2">Password</Header>
@@ -82,7 +82,7 @@ class UserIndex extends Component {
               <Header as="h2">Posts</Header>
             </div>
           </div>
-          <Modal closeIcon  size="mini" centered={false} open={this.state.showCahangePass} onClose={()=>this.setState({showCahangePass:false})}><Modal.Content><ChangePassword/></Modal.Content></Modal>
+          <Modal closeIcon  size="mini" centered={false} open={this.state.showChangePass} onClose={()=>this.setState({showChangePass:false})}><Modal.Content><ChangePassword changepassCallBack={()=>this.setState({showChangePass:false})}/></Modal.Content></Modal>
         </Container>
       )
     }else{
