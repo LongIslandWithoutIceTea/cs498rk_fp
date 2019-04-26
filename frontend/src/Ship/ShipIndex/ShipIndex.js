@@ -74,13 +74,13 @@ export default class ShipIndex extends Component {
     }
 
     getColorByValue(value){
-        if (value < 30){
+        if (value < 20){
             return 'red';
         }
         else if (value < 50){
             return 'yellow';
         }
-        else if (value < 70){
+        else if (value < 80){
             return 'olive';
         }
         else {
@@ -96,7 +96,7 @@ export default class ShipIndex extends Component {
                 <Popup.Header>{data.name}</Popup.Header>
                 <Popup.Content>
                     <p>{data.description}</p>
-                    <p>price in credits: {data.price_credit}</p>
+                    <p>Price in credits: {data.price_credit}</p>
                     <List bulleted>
                         {list}
                     </List>
@@ -110,25 +110,26 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>Max Speed: {data.profile.engine.max_speed} kts</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
             )})
 
-        const dive_bomber = this.state.modules_data[1].map((data, i) => {
+        const torp_bomber = this.state.modules_data[1].map((data, i) => {
             return(
                 <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>Cruise Speed: {data.profile.torpedo_bomber.cruise_speed} kts</List.Item>
+                            <List.Item>Aiming Distance: {data.profile.torpedo_bomber.distance} km</List.Item>
+                            <List.Item>Torpedo Damage: {data.profile.torpedo_bomber.max_damage}</List.Item>
+                            <List.Item>Torpedo Speed: {data.profile.torpedo_bomber.torpedo_max_speed}</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
@@ -141,10 +142,10 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>Cruise Speed: {data.profile.fighter.cruise_speed}</List.Item>
+                            <List.Item>Max Health: {data.profile.fighter.max_health}</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
@@ -156,10 +157,13 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>AA Mounts: {data.profile.hull.anti_aircraft_barrels}</List.Item>
+                            <List.Item>Secondary Guns: {data.profile.hull.atba_barrels}</List.Item>
+                            <List.Item>Hit Points: {data.profile.hull.health}</List.Item>
+                            <List.Item>Planes Amount: {data.profile.hull.planes_amount}</List.Item>
+                            <List.Item>Torpedo Tubes: {data.profile.hull.torpedoes_barrels}</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
@@ -171,10 +175,12 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>Firing Rate: {data.profile.artillery.gun_rate} rounds/min</List.Item>
+                            <List.Item>AP Damage: {data.profile.artillery.max_damage_AP}</List.Item>
+                            <List.Item>HE Damage: {data.profile.artillery.max_damage_HE}</List.Item>
+                            <List.Item>rotation_time: {data.profile.artillery.rotation_time} s</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
@@ -186,10 +192,12 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>Range: {data.profile.torpedoes.distance}</List.Item>
+                            <List.Item>Damage: {data.profile.torpedoes.max_damage}</List.Item>
+                            <List.Item>Firing Rate: {data.profile.torpedoes.shot_speed} rounds/min</List.Item>
+                            <List.Item>Torpedo Speed: {data.profile.torpedoes.torpedo_speed} kts</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
@@ -201,10 +209,10 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>Firing Distance: {data.profile.fire_control.distance}</List.Item>
+                            <List.Item>Firing Distance Increase: {data.profile.fire_control.distance_increase}</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
@@ -216,25 +224,29 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>Bomber Squadrons: {data.profile.flight_control.bomber_squadrons}</List.Item>
+                            <List.Item>Fighter Squadrons: {data.profile.flight_control.fighter_squadrons}</List.Item>
+                            <List.Item>Torpedo Squadrons: {data.profile.flight_control.torpedo_squadrons}</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
             )})
 
-        const torp_bomber = this.state.modules_data[8].map((data, i) => {
+        const dive_bomber = this.state.modules_data[8].map((data, i) => {
             return(
                 <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
-                            <List.Item>Gaining Access</List.Item>
-                            <List.Item>Inviting Friends</List.Item>
+                            <List.Item>Dispersion: {data.profile.dive_bomber.accuracy.min}-{data.profile.dive_bomber.accuracy.max} m </List.Item>
+                            <List.Item>Burn Probability: {data.profile.dive_bomber.bomb_burn_probability}%</List.Item>
+                            <List.Item>Cruise Speed: {data.profile.dive_bomber.cruise_speed}kts</List.Item>
+                            <List.Item>Damage: {data.profile.dive_bomber.max_damage}</List.Item>
+                            <List.Item>Hit Points: {data.profile.dive_bomber.max_health}</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
