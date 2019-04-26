@@ -104,6 +104,13 @@ module.exports = function (router) {
           data: []
         });
       }
+      if(!user) {
+        res.status(404);
+        res.json({
+          message: "No such user",
+          data: []
+        });
+      }
       name = req.param('name')?req.param('name'):user.name;
       password = req.param('password')?req.param('password'):user.password;
       posts = req.param('posts')?req.param('posts'):user.posts;
