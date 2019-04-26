@@ -151,30 +151,31 @@ module.exports = function (router) {
   loginRoute.post((req, res) => {
     name = req.param('name');
     password = req.param('password');
-    User.findOne({'name':name}, (err, user) => {
-      if(err) {
+    User.findOne({'name':name}, user => {
+      if(!user) {
         res.status(404);
         res.json({
           success: false,
           message: "Username does not exist",
           data: []
         });
-      }
-      if(user.password == password) {
-        user['password'] = undefined;
-        res.status(200);
-        res.json({
-          success: true,
-          message: "Successful login",
-          data: user
-        })
       }else {
-        res.status(404);
-        res.json({
-          success: false,
-          message: "Incorrect password",
-          data: []
-        })
+        if(user.password == password) {
+          user['password'] = undefined;
+          res.status(200);
+          res.json({
+            success: true,
+            message: "Successful login",
+            data: user
+          })
+        }else {
+          res.status(404);
+          res.json({
+            success: false,
+            message: "Incorrect password",
+            data: []
+          })
+        }
       }
     })
   });
