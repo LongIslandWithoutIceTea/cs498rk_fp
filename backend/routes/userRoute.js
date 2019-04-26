@@ -151,7 +151,7 @@ module.exports = function (router) {
   loginRoute.post((req, res) => {
     name = req.param('name');
     password = req.param('password');
-    User.findOne({'name':name}, user => {
+    User.findOne({'name':name}, (err, user) => {
       if(err) {
         res.status(404);
         res.json({
