@@ -103,51 +103,51 @@ module.exports = function (router) {
           message: status_dict[res.statusCode],
           data: []
         });
-      }
-      if(!user) {
+      }else if(!user) {
         res.status(404);
         res.json({
           message: "No such user",
           data: []
         });
-      }
-      name = req.param('name')?req.param('name'):user.name;
-      password = req.param('password')?req.param('password'):user.password;
-      posts = req.param('posts')?req.param('posts'):user.posts;
-      if(name != user.name) {
-        User.find({'name':name}, function (err, user_list) {
-          if (err){
-            res.status(500).send({ message: "Server error", data:[] });
-          } else{
-            if (user_list.length === 0) {
-              user.name = name;
-              user.password = password;
-              user.posts = posts;
-              user.save({},(err, user) => {
-                if (err){
-                  res.status(500).send({ message: "Server error", data:[] });
-                } else{
-                  user['password'] = undefined;
-                  res.status(201).send({ message: "Complete", data:user });
-                }
-              });
-            }else{
-              res.status(500).send({ message: "Try a differnt name", data:[] });
-            }
-          }
-        });
       }else {
-        user.name = name;
-        user.password = password;
-        user.posts = posts
-        user.save({},(err, user) => {
-          if (err){
-            res.status(500).send({ message: "Server error", data:[] });
-          } else{
-            user['password'] = undefined;
-            res.status(201).send({ message: "Complete", data:user });
-          }
-        });
+        name = req.param('name')?req.param('name'):user.name;
+        password = req.param('password')?req.param('password'):user.password;
+        posts = req.param('posts')?req.param('posts'):user.posts;
+        if(name != user.name) {
+          User.find({'name':name}, function (err, user_list) {
+            if (err){
+              res.status(500).send({ message: "Server error", data:[] });
+            } else{
+              if (user_list.length === 0) {
+                user.name = name;
+                user.password = password;
+                user.posts = posts;
+                user.save({},(err, user) => {
+                  if (err){
+                    res.status(500).send({ message: "Server error", data:[] });
+                  } else{
+                    user['password'] = undefined;
+                    res.status(201).send({ message: "Complete", data:user });
+                  }
+                });
+              }else{
+                res.status(500).send({ message: "Try a differnt name", data:[] });
+              }
+            }
+          });
+        }else {
+          user.name = name;
+          user.password = password;
+          user.posts = posts
+          user.save({},(err, user) => {
+            if (err){
+              res.status(500).send({ message: "Server error", data:[] });
+            } else{
+              user['password'] = undefined;
+              res.status(201).send({ message: "Complete", data:user });
+            }
+          });
+        }
       }
 
     });
