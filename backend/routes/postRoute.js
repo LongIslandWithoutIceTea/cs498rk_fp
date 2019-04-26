@@ -1,5 +1,4 @@
 var Post = require('../models/post.js');
-var fs = require('fs');
 
 module.exports = function (router) {
   var status_dict = {

@@ -3,7 +3,8 @@ var express = require('express'),
     router = express.Router(),
     mongoose = require('mongoose'),
     secrets = require('./config/secrets'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    cors = require('cors');
 
 // Create our Express application
 var app = express();
@@ -28,6 +29,8 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+
+app.use(cors());
 
 // Use routes as a module (see index.js)
 require('./routes')(app, router);

@@ -1,5 +1,4 @@
 var User = require('../models/user.js');
-var fs = require('fs');
 
 module.exports = function (router) {
   var status_dict = {
@@ -228,6 +227,36 @@ module.exports = function (router) {
         }
       }
     });
-  })
+  });
+
+  var changePasswordRoute = router.route('/users/change_password');
+
+  changePasswordRoute.post((req, res) => {
+    name = req.param('name');
+    old_password = req.param('old_password');
+    new_password = req.param('new_password');
+    User.findOne({'name':name}, (err, user) => {
+      if(err) {
+        res.status(500).send({ message: "Server error", data:[] });
+      }else if(!user) {
+        res.status(404).send({ message: "No such user", data:[] });
+      }else {
+        if(user.password == old_password) {
+          user.password = new_password;
+          user.save({},(err, user) => {
+            if (err){
+              res.status(500).send({ message: "Server error", data: [] });
+            } else{
+              user['password'] = undefined;
+              res.status(201).send({ message: "Successfully changed", data: user });
+            }
+          });
+        }else {
+          res.status(404).send({ message: "Incorrect password", data: []});
+        }
+      }
+    });
+  });
+
   return router;
 };
