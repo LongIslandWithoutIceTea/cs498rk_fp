@@ -212,7 +212,7 @@ export default class ShipIndex extends Component {
                         <p>Price in credits: {data.price_credit}</p>
                         <List bulleted>
                             <List.Item>Firing Distance: {data.profile.fire_control.distance}</List.Item>
-                            <List.Item>Firing Distance Increase: {data.profile.fire_control.distance_increase}</List.Item>
+                            <List.Item>Firing Distance Increase: {data.profile.fire_control.distance_increase}%</List.Item>
                         </List>
                     </Popup.Content>
                 </Popup>
