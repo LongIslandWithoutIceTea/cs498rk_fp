@@ -152,6 +152,14 @@ module.exports = function (router) {
     name = req.param('name');
     password = req.param('password');
     User.findOne({'name':name}, user => {
+      if(err) {
+        res.status(404);
+        res.json({
+          success: false,
+          message: "Internal Server Error",
+          data: []
+        });
+      }
       if(!user) {
         res.status(404);
         res.json({
