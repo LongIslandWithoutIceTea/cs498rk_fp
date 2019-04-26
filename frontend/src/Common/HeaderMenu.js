@@ -8,8 +8,7 @@ import Login from '../User/Login.js'
 import Register from '../User/Register.js'
 import {withRouter} from 'react-router-dom';
 import {getCookie, setCookie, checkCookie} from './cookie.js';
-
-const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
+import {division, divisionWhole, time, application_id} from './utlity.js';
 
 const resultRendererPlayer = ({title, account_id}) => <Header as='h4' key={account_id}><Icon name='user circle'/><Header.Content>{title}</Header.Content></Header>
 resultRendererPlayer.propTypes = {
@@ -17,11 +16,12 @@ resultRendererPlayer.propTypes = {
   account_id: PropTypes.string,
 }
 
-const resultRendererShip = ({title, ship_id, tag}) => <Header as='h4' key={ship_id}><Icon name='group'/><Header.Content>{'[' + tag + ']' + title}</Header.Content></Header>
+const resultRendererShip = ({title, image, ship_id, description}) => <Header as='h4' key={ship_id}><Image src={image}></Image>{title}<Header.Subheader>{description}</Header.Subheader></Header>
 resultRendererShip.propTypes = {
-  name: PropTypes.string,
+  title: PropTypes.string,
+  image: PropTypes.string,
   ship_id: PropTypes.string,
-  tag: PropTypes.string,
+  description: PropTypes.string,
 }
 
 const resultRendererClan = ({title, clan_id, tag}) => <Header as='h4' key={clan_id}><Icon name='group'/><Header.Content>{'[' + tag + ']' + title}</Header.Content></Header>
@@ -61,13 +61,12 @@ class HeaderMenu extends Component {
 
 
   componentDidMount() {
-    this.setState({mode:this.props.mode});
-    this.setState({username:getCookie("username")});
+    this.setState({mode:this.props.mode,username:getCookie("username")});
     if(this.state.mode==="ship"){
       this.getShipList();
     }
     if(getCookie("agreed") !== "true"){
-      this.setState({ cookieModalOpen: true })
+      this.setState({ cookieModalOpen: true });
     }
   }
   componentWillMount() {
@@ -83,7 +82,7 @@ class HeaderMenu extends Component {
 
   handleResultSelect(e, { result }){
     if(this.state.mode==="ship"){
-      this.setState({ ship_id: result.title, value: result.title});
+      this.setState({ ship_id: result.ship_id, value: result.name});
       this.props.set_ship_id(result.ship_id)
     }else if(this.state.mode==="player"){
       this.setState({ account_id: result.account_id, value: result.nickname });
@@ -101,7 +100,7 @@ class HeaderMenu extends Component {
   handleSearchChange(e, { value }){
     this.setState({value: value })
     if(this.state.mode==="ship"){
-      if(value.length > 1) {
+      if(value.length > 2) {
         this.setState({isLoading: true})
         var results = [];
         let filtered = this.state.shipList.filter(ship => ship.name.toLowerCase().includes(value.toLowerCase()))
@@ -208,7 +207,7 @@ class HeaderMenu extends Component {
                     results={this.state.results}
                     value={this.state.value}
                     style={{margin:"auto"}}
-                    resultRenderer={this.state.mode==="player"?resultRendererPlayer:(this.state.mode==="clan"?resultRendererClan:null)}
+                    resultRenderer={this.state.mode==="player"?resultRendererPlayer:(this.state.mode==="clan"?resultRendererClan:resultRendererShip)}
                 />
               </Menu.Item>
               <Menu.Item >

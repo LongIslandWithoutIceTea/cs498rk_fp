@@ -6,7 +6,7 @@ import Player from './Player/PlayerIndex/PlayerHeader.js'
 import Clan from './Clan/ClanIndex/ClanHeader'
 import Login from './User/Login.js'
 import Register from './User/Register.js'
-import Ship from './Ship/ShipIndex/ShipHeader'
+import Ship from './Ship/ShipIndex/ShipHeader.js'
 import { HashRouter as Router, Route } from "react-router-dom";
 
 
@@ -17,12 +17,12 @@ class App extends Component {
           <Router>
               <div>
                   <Route path={"/"} exact component={IndexPage} />
+                  <Route path={"/ship"} exact
+                         component={() => <Ship/>}  />
                   <Route path={"/player"} exact
                          component={() => <Player/>}  />
                   <Route path={"/clan"} exact
                           component={() => <Clan/>}  />
-                  <Route path={"/ship"} exact
-                         component={() => <Ship/>}  />
                   <Route path={"/login"} exact
                          component={() => <Login/>}  />
                   <Route path={"/register"} exact

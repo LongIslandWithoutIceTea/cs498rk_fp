@@ -8,10 +8,9 @@ import ShipIndex from './ShipIndex.js';
 import Login from '../../User/Login.js'
 import Register from '../../User/Register.js'
 import {withRouter} from 'react-router-dom';
-import HeaderMenu from "../../Player/PlayerIndex/PlayerHeader";
+import HeaderMenu from "../../Common/HeaderMenu.js";
 import {getCookie, setCookie, checkCookie} from '../../Common/cookie.js';
-
-const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
+import {division, divisionWhole, time, application_id} from '../../Common/utlity.js';
 
 class Ship extends Component {
   constructor(props){
@@ -40,31 +39,41 @@ class Ship extends Component {
 
 
   render(){
-    if(this.state.account_id && this.state.account_id !== ''){
+    if(this.state.ship_id && this.state.ship_id !== ''){
       return(
           <Container fluid>
             <HeaderMenu set_ship_id={this.set_ship_id} mode="ship"/>
             <ShipIndex ship_id={this.state.ship_id}/>
           </Container>
       )
-    }else if(this.props.location && this.props.location.state && this.props.location.state.account_id){
+    }else if(this.props.location && this.props.location.state && this.props.location.state.ship_id){
       return(
           <Container fluid>
             <HeaderMenu set_ship_id={this.set_ship_id} mode="ship"/>
-            <ShipIndex ship_id={this.state.ship_id}/>
+            <ShipIndex ship_id={this.props.location.state.ship_id}/>
           </Container>
       )
     }else if(getCookie("back_mode") ==="ship" && getCookie("back_id") !== "") {
       return (
           <Container fluid>
             <HeaderMenu set_ship_id={this.set_ship_id} mode="ship"/>
-            <ShipIndex ship_id={this.state.ship_id}/>
+            <ShipIndex ship_id={parseInt(getCookie("back_id"))}/>
           </Container>
       )
     }
     else{
       return(
+        <Container fluid>
           <HeaderMenu set_ship_id={this.set_ship_id} mode="ship"/>
+          <Placeholder fluid>
+            <Placeholder.Header>
+              <Placeholder.Line length='full' />
+            </Placeholder.Header>
+            <Placeholder.Paragraph>
+              <Placeholder.Line length='full' />
+            </Placeholder.Paragraph>
+          </Placeholder>
+        </Container>
       )
     }
   }
