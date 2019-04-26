@@ -12,8 +12,7 @@ class Login extends Component {
       username: "",
       password: "",
       loggedin: false,
-      wrongusername: false,
-      wrongpassword: false,
+      loginfail: false,
       hide: false,
     }
     this.login = this.login.bind(this);
@@ -24,23 +23,27 @@ class Login extends Component {
 
   login(){
     var password = this.state.password;
-    this.setState({wrongusername: false, wrongpassword: false, password: ""});
-    axios.post(server + "api/login?name="+ this.state.username +"&password="+ this.state.password)
+    this.setState({loginfail: false, password: ""});
+    if(password === "" && this.state.username === ""){
+        this.setState({loginfail: true});
+        return;
+    }
+    axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/login",{name:this.state.username,password:password})
     .then((response)=>{
-        console.log(response);
-        /*if (response.data.data.length === 0){
-          this.setState({wrongusername: true});
-        }else if (response.data.data[0].password === password){
+        if (response.data.success){
           this.setState({loggedin: true});
           setCookie("username", this.state.username, 0.1);
           if(this.props.loginCallBack){
             this.props.loginCallBack();
           }
         }else{
-          this.setState({wrongpassword: true});
-        }*/
+          this.setState({loginfail: true});
+        }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      this.setState({loginfail: true});
+    });
   }
 
   render() {
@@ -56,13 +59,12 @@ class Login extends Component {
           <Form>
             <Form.Field>
               <label>Username</label>
-              <Input fluid label={{ icon: 'tag' }} labelPosition='left corner' error={this.state.wrongusername} placeholder='username' value={this.state.username} onChange={(e,{value})=>this.setState({username:value})}/>
-              <Message style={{display:this.state.wrongusername?"block":"none"}} error header='Username Wrong' content='Please try again.'/>
+              <Input fluid label={{ icon: 'tag' }} labelPosition='left corner' error={this.state.loginfail} placeholder='username' value={this.state.username} onChange={(e,{value})=>this.setState({username:value})}/>
             </Form.Field>
             <Form.Field>
               <label>Password</label>
-              <Input fluid label={{ icon: 'key' }} iconPosition='right' icon={<Icon name={this.state.hide?"eye":"eye slash"} link onClick={()=>this.setState({hide:this.state.hide?false:true})}/>} labelPosition='left corner' type={this.state.hide?"password":"text"} error={this.state.wrongpassword} placeholder='password' value={this.state.password} onChange={(e,{value})=>this.setState({password:value})}/>
-              <Message style={{display:this.state.wrongpassword?"block":"none"}} error header='Password Wrong' content='Please try again.'/>
+              <Input fluid label={{ icon: 'key' }} iconPosition='right' icon={<Icon name={this.state.hide?"eye":"eye slash"} link onClick={()=>this.setState({hide:this.state.hide?false:true})}/>} labelPosition='left corner' type={this.state.hide?"password":"text"} error={this.state.loginfail} placeholder='password' value={this.state.password} onChange={(e,{value})=>this.setState({password:value})}/>
+              <Message style={{display:this.state.loginfail?"block":"none"}} error header='Login Failed' content='Please check your username and password.'/>
             </Form.Field>
             <Button fluid onClick={() => this.login()}>Login</Button>
           </Form>

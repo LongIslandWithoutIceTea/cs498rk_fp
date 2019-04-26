@@ -90,11 +90,11 @@ class UserIndex extends Component {
         <Container fluid>
           <HeaderMenu mode="user"/>
           <Container style={{marginTop:"5em", marginLeft:"auto"}}>
-            <Login/>
+            <Login loginCallBack={()=>window.location.reload()}/>
           </Container>
           <Divider horizontal style={{marginTop:"5em"}}>Or</Divider>
           <Container style={{marginTop:"5em", marginLeft:"auto"}}>
-            <Register/>
+            <Register registerCallBack={()=>window.location.reload()}/>
           </Container>
         </Container>
       )

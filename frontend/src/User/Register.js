@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {  Message, Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Search, Placeholder,  Checkbox, Form  } from 'semantic-ui-react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import {getCookie, setCookie, checkCookie} from '../Common/cookie.js';
 import {server} from '../Common/utlity.js';
 
 class Register extends Component {
@@ -11,7 +12,7 @@ class Register extends Component {
       username: "",
       password: "",
       loggedin: false,
-      wrongusername: false,
+      registerfail: false,
       hide: false,
     }
     this.register = this.register.bind(this);
@@ -21,22 +22,28 @@ class Register extends Component {
   }
 
   register(){
-    this.setState({wrongusername: false, wrongpassword: false});
-    axios.get(server + 'api/users/?where={"name":"' + this.state.username + '"}')
+    var password = this.state.password;
+    this.setState({registerfail: false, password: ""});
+    if(password === "" && this.state.username === ""){
+        this.setState({registerfail: true});
+        return;
+    }
+    axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/register",{name:this.state.username,password:password})
     .then((response)=>{
-        if (response.data.data.length !== 0){
-            this.setState({wrongusername: true});
+        if (response.data.data && response.data.data.name && response.data.data.name === this.state.username){
+          this.setState({loggedin: true});
+          setCookie("username", this.state.username, 0.1);
+          if(this.props.registerCallBack){
+            this.props.registerCallBack();
+          }
         }else{
-            axios.post(server + "api/users/",{name:this.state.username,password:this.state.password})
-            .then((response)=>{
-                if (response.data.data[0]){
-                    this.setState({loggedin: true});
-                }
-            })
-            .catch((error) => console.log(error));
+          this.setState({registerfail: true});
         }
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+      this.setState({registerfail: true});
+    });
   }
 
   render() {
@@ -52,8 +59,8 @@ class Register extends Component {
           <Form>
             <Form.Field required>
               <label>Username</label>
-              <Input fluid label={{ icon: 'tag' }} labelPosition='left corner' error={this.state.wrongusername} placeholder='username' value={this.state.username} onChange={(e,{value})=>this.setState({username:value})}/>
-              <Message style={{display:this.state.wrongusername?"block":"none"}} error header='Username Exists' content='Please try again.'/>
+              <Input fluid label={{ icon: 'tag' }} labelPosition='left corner' error={this.state.registerfail} placeholder='username' value={this.state.username} onChange={(e,{value})=>this.setState({username:value})}/>
+              <Message style={{display:this.state.registerfail?"block":"none"}} error header='Username Exists' content='Please try again.'/>
             </Form.Field>
             <Form.Field required>
               <label>Password</label>

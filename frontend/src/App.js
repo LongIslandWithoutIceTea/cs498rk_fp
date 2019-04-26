@@ -8,6 +8,7 @@ import Login from './User/Login.js'
 import Register from './User/Register.js'
 import Ship from './Ship/ShipIndex/ShipHeader.js'
 import { HashRouter as Router, Route } from "react-router-dom";
+import UserIndex from './User/UserIndex.js';
 
 
 class App extends Component {
@@ -27,6 +28,9 @@ class App extends Component {
                          component={() => <Login/>}  />
                   <Route path={"/register"} exact
                         component={() => <Register/>}  />
+                  <Route path={"/user"} exact
+                        component={() => <UserIndex/>}  />
+
               </div>
           </Router>
       </div>

@@ -57,6 +57,7 @@ class HeaderMenu extends Component {
     this.LogoutClick = this.LogoutClick.bind(this);
     this.getShipList = this.getShipList.bind(this);
     this.loginCallBack = this.loginCallBack.bind(this);
+    this.registerCallBack = this.registerCallBack.bind(this);
   }
 
 
@@ -172,6 +173,10 @@ class HeaderMenu extends Component {
     this.setState({username:getCookie("username"), greeting: "Hello," + getCookie("username"),});
     this.setState({showLogin: false});
   }
+  registerCallBack(){
+    this.setState({username:getCookie("username"), greeting: "Hello," + getCookie("username"),});
+    this.setState({showLogin: false});
+  }
 
   LoginClick(){
     this.setState({showLogin: true});
@@ -213,15 +218,25 @@ class HeaderMenu extends Component {
               <Menu.Item >
                 <div style={{margin:"auto"}}>
                 <Dropdown trigger={(<span><Icon name='user' /> {this.state.greeting} </span>)} options={
+                  this.state.mode !=="user" &&
                   [{
                     key: 'user',
                     text: (<span>{this.state.greeting}</span>),
                     disabled: true,
                   },
-                    { key: 'sign-in', text: 'Sign In' , icon:'sign in', onClick:()=>{this.LoginClick()} },
-                    { key: 'register', text: 'Register', icon:'pencil alternate', onClick:()=>{this.RegisterClick()} },
-                    { key: 'setting', text: 'Account', icon:'setting', onClick:()=>{this.props.history.push('/user')} },
-                    { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
+                  { key: 'sign-in', text: 'Sign In' , icon:'sign in', onClick:()=>{this.LoginClick()}},
+                  { key: 'register', text: 'Register', icon:'pencil alternate', onClick:()=>{this.RegisterClick()} },
+                  { key: 'setting', text: 'Account', icon:'setting', onClick:()=>{this.props.history.push('/user')} },
+                  { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
+                  ]
+                  ||
+                  [{
+                    key: 'user',
+                    text: (<span>{this.state.greeting}</span>),
+                    disabled: true,
+                  },
+                  { key: 'setting', text: 'Account', icon:'setting', onClick:()=>{this.props.history.push('/user')} },
+                  { key: 'sign-out', text: 'Sign Out', icon:'log out', onClick:()=>{this.LogoutClick()} },
                   ]
                 }/>
                 </div>
@@ -229,7 +244,7 @@ class HeaderMenu extends Component {
             </Container>
           </Menu>
           <Modal closeIcon  size="mini" centered={false} open={this.state.showLogin} onClose={()=>this.setState({showLogin:false})}><Modal.Content><Login loginCallBack={this.loginCallBack}/></Modal.Content></Modal>
-          <Modal closeIcon  size="mini" centered={false} open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register/></Modal.Content></Modal>
+          <Modal closeIcon  size="mini" centered={false} open={this.state.showRegister} onClose={()=>this.setState({showRegister:false})}><Modal.Content><Register registerCallBack={this.registerCallBack}/></Modal.Content></Modal>
           <Modal
             open={this.state.cookieModalOpen}
             basic
