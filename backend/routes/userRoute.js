@@ -38,6 +38,9 @@ module.exports = function (router) {
       }else {
         res.status(200);
         if(!count) {
+          for (var i = 0; i < user_list.length; i++) {
+            user_list[i]['password'] = undefined;
+          }
           res.json({
             message: status_dict[res.statusCode],
             data: user_list
@@ -54,7 +57,6 @@ module.exports = function (router) {
     var new_user = new User();
     new_user.name = req.param('name');
     new_user.password = req.param('password');
-    new_user
 
     User.find({'name':new_user.name}, function (err, user_list) {
       if (err){
@@ -86,6 +88,7 @@ module.exports = function (router) {
           data: []
         });
       }
+      user['password'] = undefined;
       res.status(200);
       res.json({
         message: status_dict[res.statusCode],
@@ -93,7 +96,7 @@ module.exports = function (router) {
       });
     });
   }).put( function (req, res) {
-    User.findById(req.param('_id'), async function (err, user) {
+    User.findById(req.param('_id'), function (err, user) {
       if(err) {
         res.status(404);
         res.json({
@@ -103,6 +106,7 @@ module.exports = function (router) {
       }
       name = req.param('name')?req.param('name'):user.name;
       password = req.param('password')?req.param('password'):user.password;
+      posts = req.param('posts')?req.param('posts'):user.posts;
       if(name != user.name) {
         User.find({'name':name}, function (err, user_list) {
           if (err){
@@ -111,10 +115,12 @@ module.exports = function (router) {
             if (user_list.length === 0) {
               user.name = name;
               user.password = password;
+              user.posts = posts;
               user.save({},(err, user) => {
                 if (err){
                   res.status(500).send({ message: "Server error", data:[] });
                 } else{
+                  user['password'] = undefined;
                   res.status(201).send({ message: "Complete", data:user });
                 }
               });
@@ -126,17 +132,88 @@ module.exports = function (router) {
       }else {
         user.name = name;
         user.password = password;
-        user.favorite = favorite;
+        user.posts = posts
         user.save({},(err, user) => {
           if (err){
             res.status(500).send({ message: "Server error", data:[] });
           } else{
+            user['password'] = undefined;
             res.status(201).send({ message: "Complete", data:user });
           }
         });
       }
-      
+
     });
   });
+
+  var loginRoute = router.route('/users/login');
+
+  loginRoute.post((req, res) => {
+    name = req.param('name');
+    password = req.param('password');
+    User.findOne({'name':name}, user => {
+      if(err) {
+        res.status(404);
+        res.json({
+          success: false,
+          message: "Internal Server Error",
+          data: []
+        });
+      }
+      if(!user) {
+        res.status(404);
+        res.json({
+          success: false,
+          message: "Username does not exist",
+          data: []
+        });
+      }else {
+        if(user.password == password) {
+          user['password'] = undefined;
+          res.status(200);
+          res.json({
+            success: true,
+            message: "Successful login",
+            data: user
+          })
+        }else {
+          res.status(404);
+          res.json({
+            success: false,
+            message: "Incorrect password",
+            data: []
+          })
+        }
+      }
+    })
+  });
+
+  var registerRoute = router.route('/users/register');
+
+  registerRoute.post((req, res) => {
+    var new_user = new User();
+    new_user.name = req.param('name');
+    new_user.password = req.param('password');
+    new_user.posts = [];
+
+    User.find({'name':new_user.name}, function (err, user_list) {
+      if (err){
+        res.status(500).send({ message: "Server error", data:[] });
+      } else{
+        if (user_list.length === 0) {
+          new_user.save({},(err, user) => {
+            if (err){
+              res.status(500).send({ message: "Server error", data:[] });
+            } else{
+              user['password'] = undefined;
+              res.status(201).send({ message: "Complete", data:user });
+            }
+          });
+        }else{
+          res.status(500).send({ message: "Try a differnt name", data:[] });
+        }
+      }
+    });
+  })
   return router;
 };
