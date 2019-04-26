@@ -14,8 +14,10 @@ export default class ShipIndex extends Component {
             ship_id: '',
             icon_url: '',
             data: undefined,
-            upgrades: []
-            }
+            upgrades: [],
+            modules_tag: ['artillery','dive_bomber','engine','fighter','fire_control','flight_control','hull','torpedo_bomber','torpedoes'],
+            modules_data: [[],[],[],[],[],[],[],[],[]]
+        }
         this.reloadData = this.reloadData.bind(this);
         this.getColorByValue = this.getColorByValue.bind(this);
     }
@@ -41,16 +43,34 @@ export default class ShipIndex extends Component {
                 let icons = response.data.data.ship_type_images;
                 let icon = this.state.data.is_premium ? icons[this.state.data.type].image_premium : icons[this.state.data.type].image;
                 this.setState({icon_url: icon});
-                console.log(icons);
             })
 
         let upgrades_id = this.state.data.upgrades;
-        await axios.get("https://api.worldofwarships.ru/wows/encyclopedia/consumables/?application_id=" + application_id + "&language=en" + "&consumable_id=" + upgrades_id)
+        axios.get("https://api.worldofwarships.ru/wows/encyclopedia/consumables/?application_id=" + application_id + "&language=en" + "&consumable_id=" + upgrades_id)
             .then((response)=>{
                 let upg_data = Object.values(response.data.data)
                 this.setState({upgrades: upg_data});
-                console.log(upg_data);
             })
+
+        let modules_id = Object.values(this.state.data.modules);
+
+        let modules_promise = modules_id.map(id_arr => {
+            if (id_arr.length === 0){
+                return [];
+            }
+            else {
+                return new Promise(function(resolve, reject) {
+                    axios.get("https://api.worldofwarships.ru/wows/encyclopedia/modules/?application_id=" + application_id + "&language=en" + "&module_id=" + id_arr)
+                        .then((response)=>{
+                            resolve(Object.values(response.data.data))
+                        })
+                });
+            }
+        })
+        Promise.all(modules_promise).then(values => {
+            console.log(values);
+            this.setState({modules_data: values});
+        })
     }
 
     getColorByValue(value){
@@ -69,10 +89,10 @@ export default class ShipIndex extends Component {
     }
 
     render() {
-        const upgrades = this.state.upgrades.map(data => {
-            let list = Object.values(data.profile).map(text =>  <List.Item>{text.description}</List.Item>)
+        const upgrades = this.state.upgrades.map((data, i) => {
+            let list = Object.values(data.profile).map( (text, idx) =>  <List.Item key={idx}>{text.description}</List.Item>)
             return(
-            <Popup as='span' trigger={<Image as='span' src={data.image}  />}>
+            <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
                 <Popup.Header>{data.name}</Popup.Header>
                 <Popup.Content>
                     <p>{data.description}</p>
@@ -83,6 +103,143 @@ export default class ShipIndex extends Component {
                 </Popup.Content>
             </Popup>
         )})
+
+        const engine = this.state.modules_data[0].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
+        const dive_bomber = this.state.modules_data[1].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
+
+        const fighter = this.state.modules_data[2].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
+        const hull = this.state.modules_data[3].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
+        const artillery = this.state.modules_data[4].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
+        const torpedoes = this.state.modules_data[5].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
+        const fire_control = this.state.modules_data[6].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
+        const flight_control = this.state.modules_data[7].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
+        const torp_bomber = this.state.modules_data[8].map((data, i) => {
+            return(
+                <Popup key={i} as='span' trigger={<Image as='span' src={data.image}  />}>
+                    <Popup.Header>{data.name}</Popup.Header>
+                    <Popup.Content>
+                        <p>{data.description}</p>
+                        <p>price in credits: {data.price_credit}</p>
+                        <List bulleted>
+                            <List.Item>Gaining Access</List.Item>
+                            <List.Item>Inviting Friends</List.Item>
+                        </List>
+                    </Popup.Content>
+                </Popup>
+            )})
+
         if (this.state.data != undefined ){
             return (
                 <Container fluid>
@@ -151,49 +308,67 @@ export default class ShipIndex extends Component {
                             marginTop: '5em',
                         }}
                     >
-                        <Grid columns={3} divided>
+                        <Grid divided='vertically' columns={3}>
                             <Grid.Row>
                                 <Grid.Column>
                                     <Header as="h4">
-                                        <Icon name='crosshairs' />
                                         Artillery
                                     </Header>
+                                    {artillery}
                                 </Grid.Column>
                                 <Grid.Column>
                                     <Header as="h4">
-                                        <Icon name='eye dropper' />
                                         Torpedoes
                                     </Header>
+                                    {torpedoes}
                                 </Grid.Column>
                                 <Grid.Column>
                                     <Header as="h4">
-                                        <Icon name='ship' />
-                                        Hull
+                                        Fire Control
                                     </Header>
+                                    {fire_control}
                                 </Grid.Column>
                             </Grid.Row>
-
                             <Grid.Row>
                                 <Grid.Column>
                                     <Header as="h4">
-                                        <Icon name='fighter jet' />
-                                        Aircrafts
+                                        Flight Control
                                     </Header>
+                                    {flight_control}
                                 </Grid.Column>
                                 <Grid.Column>
                                     <Header as="h4">
-                                        <Icon name='exclamation triangle' />
-                                        Concealment
+                                        Hull
                                     </Header>
+                                    {hull}
                                 </Grid.Column>
                                 <Grid.Column>
                                     <Header as="h4">
-                                        <Icon name='expand arrows alternate' />
-                                        Mobility
+                                        Fighters
                                     </Header>
+                                    {fighter}
                                 </Grid.Column>
                             </Grid.Row>
-
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        Dive Bombers
+                                    </Header>
+                                    {dive_bomber}
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        Torpedo Bombers
+                                    </Header>
+                                    {torp_bomber}
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Header as="h4">
+                                        Engine
+                                    </Header>
+                                    {engine}
+                                </Grid.Column>
+                            </Grid.Row>
                         </Grid>
                     </Container>
                     <Divider horizontal
