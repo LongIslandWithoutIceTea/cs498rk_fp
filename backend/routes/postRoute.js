@@ -76,12 +76,19 @@ module.exports = function (router) {
           message: status_dict[res.statusCode],
           data: []
         });
+      }else if(!post) {
+        res.status(404);
+        res.json({
+          message: "No Such Post",
+          data: []
+        });
+      }else {
+        res.status(200);
+        res.json({
+          message: status_dict[res.statusCode],
+          data: post
+        });
       }
-      res.status(200);
-      res.json({
-        message: status_dict[res.statusCode],
-        data: post
-      });
     });
   }).put( function (req, res) {
     Post.findById(req.param('_id'), async function (err, post) {
@@ -91,16 +98,23 @@ module.exports = function (router) {
           message: status_dict[res.statusCode],
           data: []
         });
+      }else if(!post) {
+        res.status(404);
+        res.json({
+          message: "No Such Post",
+          data: []
+        });
+      }else {
+        post.user_rating = req.param('user_rating')?req.param('user_rating'):post.user_rating;
+        post.content = req.param('content')?req.param('content'):post.content;
+        post.save({},(err, post) => {
+          if (err){
+            res.status(500).send({ message: "Server error", data: [] });
+          } else{
+            res.status(201).send({ message: "Complete", data: post });
+          }
+        });
       }
-      post.user_rating = req.param('user_rating')?req.param('user_rating'):post.user_rating;
-      post.content = req.param('content')?req.param('content'):post.content;
-      post.save({},(err, post) => {
-        if (err){
-          res.status(500).send({ message: "Server error", data: [] });
-        } else{
-          res.status(201).send({ message: "Complete", data: post });
-        }
-      });
     });
   }).delete(function (req, res) {
     Post.deleteOne({ _id: req.param('_id') }, function (err, data) {
