@@ -87,13 +87,20 @@ module.exports = function (router) {
           message: status_dict[res.statusCode],
           data: []
         });
+      }else if(!user) {
+        res.status(404);
+        res.json({
+          message: "No such user",
+          data: []
+        });
+      }else {
+        user['password'] = undefined;
+        res.status(200);
+        res.json({
+          message: status_dict[res.statusCode],
+          data: user
+        });
       }
-      user['password'] = undefined;
-      res.status(200);
-      res.json({
-        message: status_dict[res.statusCode],
-        data: user
-      });
     });
   }).put( function (req, res) {
     User.findById(req.param('_id'), function (err, user) {
