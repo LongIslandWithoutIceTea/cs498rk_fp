@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Progress, Grid, Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail } from 'semantic-ui-react';
+import { Popup, Progress, Grid, Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail } from 'semantic-ui-react';
 import {Link, NavLink} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
@@ -14,6 +14,7 @@ export default class ShipIndex extends Component {
             ship_id: '',
             icon_url: '',
             data: undefined,
+            upgrades: []
             }
         this.reloadData = this.reloadData.bind(this);
         this.getColorByValue = this.getColorByValue.bind(this);
@@ -35,12 +36,20 @@ export default class ShipIndex extends Component {
                 console.log(response.data.data[key[0]])
             })
 
-        axios.get("https://api.worldofwarships.ru/wows/encyclopedia/info/?application_id=" + application_id + "&language=en" + "&fields=ship_type_images")
+        await axios.get("https://api.worldofwarships.ru/wows/encyclopedia/info/?application_id=" + application_id + "&language=en" + "&fields=ship_type_images")
             .then((response)=>{
                 let icons = response.data.data.ship_type_images;
-                let icon = this.state.data.is_premium ? icons[this.state.data.type].image_premium : icons[this.state.data.type].image
-                this.setState({icon_url: icon})
-                console.log(icons)
+                let icon = this.state.data.is_premium ? icons[this.state.data.type].image_premium : icons[this.state.data.type].image;
+                this.setState({icon_url: icon});
+                console.log(icons);
+            })
+
+        let upgrades_id = this.state.data.upgrades;
+        await axios.get("https://api.worldofwarships.ru/wows/encyclopedia/consumables/?application_id=" + application_id + "&language=en" + "&consumable_id=" + upgrades_id)
+            .then((response)=>{
+                let upg_data = Object.values(response.data.data)
+                this.setState({upgrades: upg_data});
+                console.log(upg_data);
             })
     }
 
@@ -60,6 +69,20 @@ export default class ShipIndex extends Component {
     }
 
     render() {
+        const upgrades = this.state.upgrades.map(data => {
+            let list = Object.values(data.profile).map(text =>  <List.Item>{text.description}</List.Item>)
+            return(
+            <Popup as='span' trigger={<Image as='span' src={data.image}  />}>
+                <Popup.Header>{data.name}</Popup.Header>
+                <Popup.Content>
+                    <p>{data.description}</p>
+                    <p>price in credits: {data.price_credit}</p>
+                    <List bulleted>
+                        {list}
+                    </List>
+                </Popup.Content>
+            </Popup>
+        )})
         if (this.state.data != undefined ){
             return (
                 <Container fluid>
@@ -173,7 +196,23 @@ export default class ShipIndex extends Component {
 
                         </Grid>
                     </Container>
-
+                    <Divider horizontal
+                             style={{
+                                 marginTop: '5em',
+                             }}
+                    >
+                        <Header as='h4'>
+                            <Icon name='plus' />
+                            Upgrades
+                        </Header>
+                    </Divider>
+                    <Container
+                        style={{
+                            marginTop: '5em',
+                        }}
+                    >
+                        {upgrades}
+                    </Container>
                     <Divider horizontal
                              style={{
                                  marginTop: '5em',
