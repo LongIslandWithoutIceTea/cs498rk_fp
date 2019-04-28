@@ -9,7 +9,7 @@ $font-family-default: "Trebuchet MS", Helvetica, sans-serif;
 }
 
 .index {
-    margin: 10%;
+    margin-top: 10%;
 }
 
 .des {
@@ -35,6 +35,25 @@ $font-family-default: "Trebuchet MS", Helvetica, sans-serif;
 }
 
 * { box-sizing: border-box; }
+.bg {
+  background-image: url('../assets/background.jpg');
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+.verticalCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box-background {
+  background-color: rgba(0,0,0,0.75);
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
 .video-background {
   background: #000;
   position: fixed;
