@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/icons.faff9214.woff"
   },
   {
-    "revision": "7030ea629aa7e7e068a7",
-    "url": "/cs498rk_fp/static/css/main.2e77826d.chunk.css"
+    "revision": "0beae7b951e0568e03b4",
+    "url": "/cs498rk_fp/static/css/main.76a66941.chunk.css"
   },
   {
     "revision": "579f66844f49539b00fd",
@@ -16,8 +16,8 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/wows-icon.95cf5cf6.png"
   },
   {
-    "revision": "42bc578a03f95cbf1c9f",
-    "url": "/cs498rk_fp/static/js/2.b28f448d.chunk.js"
+    "revision": "50ed9434e9135f36e97e",
+    "url": "/cs498rk_fp/static/js/2.10c7e26b.chunk.js"
   },
   {
     "revision": "9c74e172f87984c48ddf5c8108cabe67",
@@ -32,20 +32,20 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/outline-icons.ef60a4f6.woff"
   },
   {
-    "revision": "ad97afd3337e8cda302d10ff5a4026b8",
-    "url": "/cs498rk_fp/static/media/outline-icons.ad97afd3.ttf"
-  },
-  {
     "revision": "701ae6abd4719e9c2ada3535a497b341",
     "url": "/cs498rk_fp/static/media/outline-icons.701ae6ab.eot"
+  },
+  {
+    "revision": "ad97afd3337e8cda302d10ff5a4026b8",
+    "url": "/cs498rk_fp/static/media/outline-icons.ad97afd3.ttf"
   },
   {
     "revision": "0ab54153eeeca0ce03978cc463b257f7",
     "url": "/cs498rk_fp/static/media/icons.0ab54153.woff2"
   },
   {
-    "revision": "7030ea629aa7e7e068a7",
-    "url": "/cs498rk_fp/static/js/main.980cfbb0.chunk.js"
+    "revision": "0beae7b951e0568e03b4",
+    "url": "/cs498rk_fp/static/js/main.57419a1e.chunk.js"
   },
   {
     "revision": "e8c322de9658cbeb8a774b6624167c2c",
@@ -84,11 +84,11 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/brand-icons.a1a749e8.svg"
   },
   {
-    "revision": "42bc578a03f95cbf1c9f",
+    "revision": "50ed9434e9135f36e97e",
     "url": "/cs498rk_fp/static/css/2.479c466f.chunk.css"
   },
   {
-    "revision": "77f4381f78d048571bdb8e201b69285b",
+    "revision": "a6c882938a8a4a59c5796abd7b96d39a",
     "url": "/cs498rk_fp/index.html"
   }
 ];
