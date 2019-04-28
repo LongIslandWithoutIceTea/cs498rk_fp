@@ -7,10 +7,12 @@ import {
     Icon,
     Segment,
     Image,
+    Embed ,
 } from 'semantic-ui-react'
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import logo from '../assets/wows-icon.png'
+import goodlogo from '../assets/logo.png'
 import './index.scss'
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 
@@ -32,28 +34,33 @@ class IndexPage extends Component {
     render() {
         return (
             <div>
-                <Segment inverted textAlign='center' vertical>
-                    <Header className="title" as='h1' inverted>
-                        <Image avatar src={logo} size='large' verticalAlign='middle'/>
-                        <span>USS illini mkII</span>
+                <div class="video-background">
+                  <div class="video-foreground">
+                    <iframe src="https://youtube.com/embed/FInMVT4vL5M?playlist=FInMVT4vL5M&autoplay=1&controls=0&showinfo=0&autohide=1&mute=1&loop=1" frameborder="0" allowfullscreen></iframe>
+                  </div>
+                </div>
+                <Header className="title" as='h1' inverted style={{marginTop:"75px"}} text>
+                    <span>USS Illini MkII</span>
+                </Header>
+                <div>
+                  <Image src={goodlogo} size='medium' verticalAlign='middle'/>
+                </div>
+                <Container style={{marginTop:"75px"}} text>
+                  <Link to={'/player'}>
+                      <Button primary size="massive" icon labelPosition='right'>
+                          Get Started <Icon inverted name='right arrow' />
+                      </Button>
+                  </Link>
+                </Container>
+                <Container style={{marginTop:"75px"}} text>
+                    <Header as='h2' inverted>
+                        A Wiki Site for World of Warships
                     </Header>
-                    <Container className="index" text>
-                        <Header as='h2' inverted>
-                            A wiki site for World of Warships
-                        </Header>
-                        <Divider/>
-                        <Header as='h2' inverted>
-                            Game Version: {this.state.version}
-                        </Header>
-                    </Container>
-                    <Link to={'/player'}>
-                        <Button primary>
-                            Get Started
-                            <Icon name='right arrow' />
-                        </Button>
-                    </Link>
-                </Segment>
-
+                    <Divider/>
+                    <Header as='h2' inverted>
+                        Game Version: {this.state.version}
+                    </Header>
+                </Container>
             </div>
         );
     }
