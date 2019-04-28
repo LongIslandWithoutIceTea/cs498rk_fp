@@ -62,14 +62,25 @@ class Clan extends Component {
       return(
         <Container fluid>
           <HeaderMenu set_clan_id={this.set_clan_id} mode="clan"/>
-          <Placeholder fluid>
-            <Placeholder.Header>
-              <Placeholder.Line length='full' />
-            </Placeholder.Header>
-            <Placeholder.Paragraph>
-              <Placeholder.Line length='full' />
-            </Placeholder.Paragraph>
-          </Placeholder>
+          <div
+            style={{
+              display: window.innerWidth<768?'none':'flex',
+              flexWrap: 'no-wrap',
+              justifyContent : 'space-between',
+              alignItems: 'space-evenly',
+            }}
+          >
+            <div
+              style={{marginLeft:"7em"}}
+            >
+              <Label pointing>Switch Between Different Database</Label>
+            </div>
+            <div
+              style={{marginRight:"15em"}}
+            >
+              <Label pointing>Search Username</Label>
+            </div>
+          </div>
         </Container>
       )
     }

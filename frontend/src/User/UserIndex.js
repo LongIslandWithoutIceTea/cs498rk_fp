@@ -11,6 +11,7 @@ import {server} from '../Common/utlity.js';
 import Login from './Login.js';
 import Register from './Register.js';
 import ChangePassword from './ChangePassword.js';
+import ManagePost from './ManagePost.js';
 
 class UserIndex extends Component {
   constructor(props){
@@ -18,6 +19,7 @@ class UserIndex extends Component {
     this.state = {
       username:'',
       showChangePass: false,
+      showManagePost: false,
       windowwidth: window.innerWidth,
     }
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -76,13 +78,14 @@ class UserIndex extends Component {
               <Header as="h2">Password</Header>
             </div>
             <div style={{margin:"2.5em"}}>
-              <Button size="massive" circular icon>
+              <Button size="massive" circular icon onClick={()=>this.setState({showManagePost:true})}>
                 <Icon name="file alternate" circular size="huge"/>
               </Button>
               <Header as="h2">Posts</Header>
             </div>
           </div>
           <Modal closeIcon  size="mini" centered={false} open={this.state.showChangePass} onClose={()=>this.setState({showChangePass:false})}><Modal.Content><ChangePassword changepassCallBack={()=>this.setState({showChangePass:false})}/></Modal.Content></Modal>
+          <Modal closeIcon size="large" centered={false} open={this.state.showManagePost} onClose={()=>this.setState({showManagePost:false})}><Modal.Content><ManagePost username={getCookie("username")}/></Modal.Content></Modal>
         </Container>
       )
     }else{

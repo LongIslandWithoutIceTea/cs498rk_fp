@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link, NavLink} from "react-router-dom";
 import {  Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Sticky, Rail } from 'semantic-ui-react';
+import DocumentMeta from 'react-document-meta';
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import PlayerShipTable from '../PlayerTable/PlayerShipTable.js';
@@ -42,11 +43,21 @@ const achievementsDict = {
     "RETRIBUTION":{'text':"It's Just A Flesh Wound!",'image':'http://wiki.gcdn.co/images/4/4d/Icon_achievement_RETRIBUTION.png'},
 };
 
+const meta = {
+  meta: {
+    charset: 'utf-8',
+    name: {
+      viewport: "width=1920, initial-scale=1.0",
+    }
+  }
+}
+
 export default class PlayerIndex extends Component {
   constructor(props){
     super(props);
     this.state = {
       account_id: '',
+      desktop: false,
       windowwidth: window.innerWidth,
       playerShipTableData: null,
       playerRankTableData: null,
@@ -480,7 +491,7 @@ export default class PlayerIndex extends Component {
     if(!this.state.data.statistics){
       return (<Container fluid><Header as="h1">Data Unavailable</Header></Container>)
     }
-    return (
+    return [this.state.desktop && <DocumentMeta {...meta}/>,(
       <Container fluid>
         <Container text>
           <Icon name='user circle'
@@ -718,6 +729,14 @@ export default class PlayerIndex extends Component {
           display:this.state.windowwidth>=1080?'none':'block',
         }}
         >
+          <Divider horizontal
+          style={{
+              marginBottom: '3em',
+            }}
+          >
+            <Header size='small' color='blue' style={{margin:'0'}} onClick={()=>{this.setState({desktop:true});window.scrollTo(0,0);}}>View Full Table</Header>
+          </Divider>
+
           <Container fluid textAlign='center' style={{marginBottom:"3em"}}>
             <Header size='small' style={{margin:'0'}}>Ship Stats By Type</Header>
             <PlayerShipTypeTableMobile data={this.state.playerShipTableData}/>
@@ -771,6 +790,13 @@ export default class PlayerIndex extends Component {
           display:this.state.windowwidth>=768&&this.state.windowwidth<1920&&this.state.playerShipTableData?'block':'none',
         }}
         >
+        <Divider horizontal
+        style={{
+            marginBottom: '3em',
+          }}
+        >
+          <Header size='small' color='blue' style={{margin:'0'}} onClick={()=>{this.setState({desktop:true});window.scrollTo(0,0);}}>View Full Table</Header>
+        </Divider>
         <Container fluid textAlign='center'>
           <PlayerShipTablePad account_id = {this.state.account_id} data={this.state.playerShipTableData} shipnames={this.state.shipnames}/>
         </Container>
@@ -795,6 +821,13 @@ export default class PlayerIndex extends Component {
           display:this.state.windowwidth<768&&this.state.playerShipTableData?'block':'none',
         }}
         >
+        <Divider horizontal
+        style={{
+            marginBottom: '3em',
+          }}
+        >
+          <Header size='small' color='blue' style={{margin:'0'}} onClick={()=>{this.setState({desktop:true});window.scrollTo(0,0);}}>View Full Table</Header>
+        </Divider>
         <Container fluid textAlign='center'>
           <PlayerShipTableMobile account_id = {this.state.account_id} data={this.state.playerShipTableData} shipnames={this.state.shipnames}/>
         </Container>
@@ -815,6 +848,6 @@ export default class PlayerIndex extends Component {
         </div>
         <ToTopButton scrollStepInPx="100" delayInMs="16.66"/>
       </Container>
-    );
+    )];
   }
 }

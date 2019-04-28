@@ -202,6 +202,7 @@ class HeaderMenu extends Component {
               <Menu.Item position='right'>
                 <Search
                     selectFirstResult
+                    placeholder={this.state.mode==="ship"?"Ship Name":(this.state.mode==="player"?"Player Name":(this.state.mode==="clan")?"Clan Name":"")}
                     minCharacters = {this.state.mode==="ship"?3:(this.state.mode==="clan"?2:4)}
                     fluid
                     loading={this.state.isLoading}
