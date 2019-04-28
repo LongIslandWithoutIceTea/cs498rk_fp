@@ -78,7 +78,7 @@ class Clan extends Component {
             <div
               style={{marginRight:"15em"}}
             >
-              <Label pointing>Search Username</Label>
+              <Label pointing>Search Clan Name/Tag</Label>
             </div>
           </div>
         </Container>
