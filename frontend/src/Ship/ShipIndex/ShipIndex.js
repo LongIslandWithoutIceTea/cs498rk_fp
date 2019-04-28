@@ -411,6 +411,7 @@ export default class ShipIndex extends Component {
                         </Header>
                     </Divider>
                     <Container
+                        text
                         style={{
                             marginTop: '5em',
                         }}
