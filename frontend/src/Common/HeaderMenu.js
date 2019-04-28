@@ -163,7 +163,12 @@ class HeaderMenu extends Component {
             let keys = Object.keys(shipList);
             let vals = keys.map(key => shipList[key])
             this.setState({shipList:vals})
-            this.setState({isLoading: false})
+
+              let filtered = this.state.shipList.filter(ship => ship.name.toLowerCase().includes(this.state.value.toLowerCase()))
+              filtered.forEach((ship)=>{
+                  results.push({title:ship.name, image:ship.images.small, description:"Tier "+ship.tier+" "+ship.nation+" "+ship.type, ship_id: ship.ship_id});
+              })
+              this.setState({isLoading: false, results:results})
           })
         })
 
