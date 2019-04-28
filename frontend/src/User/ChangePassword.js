@@ -14,6 +14,7 @@ class ChangePassword extends Component {
       loggedin: false,
       wrongpassword: false,
       hide: false,
+      loading: false,
     }
     this.ChangePassword = this.ChangePassword.bind(this);
   }
@@ -23,25 +24,28 @@ class ChangePassword extends Component {
 
   ChangePassword(){
     var password = this.state.password;
-    this.setState({loginfail: false, password: ""});
+    this.setState({loginfail: false, password: "", loading: true});
     if(password === "" && this.state.username === ""){
-        this.setState({loginfail: true});
+        this.setState({loginfail: true, loading: false});
         return;
     }
     axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/change_password",{name:this.state.username,old_password:this.state.oldpassword,new_password:this.state.password})
     .then((response)=>{
         if (response.data && response.data.data && response.data.data.name && response.data.data.name===this.state.username){
           if(this.props.changepassCallBack){
+            this.setState({loading: false});
             alert("Success");
             this.props.changepassCallBack();
+          }else{
+            this.setState({loading: false});
           }
         }else{
-          this.setState({wrongpassword: true});
+          this.setState({wrongpassword: true, loading: false});
         }
     })
     .catch((error) => {
       console.log(error);
-      this.setState({wrongpassword: true});
+      this.setState({wrongpassword: true, loading: false});
     });
   }
 
@@ -54,6 +58,9 @@ class ChangePassword extends Component {
             margin:"auto"
           }}
         >
+        <Dimmer active={this.state.loading}>
+          <Loader />
+        </Dimmer>
           <Header as="h1">ChangePassword</Header>
           <Form>
             <Form.Field required>

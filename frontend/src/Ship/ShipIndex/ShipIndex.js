@@ -315,6 +315,17 @@ export default class ShipIndex extends Component {
                             Specifications
                         </Header>
                     </Divider>
+                    <Divider horizontal
+                             style={{
+                                 marginTop: '5em',
+                             }}
+                    >
+                        <Header as='h4'>
+                            <Icon name='cogs' />
+                            Modules
+                        </Header>
+                    </Divider>
+
                     <Container
                         style={{
                             marginTop: '5em',
@@ -411,6 +422,7 @@ export default class ShipIndex extends Component {
                         </Header>
                     </Divider>
                     <Container
+                        text
                         style={{
                             marginTop: '5em',
                         }}

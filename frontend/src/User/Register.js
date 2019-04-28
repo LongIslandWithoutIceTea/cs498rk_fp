@@ -14,6 +14,7 @@ class Register extends Component {
       loggedin: false,
       registerfail: false,
       hide: false,
+      loading: false,
     }
     this.register = this.register.bind(this);
   }
@@ -23,26 +24,26 @@ class Register extends Component {
 
   register(){
     var password = this.state.password;
-    this.setState({registerfail: false, password: ""});
+    this.setState({registerfail: false, password: "", loading: true});
     if(password === "" && this.state.username === ""){
-        this.setState({registerfail: true});
+        this.setState({registerfail: true, loading: false});
         return;
     }
     axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/register",{name:this.state.username,password:password})
     .then((response)=>{
         if (response.data.data && response.data.data.name && response.data.data.name === this.state.username){
-          this.setState({loggedin: true});
+          this.setState({loggedin: true, loading: false});
           setCookie("username", this.state.username, 0.1);
           if(this.props.registerCallBack){
             this.props.registerCallBack();
           }
         }else{
-          this.setState({registerfail: true});
+          this.setState({registerfail: true, loading: false});
         }
     })
     .catch((error) => {
       console.log(error);
-      this.setState({registerfail: true});
+      this.setState({registerfail: true, loading: false});
     });
   }
 
@@ -55,6 +56,9 @@ class Register extends Component {
             margin:"auto"
           }}
         >
+        <Dimmer active={this.state.loading}>
+          <Loader />
+        </Dimmer>
           <Header as="h1">Register</Header>
           <Form>
             <Form.Field required>
