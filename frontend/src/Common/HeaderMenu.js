@@ -108,6 +108,7 @@ class HeaderMenu extends Component {
         filtered.forEach((ship)=>{
           results.push({title:ship.name, image:ship.images.small, description:"Tier "+ship.tier+" "+ship.nation+" "+ship.type, ship_id: ship.ship_id});
         })
+          console.log(results)
         this.setState({isLoading: false, results:results})
       }
     }else if(this.state.mode==="player"){
@@ -168,6 +169,7 @@ class HeaderMenu extends Component {
               filtered.forEach((ship)=>{
                   results.push({title:ship.name, image:ship.images.small, description:"Tier "+ship.tier+" "+ship.nation+" "+ship.type, ship_id: ship.ship_id});
               })
+              console.log(results)
               this.setState({isLoading: false, results:results})
           })
         })

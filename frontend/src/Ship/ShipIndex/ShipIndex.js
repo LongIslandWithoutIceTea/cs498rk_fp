@@ -7,6 +7,20 @@ import DiscussionThread from '../DiscussionThread/Discussion.js'
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
 
+const nationDict={
+    'usa':{image: 'http://wiki.gcdn.co/images/f/f2/Wows_flag_USA.png', text: 'USA'},
+    'ussr':{image: 'http://wiki.gcdn.co/images/0/04/Wows_flag_Russian_Empire_and_USSR.png',text: 'USSR'},
+    'uk':{image: 'http://wiki.gcdn.co/images/3/34/Wows_flag_UK.png',text: 'UK'},
+    'japan':{image: 'http://wiki.gcdn.co/images/5/5b/Wows_flag_Japan.png',text: 'Japan'},
+    'france':{image: 'http://wiki.gcdn.co/images/7/71/Wows_flag_France.png', text: 'France'},
+    'germany':{image: 'http://wiki.gcdn.co/images/6/6b/Wows_flag_Germany.png',text: 'Germany'},
+    'poland':{image: 'http://wiki.gcdn.co/images/5/5f/Wows_flag_Poland.png', text: 'Poland'},
+    'pan_asia':{image: 'http://wiki.gcdn.co/images/3/33/Wows_flag_Pan_Asia.png', text: 'Pan Asia'},
+    'italy':{image: 'http://wiki.gcdn.co/images/d/d1/Wows_flag_Italy.png', text: 'Italy'},
+    'commonwealth':{image: 'http://wiki.gcdn.co/images/3/3e/Wows_flag_Commonwealth.PNG', text: 'Common Wealth'},
+    'pan_america':{image: 'http://wiki.gcdn.co/images/9/9e/Wows_flag_Pan_America.png', text: 'Pan America'}
+}
+
 export default class ShipIndex extends Component {
     constructor(props){
         super(props);
@@ -107,7 +121,7 @@ export default class ShipIndex extends Component {
                 <Popup.Header>{data.name}</Popup.Header>
                 <Popup.Content>
                     <p>{data.description}</p>
-                    <p>Price in credits: {data.price_credit}</p>
+                    <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                     <List bulleted>
                         {list}
                     </List>
@@ -121,7 +135,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>Max Speed: {data.profile.engine.max_speed} kts</List.Item>
                         </List>
@@ -135,7 +149,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>Cruise Speed: {data.profile.torpedo_bomber.cruise_speed} kts</List.Item>
                             <List.Item>Aiming Distance: {data.profile.torpedo_bomber.distance} km</List.Item>
@@ -153,7 +167,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>Cruise Speed: {data.profile.fighter.cruise_speed}</List.Item>
                             <List.Item>Max Health: {data.profile.fighter.max_health}</List.Item>
@@ -168,7 +182,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>AA Mounts: {data.profile.hull.anti_aircraft_barrels}</List.Item>
                             <List.Item>Secondary Guns: {data.profile.hull.atba_barrels}</List.Item>
@@ -186,7 +200,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>Firing Rate: {data.profile.artillery.gun_rate} rounds/min</List.Item>
                             <List.Item>AP Damage: {data.profile.artillery.max_damage_AP}</List.Item>
@@ -203,7 +217,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>Range: {data.profile.torpedoes.distance}</List.Item>
                             <List.Item>Damage: {data.profile.torpedoes.max_damage}</List.Item>
@@ -220,7 +234,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>Firing Distance: {data.profile.fire_control.distance}</List.Item>
                             <List.Item>Firing Distance Increase: {data.profile.fire_control.distance_increase}%</List.Item>
@@ -235,7 +249,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>Bomber Squadrons: {data.profile.flight_control.bomber_squadrons}</List.Item>
                             <List.Item>Fighter Squadrons: {data.profile.flight_control.fighter_squadrons}</List.Item>
@@ -251,7 +265,7 @@ export default class ShipIndex extends Component {
                     <Popup.Header>{data.name}</Popup.Header>
                     <Popup.Content>
                         <p>{data.description}</p>
-                        <p>Price in credits: {data.price_credit}</p>
+                        <p>Price in credits: {data.price_credit.toLocaleString()}</p>
                         <List bulleted>
                             <List.Item>Dispersion: {data.profile.dive_bomber.accuracy.min}-{data.profile.dive_bomber.accuracy.max} m </List.Item>
                             <List.Item>Burn Probability: {data.profile.dive_bomber.bomb_burn_probability}%</List.Item>
@@ -365,7 +379,7 @@ export default class ShipIndex extends Component {
                         />
                         <div>
                             <Image avatar src={this.state.icon_url}  />
-                            <Header as='span' content={"Tier "+this.state.data.tier+" "+this.state.data.nation+" "+this.state.data.type}
+                            <Header as='span' content={"Tier "+this.state.data.tier+" "+nationDict[this.state.data.nation].text+" "+this.state.data.type}
                                     style={{
                                         fontSize: window.innerWidth>860?'1.7em':'1.2em',
                                         fontWeight: 'normal',
