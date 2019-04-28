@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/brand-icons.e8c322de.woff2"
   },
   {
-    "revision": "379c96af6b9b0aac35ec",
-    "url": "/cs498rk_fp/static/css/main.b9d4868f.chunk.css"
+    "revision": "633c44a451909154b059",
+    "url": "/cs498rk_fp/static/css/main.1e0bed4c.chunk.css"
   },
   {
     "revision": "579f66844f49539b00fd",
@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/background.0d05ea53.jpg"
   },
   {
-    "revision": "4c7a826b83f95a25d001",
+    "revision": "216121c389ddddfaf31d",
     "url": "/cs498rk_fp/static/js/2.524e2709.chunk.js"
   },
   {
@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/flags.9c74e172.png"
   },
   {
-    "revision": "cd6c777f1945164224dee082abaea03a",
-    "url": "/cs498rk_fp/static/media/outline-icons.cd6c777f.woff2"
-  },
-  {
     "revision": "ef60a4f6c25ef7f39f2d25a748dbecfe",
     "url": "/cs498rk_fp/static/media/outline-icons.ef60a4f6.woff"
+  },
+  {
+    "revision": "cd6c777f1945164224dee082abaea03a",
+    "url": "/cs498rk_fp/static/media/outline-icons.cd6c777f.woff2"
   },
   {
     "revision": "701ae6abd4719e9c2ada3535a497b341",
@@ -48,16 +48,12 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/icons.faff9214.woff"
   },
   {
-    "revision": "379c96af6b9b0aac35ec",
-    "url": "/cs498rk_fp/static/js/main.76a0233e.chunk.js"
+    "revision": "633c44a451909154b059",
+    "url": "/cs498rk_fp/static/js/main.9c575263.chunk.js"
   },
   {
     "revision": "a046592bac8f2fd96e994733faf3858c",
     "url": "/cs498rk_fp/static/media/brand-icons.a046592b.woff"
-  },
-  {
-    "revision": "b87b9ba532ace76ae9f6edfe9f72ded2",
-    "url": "/cs498rk_fp/static/media/icons.b87b9ba5.ttf"
   },
   {
     "revision": "8e3c7f5520f5ae906c6cf6d7f3ddcd19",
@@ -66,6 +62,10 @@ self.__precacheManifest = [
   {
     "revision": "13db00b7a34fee4d819ab7f9838cc428",
     "url": "/cs498rk_fp/static/media/brand-icons.13db00b7.eot"
+  },
+  {
+    "revision": "b87b9ba532ace76ae9f6edfe9f72ded2",
+    "url": "/cs498rk_fp/static/media/icons.b87b9ba5.ttf"
   },
   {
     "revision": "c5ebe0b32dc1b5cc449a76c4204d13bb",
@@ -88,11 +88,11 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/wows-icon.95cf5cf6.png"
   },
   {
-    "revision": "4c7a826b83f95a25d001",
-    "url": "/cs498rk_fp/static/css/2.479c466f.chunk.css"
+    "revision": "216121c389ddddfaf31d",
+    "url": "/cs498rk_fp/static/css/2.cbdd907f.chunk.css"
   },
   {
-    "revision": "c4952532b706bdc9d9e395a831426dd5",
+    "revision": "b0a9ed7670d3fddd8594ba9ad812093c",
     "url": "/cs498rk_fp/index.html"
   }
 ];
