@@ -81,7 +81,7 @@ class Ship extends Component {
             <div
               style={{marginRight:"15em"}}
             >
-              <Label pointing>Search Username</Label>
+              <Label pointing>Search Ship Name</Label>
             </div>
           </div>
         </Container>
