@@ -202,7 +202,7 @@ class HeaderMenu extends Component {
         <div>
           <Menu inverted stackable size='large'>
             <Container fluid>
-              <Menu.Item as='a' inverted active={this.state.mode==="home"} href='/cs498rk_fp/'><div style={{margin:"auto"}}><Icon name='home'/>Home</div></Menu.Item>
+              <Menu.Item as='a' inverted active={this.state.mode==="home"} href='/cs498rk_fp/#/'><div style={{margin:"auto"}}><Icon name='home'/>Home</div></Menu.Item>
               <Menu.Item as='a' inverted active={this.state.mode==="ship"} href='/cs498rk_fp/#/ship'><div style={{margin:"auto"}}><Icon name='anchor'/>Ship</div></Menu.Item>
               <Menu.Item as='a' inverted active={this.state.mode==="player"} href='/cs498rk_fp/#/player'><div style={{margin:"auto"}}><Icon name='user'/>Player</div></Menu.Item>
               <Menu.Item as='a' inverted active={this.state.mode==="clan"} href='/cs498rk_fp/#/clan'><div style={{margin:"auto"}}><Icon name='group'/>Clan</div></Menu.Item>
