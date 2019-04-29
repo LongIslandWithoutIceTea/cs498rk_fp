@@ -6,8 +6,8 @@ var ObjectId = mongoose.Schema.Types.ObjectId
 var UserSchema = new mongoose.Schema({
     name: String,
     password: String,
-    icon: { data: Buffer, contentType: String},
-    posts: { type: [ObjectId], default: []}
+    posts: { type: [ObjectId], default: []},
+    account_id: { type: Number, default: 0}
 },{ collection : 'users' });
 
 // Export the Mongoose model

@@ -258,5 +258,37 @@ module.exports = function (router) {
     });
   });
 
+  var bindPlayerRoute = router.route('/users/bind_player');
+
+  bindPlayerRoute.post((req, res) => {
+    name = req.param('name');
+    account_id = req.param('account_id');
+    User.findOne({'name':name}, (err, user) => {
+      if(err) {
+        res.status(500).send({ message: "Server error", data:[] });
+      }else if(!user) {
+        res.status(404).send({ message: "No such user", data:[] });
+      }else {
+        User.findOne({'account_id':account_id}, (err, user_dup) => {
+          if(err) {
+            res.status(500).send({ message: "Server error", data:[] });
+          }else if(user_dup) {
+            res.status(404).send({ message: "Account already binded", data:[] });
+          }else {
+            user.account_id = account_id;
+            user.save({},(err, user) => {
+              if (err){
+                res.status(500).send({ message: "Server error", data: [] });
+              } else{
+                user['password'] = undefined;
+                res.status(201).send({ message: "Successfully bound", data: user });
+              }
+            });
+          }
+        })
+      }
+    });
+  });
+
   return router;
 };
