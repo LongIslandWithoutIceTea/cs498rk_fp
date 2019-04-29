@@ -15,11 +15,11 @@ class ManagePost extends Component {
   // TODO: Fix this!
   build(){
     var arr = [];
-    axios.get('https://cors-anywhere.herokuapp.com/' + server + '/users?where={"name":"'+this.props.username+'"}')
+    axios.get(server + '/users?where={"name":"'+this.props.username+'"}')
     .then((response)=>{
         if(response.data.data.length === 1){
           response.data.data.post.forEach((post)=>{
-            axios.get('https://cors-anywhere.herokuapp.com/' + server + '/posts?where={"_id":"'+post._id+'"}')
+            axios.get(server + '/posts?where={"_id":"'+post._id+'"}')
             .then((res)=>{
                 arr.push((
                   <div>
@@ -32,6 +32,7 @@ class ManagePost extends Component {
         }
     })
     .catch((error) => {console.log(error);});
+    console.log(arr);
     return(arr);
   }
   render() {
