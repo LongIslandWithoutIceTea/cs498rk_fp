@@ -12,6 +12,7 @@ import Login from './Login.js';
 import Register from './Register.js';
 import ChangePassword from './ChangePassword.js';
 import ManagePost from './ManagePost.js';
+import BindPlayer from './BindPlayer.js'
 
 class UserIndex extends Component {
   constructor(props){
@@ -20,6 +21,7 @@ class UserIndex extends Component {
       username:'',
       showChangePass: false,
       showManagePost: false,
+      showBindPlayer: false,
       windowwidth: window.innerWidth,
     }
     this.updateDimensions = this.updateDimensions.bind(this);
@@ -83,9 +85,16 @@ class UserIndex extends Component {
               </Button>
               <Header as="h2">Posts</Header>
             </div>
+            <div style={{margin:"2.5em"}}>
+              <Button size="massive" circular icon onClick={()=>this.setState({showBindPlayer:true})}>
+                <Icon name="user" circular size="huge"/>
+              </Button>
+              <Header as="h2">Player</Header>
+            </div>
           </div>
           <Modal closeIcon  size="mini" centered={false} open={this.state.showChangePass} onClose={()=>this.setState({showChangePass:false})}><Modal.Content><ChangePassword changepassCallBack={()=>this.setState({showChangePass:false})}/></Modal.Content></Modal>
           <Modal closeIcon size="large" centered={false} open={this.state.showManagePost} onClose={()=>this.setState({showManagePost:false})}><Modal.Content><ManagePost username={getCookie("username")}/></Modal.Content></Modal>
+          <Modal closeIcon  size="mini" centered={false} open={this.state.showBindPlayer} onClose={()=>this.setState({showBindPlayer:false})}><Modal.Content><BindPlayer bindplayerCallBack={()=>this.setState({showBindPlayer:false})}/></Modal.Content></Modal>
         </Container>
       )
     }else{
