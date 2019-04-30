@@ -23,7 +23,7 @@ class BindPlayer extends Component {
   BindPlayer(){
     this.setState({invalidId: false, account_id: "", loading: true});
     console.log(this.state.account_id);
-    axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/bind_player",{name:this.state.username,account_id:parseInt(this.state.account_id, 10)})
+    axios.post(server + "/users/bind_player",{name:this.state.username,account_id:parseInt(this.state.account_id, 10)})
     .then((response)=>{
         if (response.data && response.data.data && response.data.data.name && response.data.data.name===this.state.username){
           if(this.props.bindplayerCallBack){
