@@ -1,45 +1,59 @@
 import React, { Component } from 'react'
-import {  Message, Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Search, Placeholder,  Checkbox, Form  } from 'semantic-ui-react';
+import { Grid, Message, Icon, Label, Menu, Table, Dimmer, Loader, Segment, Input, Dropdown, Header, Modal, Statistic, Container, Divider, List, Image, Card, Sidebar, Tab, Button, Search, Placeholder,  Checkbox, Form  } from 'semantic-ui-react';
 import axios from 'axios';
 import {server} from '../Common/utlity.js';
 import {Link, NavLink} from "react-router-dom";
+import {getCookie, setCookie, checkCookie} from '../Common/cookie.js';
 
 class ManagePost extends Component {
   constructor(props){
     super(props);
     this.state = {
       loading: false,
+        post_list: null
     }
     this.build = this.build.bind(this);
   }
-  // TODO: Fix this!
-  build(){
-    var arr = [];
-    axios.get(server + '/users?where={"name":"'+this.props.username+'"}')
-    .then((response)=>{
-        if(response.data.data.length === 1){
-          response.data.data.post.forEach((post)=>{
-            axios.get(server + '/posts?where={"_id":"'+post._id+'"}')
-            .then((res)=>{
-                arr.push((
-                  <div>
-                    <NavLink key={res.data.data.ship_id} style={{color:"cornflowerblue"}} to={{pathname: '/ship',state: {ship_id: res.data.data.ship_id}}}>{res.data.data.content}</NavLink>
-                  </div>
-                ))
-            })
-            .catch((error) => {console.log(error);});
-          })
-        }
-    })
-    .catch((error) => {console.log(error);});
-    console.log(arr);
-    return(arr);
+
+  componentDidMount() {
+      this.props.username && this.build();
   }
+
+  build(){
+      axios.get(server + "/posts?where={\"user_post\":\""+ this.props.username+"\"}")
+          .then((response)=>{
+              let new_list = response.data.data;
+              console.log(response.data.data);
+              this.setState({post_list:new_list});
+          })
+  }
+
   render() {
+      const content = this.state.post_list && this.state.post_list.map(post => {
+          return (
+              <Card fluid>
+                  <Card.Content>
+                      <Card.Header content='Jake Smith' />
+                      <Card.Meta content={post.date_created} />
+                      <Card.Description>
+                          <Grid>
+                              <Grid.Column floated='left'>
+                                  {post.content}
+                              </Grid.Column>
+                              <Grid.Column floated='right'>
+                                  <a>Delete</a>
+                              </Grid.Column>
+                          </Grid>
+                      </Card.Description>
+                  </Card.Content>
+              </Card>
+          )
+      });
     return (
       <Container fluid>
-          <Header as="h1" textAlign="center">Posts</Header>
-          {this.props.username && this.build()}
+          <Header as="h1" textAlign="center">{this.props.username}'s Posts</Header>
+          <Divider />
+          {content}
       </Container>
 
     );
