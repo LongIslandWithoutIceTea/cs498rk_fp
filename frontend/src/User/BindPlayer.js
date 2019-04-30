@@ -30,6 +30,7 @@ class BindPlayer extends Component {
             this.setState({loading: false});
             alert("Success");
             this.props.bindplayerCallBack();
+            window.location.reload();
           }else{
             this.setState({loading: false});
           }
@@ -41,7 +42,6 @@ class BindPlayer extends Component {
       console.log(error);
       this.setState({invalidId: true, loading: false});
     });
-    window.location.reload();
   }
 
   render() {

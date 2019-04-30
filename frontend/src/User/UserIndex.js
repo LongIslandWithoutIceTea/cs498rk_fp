@@ -27,10 +27,17 @@ class UserIndex extends Component {
     }
     this.updateDimensions = this.updateDimensions.bind(this);
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({username:nextProps.username});
+    this.reloadData(nextProps.username);
+  }
+
   componentDidMount() {
     if(getCookie("back_mode") ==="user" && getCookie("back_id") !== ""){
       this.setState({username:getCookie("back_id")});
     }
+    this.reloadData(this.props.username);
     window.addEventListener("resize", this.updateDimensions.bind(this));
   }
   componentWillUnmount(){
@@ -39,10 +46,7 @@ class UserIndex extends Component {
     window.removeEventListener("resize", this.updateDimensions.bind(this));
   }
 
-  updateDimensions() {
-      this.setState({ windowwidth: window.innerWidth});
-  }
-  render() {
+  reloadData(username) {
     axios.get('https://cors-anywhere.herokuapp.com/' + server + '/users?where={"name":"' + getCookie("username") + '"}')
     .then((response) => {
       var account_id = response.data.data[0].account_id;
@@ -50,7 +54,12 @@ class UserIndex extends Component {
         this.setState({account_id:account_id.toString()});
       }
     }).catch((error) => console.log(error));
-    
+  }
+
+  updateDimensions() {
+      this.setState({ windowwidth: window.innerWidth});
+  }
+  render() {
     if(getCookie("username") && getCookie("username") !== "" && this.state.account_id !== '' && parseInt(this.state.account_id) != 0 ){
       return(
         <Container fluid>
