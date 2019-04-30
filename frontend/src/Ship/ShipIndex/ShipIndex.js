@@ -564,7 +564,7 @@ export default class ShipIndex extends Component {
                             marginTop: '5em',
                         }}
                     >
-                        <DiscussionThread ship_id={this.props.ship_id}/>
+                        <DiscussionThread ship_id={this.props.ship_id, this.state.data.name}/>
                     </Container>
 
                 </Container>

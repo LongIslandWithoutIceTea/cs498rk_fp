@@ -4,7 +4,7 @@ import {Link, NavLink} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css';
 import axios from 'axios';
 import {getCookie, setCookie, checkCookie} from '../../Common/cookie.js';
-import {server} from '../../Common/utlity.js';
+import {time, server} from '../../Common/utlity.js';
 import ManagePost from '../../User/ManagePost.js';
 
 const application_id = "0cd78ed96029eac1bcb73c22e7dd0456";
@@ -18,13 +18,17 @@ export default class Discussion extends Component {
           hidden: true,
           content: '',
           post_list: [],
+          ship_name: '',
         }
         this.handleNewPost = this.handleNewPost.bind(this);
         this.updatePosts = this.updatePosts.bind(this);
+        this.rand = 0 + Math.random() * (10 - 0);
+        this.vtuber_names = ["Kizuna Ai", "Dennou Shojo Siro", "Nekomiya Hinata", "Moemi & Yomeni", "Noja Loli Ojisan", "Tokino Sora", "Kaguya Luna", "Mirai Akari", "Tsukino Mito", "Nora Cat"]
+        this.avatar = ["ade", "chris", "daniel", "helen", "joe", "justen", "lena", "laura", "steve", "matt", "nan", "veronika", "tom", "zoe"]
     }
 
     componentWillReceiveProps(nextProps) {
-      this.setState({ship_id:nextProps.ship_id, user_post: getCookie("username") != ""? getCookie("username"): "Guest_User", hidden:false});
+      this.setState({ship_id:nextProps.ship_id, ship_name:nextProps.ship_name, user_post: getCookie("username") != ""? getCookie("username"): this.vtuber_names[Math.floor(this.rand)] + " [Guest]", hidden:false});
       this.updatePosts(nextProps.ship_id);
     }
 
@@ -33,7 +37,7 @@ export default class Discussion extends Component {
 
     async handleNewPost(e){
       e.preventDefault();
-      await axios.post(server + "/posts",{ship_id:this.state.ship_id,user_post:this.state.user_post,user_rating:0,content:this.state.content})
+      await axios.post(server + "/posts",{ship_id:this.state.ship_id,ship_name:this.state.ship_name,user_post:this.state.user_post,user_rating:0,content:this.state.content})
       .then((response)=>{
           if (response.data.data && response.data.data.ship_id && response.data.data.ship_id === this.state.ship_id){
 
@@ -64,6 +68,24 @@ export default class Discussion extends Component {
         this.updatePosts(this.state.ship_id);
     }
 
+    async handleVotePost(e, idx, rateChange){
+        let post = this.state.post_list[idx];
+        let newRating = post.user_rating + rateChange;
+        e.preventDefault();
+        await axios.put(server + "/posts/"+ post._id + "?user_rating=" + newRating).
+            then((response)=>{
+                if (response.data.data && response.data.data._id === post._id){
+                  console.log(response)
+                }else{
+                    console.log("different data" + response.data.data);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        this.updatePosts(this.state.ship_id);
+    }
+
     updatePosts(ship_id){
       axios.get(server + "/posts?where={\"ship_id\":"+ship_id+"}").
       then((response)=>{
@@ -76,18 +98,31 @@ export default class Discussion extends Component {
 
     render() {
       const post_list = this.state.post_list.map((post, idx)=>{
+        let action_selection = post.user_post === this.state.user_post ?
+          (
+            <Comment.Actions>
+              <Button content='Delete' labelPosition='middle' onClick={e=>this.handleDeletePost(e, idx)} />
+            </Comment.Actions>
+          ):(
+            <Comment.Actions>
+              <Button content='Upvote' labelPosition='left' onClick={e=>this.handleVotePost(e, idx, 1)} />
+              <Button content='Downvote' labelPosition='right' onClick={e=>this.handleVotePost(e, idx, -1)} />
+            </Comment.Actions>
+          )
+
+        let avatar_pick = "https://react.semantic-ui.com/images/avatar/small/" + this.avatar[Math.floor(post.user_post.charCodeAt(0) % this.avatar.length)] +".jpg"
+
         return (
           <Comment>
-            <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
+            <Comment.Avatar as='a' src={avatar_pick} />
             <Comment.Content>
                 <Comment.Author as='a'>{post.user_post}</Comment.Author>
                 <Comment.Metadata>
-                    <span>{post.date_created}</span>
+                    <span>{time(post.date_created)}</span>
+                    <span>{post.user_rating}</span>
                 </Comment.Metadata>
                 <Comment.Text>{post.content}</Comment.Text>
-                <Comment.Actions>
-                    <Button content='Delete' labelPosition='left' onClick={e=>this.handleDeletePost(e, idx)} />
-                </Comment.Actions>
+                {action_selection}
             </Comment.Content>
           </Comment>
         )
