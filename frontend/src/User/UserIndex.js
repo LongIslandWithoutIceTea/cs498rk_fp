@@ -12,13 +12,14 @@ import Login from './Login.js';
 import Register from './Register.js';
 import ChangePassword from './ChangePassword.js';
 import ManagePost from './ManagePost.js';
-import BindPlayer from './BindPlayer.js'
+import BindPlayer from './BindPlayer.js';
 
 class UserIndex extends Component {
   constructor(props){
     super(props);
     this.state = {
       username:'',
+      account_id: '',
       showChangePass: false,
       showManagePost: false,
       showBindPlayer: false,
@@ -42,7 +43,79 @@ class UserIndex extends Component {
       this.setState({ windowwidth: window.innerWidth});
   }
   render() {
-    if(getCookie("username") && getCookie("username") !== ""){
+    axios.get('https://cors-anywhere.herokuapp.com/' + server + '/users?where={"name":"' + getCookie("username") + '"}')
+    .then((response) => {
+      var account_id = response.data.data[0].account_id;
+      if(account_id != 0) {
+        this.setState({account_id:account_id.toString()});
+      }
+    }).catch((error) => console.log(error));
+    
+    if(getCookie("username") && getCookie("username") !== "" && this.state.account_id !== '' && parseInt(this.state.account_id) != 0 ){
+      return(
+        <Container fluid>
+          <HeaderMenu mode="user"/>
+          <Container text>
+            <Icon name='user circle'
+              style={{
+                fontSize: this.state.windowwidth>860?'4em':'3em',
+                fontWeight: 'normal',
+                marginBottom: 0,
+                marginTop: this.state.windowwidth>860?'2em':'1em',
+              }}
+            />
+            <Header as='h1' content={getCookie("username")}
+              style={{
+                fontSize: this.state.windowwidth>860?'4em':'3em',
+                fontWeight: 'normal',
+                marginBottom: 0,
+                marginTop: this.state.windowwidth>860?'0.5em':'0.25em',
+              }}
+            />
+            <Header as='h2'
+              style={{
+                fontSize: this.state.windowwidth>860?'1.7em':'1.2em',
+                fontWeight: 'normal',
+                marginTop: this.state.windowwidth>860?'0.5em':'0.25em',
+              }}
+              >
+              <NavLink to={{pathname: '/player',state: {account_id: this.state.account_id}}}>{this.state.account_id}</NavLink>
+            </Header>
+          </Container>
+          <div
+          style={{
+            marginTop: this.state.windowwidth>860?'5em':'2.5em',
+            marginLeft: 'auto',
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent : 'space-evenly',
+            alignItems: 'center',
+          }}>
+            <div style={{margin:"2.5em"}}>
+              <Button size="massive" circular icon onClick={()=>this.setState({showChangePass:true})}>
+                <Icon name="key" circular size="huge"/>
+              </Button>
+              <Header as="h2">Password</Header>
+            </div>
+            <div style={{margin:"2.5em"}}>
+              <Button size="massive" circular icon onClick={()=>this.setState({showManagePost:true})}>
+                <Icon name="file alternate" circular size="huge"/>
+              </Button>
+              <Header as="h2">Posts</Header>
+            </div>
+            <div style={{margin:"2.5em"}}>
+              <Button size="massive" circular icon onClick={()=>this.setState({showBindPlayer:true})}>
+                <Icon name="user" circular size="huge"/>
+              </Button>
+              <Header as="h2">Player</Header>
+            </div>
+          </div>
+          <Modal closeIcon  size="mini" centered={false} open={this.state.showChangePass} onClose={()=>this.setState({showChangePass:false})}><Modal.Content><ChangePassword changepassCallBack={()=>this.setState({showChangePass:false})}/></Modal.Content></Modal>
+          <Modal closeIcon size="large" centered={false} open={this.state.showManagePost} onClose={()=>this.setState({showManagePost:false})}><Modal.Content><ManagePost username={getCookie("username")}/></Modal.Content></Modal>
+          <Modal closeIcon  size="mini" centered={false} open={this.state.showBindPlayer} onClose={()=>this.setState({showBindPlayer:false})}><Modal.Content><BindPlayer bindplayerCallBack={()=>this.setState({showBindPlayer:false})}/></Modal.Content></Modal>
+        </Container>
+      )
+    }else if (getCookie("username") && getCookie("username") !== "" && this.state.account_id === '' ){
       return(
         <Container fluid>
           <HeaderMenu mode="user"/>

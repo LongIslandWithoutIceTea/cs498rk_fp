@@ -41,6 +41,7 @@ class BindPlayer extends Component {
       console.log(error);
       this.setState({invalidId: true, loading: false});
     });
+    window.location.reload();
   }
 
   render() {
