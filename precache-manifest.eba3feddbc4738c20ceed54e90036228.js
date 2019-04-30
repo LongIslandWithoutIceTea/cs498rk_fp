@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/brand-icons.e8c322de.woff2"
   },
   {
-    "revision": "2aa4a321cff621074ab3",
-    "url": "/cs498rk_fp/static/css/main.b9d4868f.chunk.css"
+    "revision": "1b607165f5749180b3fa",
+    "url": "/cs498rk_fp/static/css/main.1e0bed4c.chunk.css"
   },
   {
     "revision": "579f66844f49539b00fd",
@@ -16,20 +16,20 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/background.0d05ea53.jpg"
   },
   {
-    "revision": "6f4dcf08a0bea384db28",
-    "url": "/cs498rk_fp/static/js/2.ede61fc4.chunk.js"
+    "revision": "f5ffc266e9a73c5589e9",
+    "url": "/cs498rk_fp/static/js/2.130f4cc7.chunk.js"
   },
   {
     "revision": "9c74e172f87984c48ddf5c8108cabe67",
     "url": "/cs498rk_fp/static/media/flags.9c74e172.png"
   },
   {
-    "revision": "ef60a4f6c25ef7f39f2d25a748dbecfe",
-    "url": "/cs498rk_fp/static/media/outline-icons.ef60a4f6.woff"
-  },
-  {
     "revision": "cd6c777f1945164224dee082abaea03a",
     "url": "/cs498rk_fp/static/media/outline-icons.cd6c777f.woff2"
+  },
+  {
+    "revision": "ef60a4f6c25ef7f39f2d25a748dbecfe",
+    "url": "/cs498rk_fp/static/media/outline-icons.ef60a4f6.woff"
   },
   {
     "revision": "701ae6abd4719e9c2ada3535a497b341",
@@ -48,8 +48,8 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/icons.faff9214.woff"
   },
   {
-    "revision": "2aa4a321cff621074ab3",
-    "url": "/cs498rk_fp/static/js/main.fa9b158c.chunk.js"
+    "revision": "1b607165f5749180b3fa",
+    "url": "/cs498rk_fp/static/js/main.7a51986d.chunk.js"
   },
   {
     "revision": "a046592bac8f2fd96e994733faf3858c",
@@ -88,11 +88,11 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/wows-icon.95cf5cf6.png"
   },
   {
-    "revision": "6f4dcf08a0bea384db28",
-    "url": "/cs498rk_fp/static/css/2.479c466f.chunk.css"
+    "revision": "f5ffc266e9a73c5589e9",
+    "url": "/cs498rk_fp/static/css/2.cbdd907f.chunk.css"
   },
   {
-    "revision": "eafeea769bb840a0ae4b646d2df62c86",
+    "revision": "f3d8082baa3b98d75ad916c59c5aeaeb",
     "url": "/cs498rk_fp/index.html"
   }
 ];
