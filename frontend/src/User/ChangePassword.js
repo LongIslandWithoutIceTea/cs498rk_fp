@@ -29,7 +29,7 @@ class ChangePassword extends Component {
         this.setState({loginfail: true, loading: false});
         return;
     }
-    axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/change_password",{name:this.state.username,old_password:this.state.oldpassword,new_password:this.state.password})
+    axios.post(server + "/users/change_password",{name:this.state.username,old_password:this.state.oldpassword,new_password:this.state.password})
     .then((response)=>{
         if (response.data && response.data.data && response.data.data.name && response.data.data.name===this.state.username){
           if(this.props.changepassCallBack){
