@@ -52,6 +52,7 @@ module.exports = function (router) {
   }).post((req, res) => {
     var new_post = new Post();
     new_post.ship_id = req.param('ship_id');
+    new_post.ship_name = req.param('ship_name');
     new_post.user_post = req.param('user_post');
     new_post.user_rating = req.param('user_rating');
     new_post.content = req.param('content');

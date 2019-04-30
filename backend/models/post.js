@@ -8,6 +8,7 @@ var PostSchema = new mongoose.Schema({
     user_post: String,
     user_rating: Number,
     date_created: {type:Date, default: Date.now},
+    ship_name: String,
     content: {type: String, default: ''},
 },{ collection : 'posts' });
 
