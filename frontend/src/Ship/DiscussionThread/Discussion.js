@@ -36,6 +36,7 @@ export default class Discussion extends Component {
     }
 
     async handleNewPost(e){
+      console.log("ship name"+this.state.ship_name)
       e.preventDefault();
       await axios.post(server + "/posts",{ship_id:this.state.ship_id,ship_name:this.state.ship_name,user_post:this.state.user_post,user_rating:0,content:this.state.content})
       .then((response)=>{
