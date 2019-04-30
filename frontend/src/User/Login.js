@@ -29,7 +29,7 @@ class Login extends Component {
         this.setState({loginfail: true, loading: false});
         return;
     }
-    axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/login",{name:this.state.username,password:password})
+    axios.post(server + "/users/login",{name:this.state.username,password:password})
     .then((response)=>{
         if (response.data.success){
           this.setState({loggedin: true, loading: false});
