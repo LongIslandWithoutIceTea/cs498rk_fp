@@ -47,6 +47,23 @@ export default class Discussion extends Component {
       this.updatePosts(this.state.ship_id);
     }
 
+    async handleDeletePost(e, idx){
+        let post = this.state.post_list[idx]
+        e.preventDefault();
+        await axios.delete(server + "/posts/"+ post._id).
+            then((response)=>{
+                if (response.data.data && response.data.data._id === post._id){
+
+                }else{
+                    console.log("different data" + response.data.data);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        this.updatePosts(this.state.ship_id);
+    }
+
     updatePosts(ship_id){
       axios.get(server + "/posts?where={\"ship_id\":"+ship_id+"}").
       then((response)=>{
@@ -58,7 +75,7 @@ export default class Discussion extends Component {
     }
 
     render() {
-      const post_list = this.state.post_list.map((post)=>{
+      const post_list = this.state.post_list.map((post, idx)=>{
         return (
           <Comment>
             <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
@@ -69,7 +86,7 @@ export default class Discussion extends Component {
                 </Comment.Metadata>
                 <Comment.Text>{post.content}</Comment.Text>
                 <Comment.Actions>
-                    <a>Detete</a>
+                    <Button content='Delete' labelPosition='left' onClick={e=>this.handleDeletePost(e, idx)} />
                 </Comment.Actions>
             </Comment.Content>
           </Comment>
