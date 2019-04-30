@@ -31,7 +31,7 @@ class ManagePost extends Component {
   render() {
       const content = this.state.post_list && this.state.post_list.map(post => {
           return (
-              <Card fluid>
+              <Card fluid color='violet'>
                   <Card.Content>
                       <Card.Header content='Jake Smith' />
                       <Card.Meta content={post.date_created} />
