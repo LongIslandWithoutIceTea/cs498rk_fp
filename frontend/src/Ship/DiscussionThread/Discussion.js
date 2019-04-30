@@ -31,9 +31,9 @@ export default class Discussion extends Component {
     componentDidMount(){
     }
 
-    handleNewPost(e){
+    async handleNewPost(e){
       e.preventDefault();
-      axios.post(server + "/posts",{ship_id:this.state.ship_id,user_post:this.state.user_post,user_rating:0,content:this.state.content})
+      await axios.post(server + "/posts",{ship_id:this.state.ship_id,user_post:this.state.user_post,user_rating:0,content:this.state.content})
       .then((response)=>{
           if (response.data.data && response.data.data.ship_id && response.data.data.ship_id === this.state.ship_id){
 
@@ -44,10 +44,6 @@ export default class Discussion extends Component {
       .catch((error) => {
         console.log(error);
       });
-      // let new_list = this.state.post_list;
-      // new_list.push({ship_id:this.state.ship_id, user_post:this.state.user_post, user_rating:this.state.user_rating, content:this.state.content})
-      // this.setState({post_list:new_list});
-      // console.log(this.state.post_list)
       this.updatePosts(this.state.ship_id);
     }
 
@@ -58,6 +54,7 @@ export default class Discussion extends Component {
         console.log(response)
         this.setState({post_list:new_list});
       })
+        this.setState({content: ""})
     }
 
     render() {
@@ -72,7 +69,7 @@ export default class Discussion extends Component {
                 </Comment.Metadata>
                 <Comment.Text>{post.content}</Comment.Text>
                 <Comment.Actions>
-                    <a>Reply</a>
+                    <a>Detete</a>
                 </Comment.Actions>
             </Comment.Content>
           </Comment>
@@ -85,67 +82,6 @@ export default class Discussion extends Component {
                     You are currently posting as {this.state.user_post}
                 </Header>
                 {post_list}
-                {/*
-                <Comment>
-                    <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
-                    <Comment.Content>
-                        <Comment.Author as='a'>Matt</Comment.Author>
-                        <Comment.Metadata>
-                            <span>Today at 5:42PM</span>
-                        </Comment.Metadata>
-                        <Comment.Text>How artistic!</Comment.Text>
-                        <Comment.Actions>
-                            <a>Reply</a>
-                        </Comment.Actions>
-                    </Comment.Content>
-                </Comment>
-
-                <Comment>
-                    <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/elliot.jpg' />
-                    <Comment.Content>
-                        <Comment.Author as='a'>Elliot Fu</Comment.Author>
-                        <Comment.Metadata>
-                            <span>Yesterday at 12:30AM</span>
-                        </Comment.Metadata>
-                        <Comment.Text>
-                            <p>This has been very useful for my research. Thanks as well!</p>
-                        </Comment.Text>
-                        <Comment.Actions>
-                            <a>Reply</a>
-                        </Comment.Actions>
-                    </Comment.Content>
-
-                    <Comment.Group>
-                        <Comment>
-                            <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/jenny.jpg' />
-                            <Comment.Content>
-                                <Comment.Author as='a'>Jenny Hess</Comment.Author>
-                                <Comment.Metadata>
-                                    <span>Just now</span>
-                                </Comment.Metadata>
-                                <Comment.Text>Elliot you are always so right :)</Comment.Text>
-                                <Comment.Actions>
-                                    <a>Reply</a>
-                                </Comment.Actions>
-                            </Comment.Content>
-                        </Comment>
-                    </Comment.Group>
-                </Comment>
-
-                <Comment>
-                    <Comment.Avatar as='a' src='https://react.semantic-ui.com/images/avatar/small/joe.jpg' />
-                    <Comment.Content>
-                        <Comment.Author as='a'>Joe Henderson</Comment.Author>
-                        <Comment.Metadata>
-                            <span>5 days ago</span>
-                        </Comment.Metadata>
-                        <Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
-                        <Comment.Actions>
-                            <a>Reply</a>
-                        </Comment.Actions>
-                    </Comment.Content>
-                </Comment>
-                */}
                 <Form reply>
                     <Form.TextArea onChange={(e, data)=>{this.setState({content:data.value}, ()=>{console.log(this.state.content.value)})}}/>
                     <Button content='Add Reply' labelPosition='left' icon='edit' primary onClick={e=>this.handleNewPost(e)}/>
