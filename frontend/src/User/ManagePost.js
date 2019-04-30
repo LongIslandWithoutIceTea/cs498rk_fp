@@ -37,7 +37,7 @@ class ManagePost extends Component {
                       <Card.Meta content={post.date_created} />
                       <Card.Description>
                           <Grid>
-                              <Grid.Column floated='left'>
+                              <Grid.Column floated='left' width={10}>
                                   {post.content}
                               </Grid.Column>
                               <Grid.Column floated='right'>
