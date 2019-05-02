@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/brand-icons.e8c322de.woff2"
   },
   {
-    "revision": "a6621b96c42e25fc24f3",
-    "url": "/cs498rk_fp/static/css/main.b9d4868f.chunk.css"
+    "revision": "5267058fc06c026dab7e",
+    "url": "/cs498rk_fp/static/css/main.1e0bed4c.chunk.css"
   },
   {
     "revision": "579f66844f49539b00fd",
@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/background.0d05ea53.jpg"
   },
   {
-    "revision": "7479da18e9c320d2fff4",
+    "revision": "cc55cb814bd255106756",
     "url": "/cs498rk_fp/static/js/2.8204f73c.chunk.js"
   },
   {
@@ -48,8 +48,8 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/icons.faff9214.woff"
   },
   {
-    "revision": "a6621b96c42e25fc24f3",
-    "url": "/cs498rk_fp/static/js/main.91cf0261.chunk.js"
+    "revision": "5267058fc06c026dab7e",
+    "url": "/cs498rk_fp/static/js/main.e2f2f9f4.chunk.js"
   },
   {
     "revision": "a046592bac8f2fd96e994733faf3858c",
@@ -88,11 +88,11 @@ self.__precacheManifest = [
     "url": "/cs498rk_fp/static/media/wows-icon.95cf5cf6.png"
   },
   {
-    "revision": "7479da18e9c320d2fff4",
-    "url": "/cs498rk_fp/static/css/2.479c466f.chunk.css"
+    "revision": "cc55cb814bd255106756",
+    "url": "/cs498rk_fp/static/css/2.cbdd907f.chunk.css"
   },
   {
-    "revision": "5a15cb2b60442c44e5a810a0ed1fb803",
+    "revision": "6118b5b82440d0b1f3aeab622eee594d",
     "url": "/cs498rk_fp/index.html"
   }
 ];
