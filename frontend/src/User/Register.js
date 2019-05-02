@@ -29,7 +29,7 @@ class Register extends Component {
         this.setState({registerfail: true, loading: false});
         return;
     }
-    axios.post('https://cors-anywhere.herokuapp.com/' + server + "/users/register",{name:this.state.username,password:password})
+    axios.post(server + "/users/register",{name:this.state.username,password:password})
     .then((response)=>{
         if (response.data.data && response.data.data.name && response.data.data.name === this.state.username){
           this.setState({loggedin: true, loading: false});

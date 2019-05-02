@@ -47,7 +47,7 @@ class UserIndex extends Component {
   }
 
   reloadData(username) {
-    axios.get('https://cors-anywhere.herokuapp.com/' + server + '/users?where={"name":"' + getCookie("username") + '"}')
+    axios.get(server + '/users?where={"name":"' + getCookie("username") + '"}')
     .then((response) => {
       var account_id = response.data.data[0].account_id;
       if(account_id != 0) {
