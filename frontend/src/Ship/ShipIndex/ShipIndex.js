@@ -19,7 +19,7 @@ const nationDict={
     'italy':{image: 'http://wiki.gcdn.co/images/d/d1/Wows_flag_Italy.png', text: 'Italy'},
     'commonwealth':{image: 'http://wiki.gcdn.co/images/3/3e/Wows_flag_Commonwealth.PNG', text: 'Common Wealth'},
     'pan_america':{image: 'http://wiki.gcdn.co/images/9/9e/Wows_flag_Pan_America.png', text: 'Pan America'}
-}
+};
 
 export default class ShipIndex extends Component {
     constructor(props){
@@ -27,54 +27,62 @@ export default class ShipIndex extends Component {
         this.state = {
             activeIndex: 0,
             ship_id: '',
+            windowwidth: window.innerWidth,
             icon_url: '',
             data: undefined,
             upgrades: [],
             modules_tag: ['artillery','dive_bomber','engine','fighter','fire_control','flight_control','hull','torpedo_bomber','torpedoes'],
             modules_data: [[],[],[],[],[],[],[],[],[]]
-        }
+        };
         this.reloadData = this.reloadData.bind(this);
         this.getColorByValue = this.getColorByValue.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.updateDimensions = this.updateDimensions.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ship_id :nextProps.ship_id});
         this.reloadData(nextProps.ship_id);
     }
+
     componentDidMount(){
         this.reloadData(this.props.ship_id);
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions.bind(this));
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions.bind(this));
     }
 
     handleClick(e, titleProps) {
-        const { index } = titleProps
-        const { activeIndex } = this.state
-        const newIndex = activeIndex === index ? -1 : index
-
+        const { index } = titleProps;
+        const { activeIndex } = this.state;
+        const newIndex = activeIndex === index ? -1 : index;
         this.setState({ activeIndex: newIndex })
     }
 
     async reloadData(ship_id){
-        console.log(ship_id)
+        console.log(ship_id);
         await axios.get("https://api.worldofwarships.ru/wows/encyclopedia/ships/?application_id=" + application_id + "&language=en" + "&ship_id=" + ship_id)
             .then((response)=>{
-                let key = Object.keys(response.data.data)
-                this.setState({data: response.data.data[key[0]]})
+                let key = Object.keys(response.data.data);
+                this.setState({data: response.data.data[key[0]]});
                 console.log(response.data.data[key[0]])
-            })
+            });
 
         await axios.get("https://api.worldofwarships.ru/wows/encyclopedia/info/?application_id=" + application_id + "&language=en" + "&fields=ship_type_images")
             .then((response)=>{
                 let icons = response.data.data.ship_type_images;
                 let icon = this.state.data.is_premium ? icons[this.state.data.type].image_premium : icons[this.state.data.type].image;
                 this.setState({icon_url: icon});
-            })
+            });
 
         let upgrades_id = this.state.data.upgrades;
         axios.get("https://api.worldofwarships.ru/wows/encyclopedia/consumables/?application_id=" + application_id + "&language=en" + "&consumable_id=" + upgrades_id)
             .then((response)=>{
-                let upg_data = Object.values(response.data.data)
+                let upg_data = Object.values(response.data.data);
                 this.setState({upgrades: upg_data});
-            })
+            });
 
         let modules_id = Object.values(this.state.data.modules);
 
@@ -90,14 +98,20 @@ export default class ShipIndex extends Component {
                         })
                 });
             }
-        })
+        });
         Promise.all(modules_promise).then(values => {
             console.log(values);
             this.setState({modules_data: values});
         })
     }
 
-    getColorByValue(value){
+
+    updateDimensions() {
+        this.setState({ windowwidth: window.innerWidth});
+    }
+
+
+    getColorByValue(value) {
         if (value < 20){
             return 'red';
         }
@@ -127,7 +141,7 @@ export default class ShipIndex extends Component {
                     </List>
                 </Popup.Content>
             </Popup>
-        )})
+        )});
 
         const engine = this.state.modules_data[0].map((data, i) => {
             return(
@@ -141,7 +155,7 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
         const torp_bomber = this.state.modules_data[1].map((data, i) => {
             return(
@@ -158,7 +172,7 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
 
         const fighter = this.state.modules_data[2].map((data, i) => {
@@ -174,7 +188,7 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
         const hull = this.state.modules_data[3].map((data, i) => {
             return(
@@ -192,7 +206,7 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
         const artillery = this.state.modules_data[4].map((data, i) => {
             return(
@@ -209,7 +223,7 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
         const torpedoes = this.state.modules_data[5].map((data, i) => {
             return(
@@ -226,7 +240,7 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
         const fire_control = this.state.modules_data[6].map((data, i) => {
             return(
@@ -241,7 +255,7 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
         const flight_control = this.state.modules_data[7].map((data, i) => {
             return(
@@ -257,7 +271,7 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
         const dive_bomber = this.state.modules_data[8].map((data, i) => {
             return(
@@ -275,9 +289,9 @@ export default class ShipIndex extends Component {
                         </List>
                     </Popup.Content>
                 </Popup>
-            )})
+            )});
 
-        if (this.state.data != undefined ){
+        if (this.state.data !== undefined ){
             const shell_detail = this.state.data.default_profile.artillery != undefined ? (
                 <div>
                     <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
@@ -404,15 +418,15 @@ export default class ShipIndex extends Component {
                         }}
                     >
                         <Grid>
-                            <Grid.Column width={10}>
+                            <Grid.Column width={this.state.windowwidth < 860 ? 16 : 10}>
                                 <Header as="div" textAlign='left'>{this.state.data.description}</Header>
                             </Grid.Column>
-                            <Grid.Column width={6}>
-                                <Progress percent={this.state.data.default_profile.armour.total}size='small'progress color={this.getColorByValue(this.state.data.default_profile.armour.total)}>Survivability</Progress>
-                                <Progress percent={this.state.data.default_profile.weaponry.artillery}size='small'progress color={this.getColorByValue(this.state.data.default_profile.weaponry.artillery)}>Artillery</Progress>
-                                <Progress percent={this.state.data.default_profile.weaponry.anti_aircraft}size='small'progress color={this.getColorByValue(this.state.data.default_profile.weaponry.anti_aircraft)}>AA Defense</Progress>
-                                <Progress percent={this.state.data.default_profile.mobility.total}size='small'progress color={this.getColorByValue(this.state.data.default_profile.mobility.total)}>Maneuverability</Progress>
-                                <Progress percent={this.state.data.default_profile.concealment.total}size='small'progress color={this.getColorByValue(this.state.data.default_profile.concealment.total)}>Concealment</Progress>
+                            <Grid.Column width={this.state.windowwidth < 860 ? 16 : 6}>
+                                <Progress percent={this.state.data.default_profile.armour.total} size='small' progress color={this.getColorByValue(this.state.data.default_profile.armour.total)}>Survivability</Progress>
+                                <Progress percent={this.state.data.default_profile.weaponry.artillery} size='small' progress color={this.getColorByValue(this.state.data.default_profile.weaponry.artillery)}>Artillery</Progress>
+                                <Progress percent={this.state.data.default_profile.weaponry.anti_aircraft} size='small' progress color={this.getColorByValue(this.state.data.default_profile.weaponry.anti_aircraft)}>AA Defense</Progress>
+                                <Progress percent={this.state.data.default_profile.mobility.total} size='small' progress color={this.getColorByValue(this.state.data.default_profile.mobility.total)}>Maneuverability</Progress>
+                                <Progress percent={this.state.data.default_profile.concealment.total} size='small' progress color={this.getColorByValue(this.state.data.default_profile.concealment.total)}>Concealment</Progress>
                             </Grid.Column>
                         </Grid>
                     </Container>
@@ -494,41 +508,43 @@ export default class ShipIndex extends Component {
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
-                        <Accordion>
-                            {shell_detail}
+                        {
+                            this.state.windowwidth > 860 &&
+                            <Accordion>
+                                {shell_detail}
+                                <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
+                                    <Icon name='dropdown'/>
+                                    Detailed hull information
+                                </Accordion.Title>
+                                <Accordion.Content active={activeIndex === 1}>
+                                    <Table celled structured>
+                                        <Table.Header>
+                                            <Table.Row>
+                                                <Table.HeaderCell rowSpan='2'>Max Speed</Table.HeaderCell>
+                                                <Table.HeaderCell rowSpan='2'>Rudder Shiff Time</Table.HeaderCell>
+                                                <Table.HeaderCell rowSpan='2'>Turning Radius</Table.HeaderCell>
+                                                <Table.HeaderCell colSpan='2'>Detectability</Table.HeaderCell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.HeaderCell>By Ships</Table.HeaderCell>
+                                                <Table.HeaderCell>By Planes</Table.HeaderCell>
+                                            </Table.Row>
+                                        </Table.Header>
 
-                            <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
-                                <Icon name='dropdown' />
-                                Detailed hull information
-                            </Accordion.Title>
-                            <Accordion.Content active={activeIndex === 1}>
-                                <Table celled structured>
-                                    <Table.Header>
-                                        <Table.Row>
-                                            <Table.HeaderCell rowSpan='2'>Max Speed</Table.HeaderCell>
-                                            <Table.HeaderCell rowSpan='2'>Rudder Shiff Time</Table.HeaderCell>
-                                            <Table.HeaderCell rowSpan='2'>Turning Radius</Table.HeaderCell>
-                                            <Table.HeaderCell colSpan='2'>Detectability</Table.HeaderCell>
-                                        </Table.Row>
-                                        <Table.Row>
-                                            <Table.HeaderCell>By Ships</Table.HeaderCell>
-                                            <Table.HeaderCell>By Planes</Table.HeaderCell>
-                                        </Table.Row>
-                                    </Table.Header>
-
-                                    <Table.Body>
-                                        <Table.Row>
-                                            <Table.Cell>{this.state.data.default_profile.mobility.max_speed}kts</Table.Cell>
-                                            <Table.Cell>{this.state.data.default_profile.mobility.rudder_time}s</Table.Cell>
-                                            <Table.Cell>{this.state.data.default_profile.mobility.turning_radius}m</Table.Cell>
-                                            <Table.Cell>{this.state.data.default_profile.concealment.detect_distance_by_ship}km</Table.Cell>
-                                            <Table.Cell>{this.state.data.default_profile.concealment.detect_distance_by_plane}km</Table.Cell>
-                                        </Table.Row>
-                                    </Table.Body>
-                                </Table>
-                            </Accordion.Content>
-                            {atbas_detail}
-                        </Accordion>
+                                        <Table.Body>
+                                            <Table.Row>
+                                                <Table.Cell>{this.state.data.default_profile.mobility.max_speed}kts</Table.Cell>
+                                                <Table.Cell>{this.state.data.default_profile.mobility.rudder_time}s</Table.Cell>
+                                                <Table.Cell>{this.state.data.default_profile.mobility.turning_radius}m</Table.Cell>
+                                                <Table.Cell>{this.state.data.default_profile.concealment.detect_distance_by_ship}km</Table.Cell>
+                                                <Table.Cell>{this.state.data.default_profile.concealment.detect_distance_by_plane}km</Table.Cell>
+                                            </Table.Row>
+                                        </Table.Body>
+                                    </Table>
+                                </Accordion.Content>
+                                {atbas_detail}
+                            </Accordion>
+                        }
                     </Container>
 
                     <Divider horizontal
