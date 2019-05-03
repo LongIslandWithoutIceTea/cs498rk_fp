@@ -232,7 +232,8 @@ class HeaderMenu extends Component {
               <Menu.Item as='a' inverted active={this.state.mode==="player"} href='/cs498rk_fp/#/player'><div style={{margin:"auto"}}><Icon name='user'/>Player</div></Menu.Item>
               <Menu.Item as='a' inverted active={this.state.mode==="clan"} href='/cs498rk_fp/#/clan'><div style={{margin:"auto"}}><Icon name='group'/>Clan</div></Menu.Item>
               <Menu.Item position='right'>
-                <Search
+                  {this.state.mode!="user" &&
+                      <Search
                     selectFirstResult
                     placeholder={this.state.mode==="ship"?"Ship Name":(this.state.mode==="player"?"Player Name":(this.state.mode==="clan")?"Clan Name":"")}
                     minCharacters = {this.state.mode==="ship"?3:(this.state.mode==="clan"?2:4)}
@@ -246,7 +247,7 @@ class HeaderMenu extends Component {
                     value={this.state.value}
                     style={{margin:"auto"}}
                     resultRenderer={this.state.mode==="player"?resultRendererPlayer:(this.state.mode==="clan"?resultRendererClan:resultRendererShip)}
-                />
+                />}
               </Menu.Item>
               <Menu.Item >
                 <div style={{margin:"auto"}}>
